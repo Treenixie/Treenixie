@@ -73,25 +73,29 @@ THEMES = {
 }
 
 CANVAS_W = 1200
-CANVAS_H = 44
 
 COLS = 53
 ROWS = 7
 
-GAP_X = 1
-GAP_Y = 2
+OUTER_PAD_X = 16
+OUTER_PAD_Y = 8
 
-GRID_X = 0
-GRID_Y = 0
+GAP_X = 3
+GAP_Y = 3
 
-CELL_W = (CANVAS_W - GAP_X * (COLS - 1)) / COLS
-CELL_H = 4
+GRID_X = OUTER_PAD_X
+GRID_Y = OUTER_PAD_Y
+
+CELL_H = 5
+CELL_W = (CANVAS_W - OUTER_PAD_X * 2 - GAP_X * (COLS - 1)) / COLS
 
 STEP_X = CELL_W + GAP_X
 STEP_Y = CELL_H + GAP_Y
 
 GRID_W = COLS * STEP_X - GAP_X
 GRID_H = ROWS * STEP_Y - GAP_Y
+
+CANVAS_H = OUTER_PAD_Y * 2 + GRID_H
 
 BASE_SHAPES = {
     "I": [(0, 0), (1, 0), (2, 0), (3, 0)],
