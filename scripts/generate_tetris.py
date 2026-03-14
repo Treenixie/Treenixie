@@ -4,7 +4,6 @@ import calendar as cal
 import datetime as dt
 import hashlib
 import json
-import random
 
 import requests
 
@@ -86,7 +85,6 @@ ROWS = 7
 
 FONT_STACK = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'"
 
-# Фигуры
 BASE_SHAPES = {
     "I": [(0, 0), (1, 0), (2, 0), (3, 0)],
     "O": [(0, 0), (1, 0), (0, 1), (1, 1)],
@@ -99,10 +97,6 @@ BASE_SHAPES = {
 }
 
 PIECE_ORDER = ["T", "L", "J", "S", "Z", "O", "I", "DOT"]
-
-MOVE_DUR = 0.55
-PAUSE_DUR = 0.10
-INITIAL_DELAY = 0.15
 
 
 def svg_rect(x, y, w, h, fill, rx=2, extra=""):
@@ -316,8 +310,8 @@ def neighbor_score(cells, active):
     cells = set(cells)
     for col, row in cells:
         for dc, dr in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-            nb = (col + dc, row + dr)
-            if nb in active and nb not in cells:
+            neighbor = (col + dc, row + dr)
+            if neighbor in active and neighbor not in cells:
                 score += 1
     return score
 
@@ -335,7 +329,6 @@ def best_piece_for_anchor(anchor, active):
                 if not absolute_cells.issubset(active):
                     continue
 
-                # Чем больше фигура и чем лучше она врастает в соседей, тем лучше.
                 score = len(absolute_cells) * 100 + neighbor_score(absolute_cells, active)
                 candidates.append(
                     {
@@ -382,98 +375,40 @@ def partition_into_pieces(board):
 
     pieces = []
     while active:
-        anchor = min(active, key=lambda c: (c[0], c[1]))
+        anchor = min(active, key=lambda item: (item[0], item[1]))
         piece = best_piece_for_anchor(anchor, active)
         for cell in piece["cells"]:
             active.discard(cell)
         pieces.append(piece)
 
-    # Чуть более естественный порядок для анимации
     pieces.sort(key=lambda p: (max(r for _, r in p["cells"]), min(c for c, _ in p["cells"])))
     return pieces
 
 
-def build_animation_plan(pieces, calendar_hash):
-    seed = int(calendar_hash[:8], 16)
-    rng = random.Random(seed)
+def render_piece_overlay(parts, theme_name, pieces):
+    palette = THEMES[theme_name]["piece_colors"]
 
-    plan = []
-    current_t = INITIAL_DELAY
+    for index, piece in enumerate(pieces):
+        color = palette[index % len(palette)]
+        stroke_width = 1.4 if piece["name"] != "DOT" else 1.8
+        opacity = 0.95 if piece["name"] != "DOT" else 1.0
 
-    for idx, piece in enumerate(pieces):
-        width = shape_width(piece["shape"])
-        height = shape_height(piece["shape"])
-
-        target_x = piece["origin_x"]
-        target_y = piece["origin_y"]
-
-        options = [
-            target_x,
-            max(0, target_x - 4),
-            min(COLS - width, target_x + 4),
-        ]
-        options = [x for x in options if 0 <= x <= COLS - width]
-        spawn_x = rng.choice(sorted(set(options))) if options else target_x
-        spawn_y = -height - 1
-
-        # Через промежуточную точку, чтобы было ощущение "манёвра"
-        mid_x = target_x
-        mid_y = spawn_y
-
-        plan.append(
-            {
-                "index": idx,
-                "start": current_t,
-                "end": current_t + MOVE_DUR,
-                "spawn_x": spawn_x,
-                "spawn_y": spawn_y,
-                "mid_x": mid_x,
-                "mid_y": mid_y,
-                "target_x": target_x,
-                "target_y": target_y,
-            }
-        )
-        current_t += MOVE_DUR + PAUSE_DUR
-
-    return plan, current_t + 0.25
+        for col, row in piece["cells"]:
+            x, y, w, h = cell_rect(col, row)
+            parts.append(
+                svg_rect(
+                    x + 0.6,
+                    y + 0.6,
+                    w - 1.2,
+                    h - 1.2,
+                    "none",
+                    rx=2,
+                    extra=f'stroke="{color}" stroke-width="{stroke_width}" opacity="{opacity}"',
+                )
+            )
 
 
-def render_piece_group(piece, anim, color):
-    # Группа рисуется в относительных координатах, а потом двигается translate-анимацией.
-    shape = piece["shape"]
-
-    spawn_px_x = GRID_X + anim["spawn_x"] * STEP
-    spawn_px_y = GRID_Y + anim["spawn_y"] * STEP
-    mid_px_x = GRID_X + anim["mid_x"] * STEP
-    mid_px_y = GRID_Y + anim["mid_y"] * STEP
-    target_px_x = GRID_X + anim["target_x"] * STEP
-    target_px_y = GRID_Y + anim["target_y"] * STEP
-
-    parts = []
-    parts.append('<g opacity="0">')
-    parts.append(
-        f'<set attributeName="opacity" to="1" begin="{anim["start"]:.3f}s" dur="0.001s" fill="freeze" />'
-    )
-    parts.append(
-        f'<set attributeName="opacity" to="0" begin="{anim["end"]:.3f}s" dur="0.001s" fill="freeze" />'
-    )
-    parts.append(
-        f'<animateTransform attributeName="transform" type="translate" '
-        f'begin="{anim["start"]:.3f}s" dur="{MOVE_DUR:.3f}s" fill="freeze" '
-        f'values="{spawn_px_x} {spawn_px_y}; {mid_px_x} {mid_px_y}; {target_px_x} {target_px_y}" '
-        f'keyTimes="0;0.35;1" calcMode="linear" />'
-    )
-
-    for dx, dy in shape:
-        x = dx * STEP
-        y = dy * STEP
-        parts.append(svg_rect(x, y, CELL, CELL, color, rx=2))
-
-    parts.append("</g>")
-    return "\n".join(parts)
-
-
-def render_svg(theme_name, board, month_labels, total, active_cells, username, pieces, calendar_hash):
+def render_svg(theme_name, board, month_labels, total, active_cells, username, pieces=None):
     theme = THEMES[theme_name]
     parts = []
 
@@ -553,19 +488,15 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username, p
             )
         )
 
-    # Сетка: сразу рисуем финальную форму, чтобы даже без анимации был правильный граф.
+    # Сетка
     for row in range(ROWS):
         for col in range(COLS):
             x, y, w, h = cell_rect(col, row)
             parts.append(svg_rect(x, y, w, h, theme["greens"][board[row][col]], rx=2))
 
-    # Анимация фигур поверх сетки
-    plan, total_dur = build_animation_plan(pieces, calendar_hash)
-    palette = theme["piece_colors"]
-
-    for piece, anim in zip(pieces, plan):
-        color = palette[anim["index"] % len(palette)]
-        parts.append(render_piece_group(piece, anim, color))
+    # Overlay preview
+    if pieces is not None:
+        render_piece_overlay(parts, theme_name, pieces)
 
     # Нижняя подпись
     parts.append(
@@ -611,9 +542,12 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username, p
     )
 
     # Metadata
-    parts.append(
-        f'<metadata>{{"username":"{username}","active_cells":{active_cells},"pieces":{len(pieces)},"timeline":{total_dur:.3f}}}</metadata>'
-    )
+    meta_payload = {
+        "username": username,
+        "active_cells": active_cells,
+        "pieces_overlay": pieces is not None,
+    }
+    parts.append(f"<metadata>{json.dumps(meta_payload, ensure_ascii=False)}</metadata>")
     parts.append("</svg>")
 
     return "\n".join(parts)
@@ -632,11 +566,23 @@ def main():
     board, month_labels, total, active_cells, calendar_hash = normalize_calendar(calendar_data)
     pieces = partition_into_pieces(board)
 
-    light_svg = render_svg("light", board, month_labels, total, active_cells, username, pieces, calendar_hash)
-    dark_svg = render_svg("dark", board, month_labels, total, active_cells, username, pieces, calendar_hash)
+    # Обычные live SVG
+    light_svg = render_svg("light", board, month_labels, total, active_cells, username, pieces=None)
+    dark_svg = render_svg("dark", board, month_labels, total, active_cells, username, pieces=None)
 
     (outdir / "github-tetris-light.svg").write_text(light_svg, encoding="utf-8")
     (outdir / "github-tetris-dark.svg").write_text(dark_svg, encoding="utf-8")
+
+    # Preview разбиения на фигуры
+    light_partition_svg = render_svg("light", board, month_labels, total, active_cells, username, pieces=pieces)
+    dark_partition_svg = render_svg("dark", board, month_labels, total, active_cells, username, pieces=pieces)
+
+    (outdir / "github-tetris-light-partition.svg").write_text(light_partition_svg, encoding="utf-8")
+    (outdir / "github-tetris-dark-partition.svg").write_text(dark_partition_svg, encoding="utf-8")
+
+    piece_counts = {}
+    for piece in pieces:
+        piece_counts[piece["name"]] = piece_counts.get(piece["name"], 0) + 1
 
     meta = {
         "username": username,
@@ -644,7 +590,8 @@ def main():
         "active_cells": active_cells,
         "calendar_hash": calendar_hash,
         "pieces_count": len(pieces),
-        "dot_count": sum(1 for p in pieces if p["name"] == "DOT"),
+        "dot_count": piece_counts.get("DOT", 0),
+        "piece_breakdown": piece_counts,
         "diagnostics": diagnostics,
     }
 
@@ -653,7 +600,7 @@ def main():
         encoding="utf-8",
     )
 
-    print("Generated live calendar SVGs with tetris overlay.")
+    print("Generated live calendar SVGs + partition previews.")
     print(json.dumps(meta, ensure_ascii=False, indent=2))
 
 
