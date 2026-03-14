@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="767" height="196" viewBox="0 0 767 196">
 <rect x="0" y="0" width="767" height="196" rx="0" ry="0" fill="#ffffff" />
 <rect x="8" y="8" width="751" height="180" rx="6" ry="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
-<text x="16" y="31" fill="#24292f" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="14" font-weight="600" text-anchor="start" dominant-baseline="alphabetic">123 contributions in the last year</text>
+<text x="16" y="31" fill="#24292f" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="14" font-weight="600" text-anchor="start" dominant-baseline="alphabetic">125 contributions in the last year</text>
 <text x="743" y="31" fill="#57606a" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Contribution settings ▾</text>
 <line x1="9" y1="40" x2="758" y2="40" stroke="#d8dee4" stroke-width="1"/>
 <text x="69" y="56" fill="#24292f" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="start" dominant-baseline="alphabetic">Mar</text>
@@ -20,6 +20,9 @@
 <text x="51" y="85" fill="#24292f" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Mon</text>
 <text x="51" y="111" fill="#24292f" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Wed</text>
 <text x="51" y="137" fill="#24292f" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Fri</text>
+<defs>
+<clipPath id="grid-clip-live-light"><rect x="69" y="66" width="686" height="88" rx="0" ry="0" /></clipPath>
+</defs>
 <rect x="69" y="66" width="10" height="10" rx="2" ry="2" fill="#ebedf0" />
 <rect x="82" y="66" width="10" height="10" rx="2" ry="2" fill="#ebedf0" />
 <rect x="95" y="66" width="10" height="10" rx="2" ry="2" fill="#ebedf0" />
@@ -391,109 +394,111 @@
 <rect x="719" y="144" width="10" height="10" rx="2" ry="2" fill="#ebedf0" />
 <rect x="732" y="144" width="10" height="10" rx="2" ry="2" fill="#ebedf0" />
 <rect x="745" y="144" width="10" height="10" rx="2" ry="2" fill="#ebedf0" />
+<g clip-path="url(#grid-clip-live-light)">
 <g opacity="0">
 <set attributeName="opacity" to="1" begin="0.560s" fill="freeze" />
-<rect x="641" y="66" width="10" height="10" rx="2" ry="2" fill="#d6535d" stroke="#aa1c26" stroke-width="0.9"/>
+<rect x="641" y="66" width="10" height="10" rx="2" ry="2" fill="#d6535d" />
 </g>
 <g opacity="0" transform="translate(641 66)">
 <set attributeName="opacity" to="1" begin="0.180s" fill="freeze" />
 <set attributeName="opacity" to="0" begin="0.560s" fill="freeze" />
-<animateTransform attributeName="transform" type="translate" additive="sum" begin="0.180s" dur="0.380s" fill="freeze" values="52 -39; 0 -26; 0 0" keyTimes="0;0.35;1" />
-<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#d6535d" stroke="#aa1c26" stroke-width="0.9"/>
+<animateTransform attributeName="transform" type="translate" additive="sum" begin="0.180s" dur="0.380s" fill="freeze" values="-39 -26; 0 -26; 0 0" keyTimes="0;0.35;1" />
+<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#d6535d" />
 </g>
 <g opacity="0">
-<set attributeName="opacity" to="1" begin="1.102s" fill="freeze" />
-<rect x="667" y="92" width="10" height="10" rx="2" ry="2" fill="#0e6cda" stroke="#0756b3" stroke-width="0.9"/>
+<set attributeName="opacity" to="1" begin="1.020s" fill="freeze" />
+<rect x="667" y="92" width="10" height="10" rx="2" ry="2" fill="#0e6cda" />
 </g>
 <g opacity="0" transform="translate(667 92)">
 <set attributeName="opacity" to="1" begin="0.640s" fill="freeze" />
-<set attributeName="opacity" to="0" begin="1.102s" fill="freeze" />
-<animateTransform attributeName="transform" type="translate" additive="sum" begin="0.640s" dur="0.462s" fill="freeze" values="52 -65; 0 -39; 0 0" keyTimes="0;0.35;1" />
-<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#0e6cda" stroke="#0756b3" stroke-width="0.9"/>
+<set attributeName="opacity" to="0" begin="1.020s" fill="freeze" />
+<animateTransform attributeName="transform" type="translate" additive="sum" begin="0.640s" dur="0.380s" fill="freeze" values="0 -52; 0 -39; 0 0" keyTimes="0;0.35;1" />
+<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#0e6cda" />
 </g>
 <g opacity="0">
-<set attributeName="opacity" to="1" begin="1.644s" fill="freeze" />
-<rect x="706" y="92" width="10" height="10" rx="2" ry="2" fill="#c3b1ea" stroke="#6b42b7" stroke-width="0.9"/>
+<set attributeName="opacity" to="1" begin="1.562s" fill="freeze" />
+<rect x="706" y="92" width="10" height="10" rx="2" ry="2" fill="#c3b1ea" />
 </g>
 <g opacity="0" transform="translate(706 92)">
-<set attributeName="opacity" to="1" begin="1.182s" fill="freeze" />
-<set attributeName="opacity" to="0" begin="1.644s" fill="freeze" />
-<animateTransform attributeName="transform" type="translate" additive="sum" begin="1.182s" dur="0.462s" fill="freeze" values="-52 -65; 0 -39; 0 0" keyTimes="0;0.35;1" />
-<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#c3b1ea" stroke="#6b42b7" stroke-width="0.9"/>
+<set attributeName="opacity" to="1" begin="1.100s" fill="freeze" />
+<set attributeName="opacity" to="0" begin="1.562s" fill="freeze" />
+<animateTransform attributeName="transform" type="translate" additive="sum" begin="1.100s" dur="0.462s" fill="freeze" values="0 -65; 0 -39; 0 0" keyTimes="0;0.35;1" />
+<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#c3b1ea" />
 </g>
 <g opacity="0">
 <set attributeName="opacity" to="1" begin="2.104s" fill="freeze" />
-<rect x="745" y="66" width="10" height="10" rx="2" ry="2" fill="#d9b095" stroke="#9a3e00" stroke-width="0.9"/>
-<rect x="745" y="79" width="10" height="10" rx="2" ry="2" fill="#c7733a" stroke="#9a3e00" stroke-width="0.9"/>
-<rect x="745" y="92" width="10" height="10" rx="2" ry="2" fill="#d1936a" stroke="#9a3e00" stroke-width="0.9"/>
+<rect x="745" y="66" width="10" height="10" rx="2" ry="2" fill="#d9b095" />
+<rect x="745" y="79" width="10" height="10" rx="2" ry="2" fill="#c7733a" />
+<rect x="745" y="92" width="10" height="10" rx="2" ry="2" fill="#d1936a" />
 </g>
 <g opacity="0" transform="translate(745 66)">
-<set attributeName="opacity" to="1" begin="1.724s" fill="freeze" />
+<set attributeName="opacity" to="1" begin="1.642s" fill="freeze" />
 <set attributeName="opacity" to="0" begin="2.104s" fill="freeze" />
-<animateTransform attributeName="transform" type="translate" additive="sum" begin="1.724s" dur="0.380s" fill="freeze" values="0 -52; 0 -26; 0 0" keyTimes="0;0.35;1" />
-<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#d9b095" stroke="#9a3e00" stroke-width="0.9"/>
-<rect x="0" y="13" width="10" height="10" rx="2" ry="2" fill="#c7733a" stroke="#9a3e00" stroke-width="0.9"/>
-<rect x="0" y="26" width="10" height="10" rx="2" ry="2" fill="#d1936a" stroke="#9a3e00" stroke-width="0.9"/>
+<animateTransform attributeName="transform" type="translate" additive="sum" begin="1.642s" dur="0.462s" fill="freeze" values="-39 -65; 0 -26; 0 0" keyTimes="0;0.35;1" />
+<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#d9b095" />
+<rect x="0" y="13" width="10" height="10" rx="2" ry="2" fill="#c7733a" />
+<rect x="0" y="26" width="10" height="10" rx="2" ry="2" fill="#d1936a" />
 </g>
 <g opacity="0">
-<set attributeName="opacity" to="1" begin="2.738s" fill="freeze" />
-<rect x="82" y="118" width="10" height="10" rx="2" ry="2" fill="#9cc3aa" stroke="#15682d" stroke-width="0.9"/>
+<set attributeName="opacity" to="1" begin="2.831s" fill="freeze" />
+<rect x="82" y="118" width="10" height="10" rx="2" ry="2" fill="#9cc3aa" />
 </g>
 <g opacity="0" transform="translate(82 118)">
 <set attributeName="opacity" to="1" begin="2.184s" fill="freeze" />
-<set attributeName="opacity" to="0" begin="2.738s" fill="freeze" />
-<animateTransform attributeName="transform" type="translate" additive="sum" begin="2.184s" dur="0.554s" fill="freeze" values="0 -78; 0 -65; 0 0" keyTimes="0;0.35;1" />
-<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#9cc3aa" stroke="#15682d" stroke-width="0.9"/>
+<set attributeName="opacity" to="0" begin="2.831s" fill="freeze" />
+<animateTransform attributeName="transform" type="translate" additive="sum" begin="2.184s" dur="0.647s" fill="freeze" values="39 -91; 0 -65; 0 0" keyTimes="0;0.35;1" />
+<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#9cc3aa" />
 </g>
 <g opacity="0">
 <set attributeName="opacity" to="1" begin="3.465s" fill="freeze" />
-<rect x="706" y="118" width="10" height="10" rx="2" ry="2" fill="#ccba95" stroke="#7e5400" stroke-width="0.9"/>
-<rect x="719" y="105" width="10" height="10" rx="2" ry="2" fill="#ccba95" stroke="#7e5400" stroke-width="0.9"/>
-<rect x="719" y="118" width="10" height="10" rx="2" ry="2" fill="#ccba95" stroke="#7e5400" stroke-width="0.9"/>
+<rect x="706" y="118" width="10" height="10" rx="2" ry="2" fill="#ccba95" />
+<rect x="719" y="105" width="10" height="10" rx="2" ry="2" fill="#ccba95" />
+<rect x="719" y="118" width="10" height="10" rx="2" ry="2" fill="#ccba95" />
 </g>
 <g opacity="0" transform="translate(706 105)">
-<set attributeName="opacity" to="1" begin="2.818s" fill="freeze" />
+<set attributeName="opacity" to="1" begin="2.911s" fill="freeze" />
 <set attributeName="opacity" to="0" begin="3.465s" fill="freeze" />
-<animateTransform attributeName="transform" type="translate" additive="sum" begin="2.818s" dur="0.647s" fill="freeze" values="26 -91; 0 -52; 0 0" keyTimes="0;0.35;1" />
-<rect x="0" y="13" width="10" height="10" rx="2" ry="2" fill="#ccba95" stroke="#7e5400" stroke-width="0.9"/>
-<rect x="13" y="0" width="10" height="10" rx="2" ry="2" fill="#ccba95" stroke="#7e5400" stroke-width="0.9"/>
-<rect x="13" y="13" width="10" height="10" rx="2" ry="2" fill="#ccba95" stroke="#7e5400" stroke-width="0.9"/>
+<animateTransform attributeName="transform" type="translate" additive="sum" begin="2.911s" dur="0.554s" fill="freeze" values="26 -78; 0 -52; 0 0" keyTimes="0;0.35;1" />
+<rect x="0" y="13" width="10" height="10" rx="2" ry="2" fill="#ccba95" />
+<rect x="13" y="0" width="10" height="10" rx="2" ry="2" fill="#ccba95" />
+<rect x="13" y="13" width="10" height="10" rx="2" ry="2" fill="#ccba95" />
 </g>
 <g opacity="0">
 <set attributeName="opacity" to="1" begin="4.284s" fill="freeze" />
-<rect x="628" y="144" width="10" height="10" rx="2" ry="2" fill="#0e80a6" stroke="#086786" stroke-width="0.9"/>
+<rect x="628" y="144" width="10" height="10" rx="2" ry="2" fill="#0e80a6" />
 </g>
 <g opacity="0" transform="translate(628 144)">
 <set attributeName="opacity" to="1" begin="3.545s" fill="freeze" />
 <set attributeName="opacity" to="0" begin="4.284s" fill="freeze" />
-<animateTransform attributeName="transform" type="translate" additive="sum" begin="3.545s" dur="0.739s" fill="freeze" values="-52 -104; 0 -91; 0 0" keyTimes="0;0.35;1" />
-<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#0e80a6" stroke="#086786" stroke-width="0.9"/>
+<animateTransform attributeName="transform" type="translate" additive="sum" begin="3.545s" dur="0.739s" fill="freeze" values="26 -104; 0 -91; 0 0" keyTimes="0;0.35;1" />
+<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#0e80a6" />
 </g>
 <g opacity="0">
 <set attributeName="opacity" to="1" begin="5.196s" fill="freeze" />
-<rect x="706" y="131" width="10" height="10" rx="2" ry="2" fill="#d6b595" stroke="#934900" stroke-width="0.9"/>
-<rect x="706" y="144" width="10" height="10" rx="2" ry="2" fill="#d6b595" stroke="#934900" stroke-width="0.9"/>
+<rect x="706" y="131" width="10" height="10" rx="2" ry="2" fill="#d6b595" />
+<rect x="706" y="144" width="10" height="10" rx="2" ry="2" fill="#d6b595" />
 </g>
 <g opacity="0" transform="translate(706 131)">
 <set attributeName="opacity" to="1" begin="4.364s" fill="freeze" />
 <set attributeName="opacity" to="0" begin="5.196s" fill="freeze" />
-<animateTransform attributeName="transform" type="translate" additive="sum" begin="4.364s" dur="0.832s" fill="freeze" values="0 -117; 0 -78; 0 0" keyTimes="0;0.35;1" />
-<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#d6b595" stroke="#934900" stroke-width="0.9"/>
-<rect x="0" y="13" width="10" height="10" rx="2" ry="2" fill="#d6b595" stroke="#934900" stroke-width="0.9"/>
+<animateTransform attributeName="transform" type="translate" additive="sum" begin="4.364s" dur="0.832s" fill="freeze" values="-26 -117; 0 -78; 0 0" keyTimes="0;0.35;1" />
+<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#d6b595" />
+<rect x="0" y="13" width="10" height="10" rx="2" ry="2" fill="#d6b595" />
 </g>
 <g opacity="0">
-<set attributeName="opacity" to="1" begin="6.108s" fill="freeze" />
-<rect x="732" y="131" width="10" height="10" rx="2" ry="2" fill="#e0a0a6" stroke="#aa1c26" stroke-width="0.9"/>
-<rect x="745" y="131" width="10" height="10" rx="2" ry="2" fill="#e0a0a6" stroke="#aa1c26" stroke-width="0.9"/>
-<rect x="745" y="144" width="10" height="10" rx="2" ry="2" fill="#d02632" stroke="#aa1c26" stroke-width="0.9"/>
+<set attributeName="opacity" to="1" begin="6.015s" fill="freeze" />
+<rect x="732" y="131" width="10" height="10" rx="2" ry="2" fill="#e0a0a6" />
+<rect x="745" y="131" width="10" height="10" rx="2" ry="2" fill="#e0a0a6" />
+<rect x="745" y="144" width="10" height="10" rx="2" ry="2" fill="#d02632" />
 </g>
 <g opacity="0" transform="translate(732 131)">
 <set attributeName="opacity" to="1" begin="5.276s" fill="freeze" />
-<set attributeName="opacity" to="0" begin="6.108s" fill="freeze" />
-<animateTransform attributeName="transform" type="translate" additive="sum" begin="5.276s" dur="0.832s" fill="freeze" values="0 -117; 0 -78; 0 0" keyTimes="0;0.35;1" />
-<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#e0a0a6" stroke="#aa1c26" stroke-width="0.9"/>
-<rect x="13" y="0" width="10" height="10" rx="2" ry="2" fill="#e0a0a6" stroke="#aa1c26" stroke-width="0.9"/>
-<rect x="13" y="13" width="10" height="10" rx="2" ry="2" fill="#d02632" stroke="#aa1c26" stroke-width="0.9"/>
+<set attributeName="opacity" to="0" begin="6.015s" fill="freeze" />
+<animateTransform attributeName="transform" type="translate" additive="sum" begin="5.276s" dur="0.739s" fill="freeze" values="-39 -104; 0 -78; 0 0" keyTimes="0;0.35;1" />
+<rect x="0" y="0" width="10" height="10" rx="2" ry="2" fill="#e0a0a6" />
+<rect x="13" y="0" width="10" height="10" rx="2" ry="2" fill="#e0a0a6" />
+<rect x="13" y="13" width="10" height="10" rx="2" ry="2" fill="#d02632" />
+</g>
 </g>
 <text x="66" y="176" fill="#57606a" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="start" dominant-baseline="alphabetic">Learn how we count contributions</text>
 <text x="633" y="176" fill="#24292f" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Less</text>
