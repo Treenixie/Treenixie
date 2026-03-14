@@ -106,22 +106,21 @@ ROWS = 7
 GRID_W = COLS * STEP - GAP
 GRID_H = ROWS * STEP - GAP
 
-# Layout
-TITLE_X = CARD_X + CARD_PAD
-TITLE_Y = CARD_Y + CARD_PAD + 13
+GRID_X = CARD_RIGHT - CARD_PAD - GRID_W
+
+DAY_LABEL_X = GRID_X - 9
+
+TITLE_X = DAY_LABEL_X - 23
+TITLE_Y = CARD_Y + CARD_PAD + 12
+
 SETTINGS_X = CARD_RIGHT - CARD_PAD
 SETTINGS_Y = TITLE_Y
 
-# Линия: по 1 кубу сверху и снизу
-DIVIDER_Y = TITLE_Y + 10
+DIVIDER_Y = TITLE_Y + 14
 
-# Месяцы и grid: тоже с шагом в 1 куб
-MONTH_Y = DIVIDER_Y + 10
-GRID_Y = MONTH_Y + 10
-GRID_X = CARD_RIGHT - CARD_PAD - GRID_W
+MONTH_Y = DIVIDER_Y + 18
 
-# Дни ближе к grid примерно в 2 раза
-DAY_LABEL_X = GRID_X - 9
+GRID_Y = MONTH_Y + 11
 
 FOOTER_Y = GRID_Y + GRID_H + 18
 LEGEND_Y = FOOTER_Y - 10
