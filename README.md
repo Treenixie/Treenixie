@@ -6,9 +6,6 @@
   </picture>
 </p>
 
-<p align="center">
-</p>
-
 <b>languages</b><br><br>
 <code>&nbsp;<img src="https://cdn.simpleicons.org/python/24292F/C9D1D9?viewbox=auto" alt="Python" width="14" height="14" align="absmiddle" />&nbsp;Python&nbsp;</code>
 <code>&nbsp;<img src="https://cdn.simpleicons.org/cplusplus/24292F/C9D1D9?viewbox=auto" alt="C++" width="14" height="14" align="absmiddle" />&nbsp;C++&nbsp;</code>
