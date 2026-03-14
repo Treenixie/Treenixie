@@ -63,6 +63,13 @@ THEMES = {
 CANVAS_W = 767
 CANVAS_H = 220
 
+CARD_X = 8
+CARD_Y = 8
+CARD_W = CANVAS_W - 16
+CARD_H = CANVAS_H - 16
+CARD_RIGHT = CARD_X + CARD_W
+CARD_BOTTOM = CARD_Y + CARD_H
+
 GRID_X = 60
 GRID_Y = 72
 CELL = 10
@@ -72,12 +79,24 @@ STEP = CELL + GAP
 COLS = 53
 ROWS = 7
 
+FONT_STACK = '-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji"'
+
 
 def svg_rect(x, y, w, h, fill, rx=2, extra=""):
     return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" ry="{rx}" fill="{fill}" {extra}/>'
 
 
-def svg_text(x, y, text, fill, size=12, weight="400"):
+def svg_text(
+    x,
+    y,
+    text,
+    fill,
+    size=12,
+    weight="400",
+    anchor="start",
+    baseline="alphabetic",
+    family=FONT_STACK,
+):
     safe = (
         str(text)
         .replace("&", "&amp;")
@@ -85,8 +104,10 @@ def svg_text(x, y, text, fill, size=12, weight="400"):
         .replace(">", "&gt;")
     )
     return (
-        f'<text x="{x}" y="{y}" fill="{fill}" font-family="system-ui, -apple-system, Segoe UI, Arial, sans-serif" '
-        f'font-size="{size}" font-weight="{weight}">{safe}</text>'
+        f'<text x="{x}" y="{y}" fill="{fill}" '
+        f'font-family="{family}" '
+        f'font-size="{size}" font-weight="{weight}" '
+        f'text-anchor="{anchor}" dominant-baseline="{baseline}">{safe}</text>'
     )
 
 
@@ -237,46 +258,137 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username):
     parts = []
 
     parts.append(
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{CANVAS_W}" height="{CANVAS_H}" viewBox="0 0 {CANVAS_W} {CANVAS_H}">'
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{CANVAS_W}" height="{CANVAS_H}" '
+        f'viewBox="0 0 {CANVAS_W} {CANVAS_H}" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">'
     )
     parts.append(svg_rect(0, 0, CANVAS_W, CANVAS_H, theme["bg"], rx=0))
+parts.append(
+    svg_rect(
+        CARD_X,
+        CARD_Y,
+        CARD_W,
+        CARD_H,
+        theme["bg"],
+        rx=6,
+        extra=f'stroke="{theme["border"]}" stroke-width="1"',
+    )
+)
+
+# Верхняя строка
+parts.append(
+    svg_text(
+        16,
+        31,
+        f"{total} contributions in the last year",
+        theme["text"],
+        size=14,
+        weight="600",
+        anchor="start",
+        baseline="alphabetic",
+    )
+)
+
+parts.append(
+    svg_text(
+        CARD_RIGHT - 16,
+        31,
+        "Contribution settings ▾",
+        theme["muted"],
+        size=11,
+        weight="400",
+        anchor="end",
+        baseline="alphabetic",
+    )
+)
+
+parts.append(
+    f'<line x1="{CARD_X + 1}" y1="40" x2="{CARD_RIGHT - 1}" y2="40" stroke="{theme["divider"]}" stroke-width="1"/>'
+)
+
+# Месяцы
+for month_name, col in month_labels:
+    x = GRID_X + col * STEP
     parts.append(
-        svg_rect(
-            8,
-            8,
-            CANVAS_W - 16,
-            CANVAS_H - 16,
-            theme["bg"],
-            rx=6,
-            extra=f'stroke="{theme["border"]}" stroke-width="1"',
+        svg_text(
+            x,
+            62,
+            month_name,
+            theme["text"],
+            size=12,
+            weight="400",
+            anchor="start",
+            baseline="alphabetic",
         )
     )
 
-    parts.append(svg_text(16, 30, f"{total} contributions in the last year", theme["text"], size=15, weight="700"))
-    parts.append(svg_text(CANVAS_W - 150, 30, "Contribution settings ▾", theme["muted"], size=11))
-    parts.append(f'<line x1="9" y1="40" x2="{CANVAS_W - 9}" y2="40" stroke="{theme["divider"]}" stroke-width="1"/>')
+# Подписи дней
+for label, row in (("Mon", 1), ("Wed", 3), ("Fri", 5)):
+    y = GRID_Y + row * STEP + CELL / 2
+    parts.append(
+        svg_text(
+            GRID_X - 18,
+            y,
+            label,
+            theme["text"],
+            size=12,
+            weight="400",
+            anchor="end",
+            baseline="middle",
+        )
+    )
 
-    for month_name, col in month_labels:
-        x = GRID_X + col * STEP
-        parts.append(svg_text(x, 62, month_name, theme["text"], size=12))
+# Сетка
+for row in range(ROWS):
+    for col in range(COLS):
+        x, y, w, h = cell_rect(col, row)
+        parts.append(svg_rect(x, y, w, h, theme["greens"][board[row][col]], rx=2))
 
-    for label, row in (("Mon", 1), ("Wed", 3), ("Fri", 5)):
-        y = GRID_Y + row * STEP + 9
-        parts.append(svg_text(18, y, label, theme["text"], size=12))
+# Нижняя подпись
+parts.append(
+    svg_text(
+        66,
+        197,
+        "Learn how we count contributions",
+        theme["muted"],
+        size=11,
+        weight="400",
+        anchor="start",
+        baseline="alphabetic",
+    )
+)
 
-    for row in range(ROWS):
-        for col in range(COLS):
-            x, y, w, h = cell_rect(col, row)
-            parts.append(svg_rect(x, y, w, h, theme["greens"][board[row][col]], rx=2))
+# Less / More
+legend_blocks_x = CARD_RIGHT - 88
+legend_y = 188
 
-    parts.append(svg_text(66, 197, "Live GitHub calendar data", theme["muted"], size=11))
+parts.append(
+    svg_text(
+        legend_blocks_x - 10,
+        197,
+        "Less",
+        theme["text"],
+        size=11,
+        weight="400",
+        anchor="end",
+        baseline="alphabetic",
+    )
+)
 
-    parts.append(svg_text(CANVAS_W - 120, 197, "Less", theme["text"], size=11))
-    legend_x = CANVAS_W - 90
-    for i, color in enumerate(theme["greens"]):
-        parts.append(svg_rect(legend_x + i * 13, 188, 10, 10, color, rx=2))
-    parts.append(svg_text(CANVAS_W - 22, 197, "More", theme["text"], size=11))
+for i, color in enumerate(theme["greens"]):
+    parts.append(svg_rect(legend_blocks_x + i * 13, legend_y, 10, 10, color, rx=2))
 
+parts.append(
+    svg_text(
+        legend_blocks_x + 5 * 13 + 4,
+        197,
+        "More",
+        theme["text"],
+        size=11,
+        weight="400",
+        anchor="start",
+        baseline="alphabetic",
+    )
+)
     parts.append(f'<metadata>{{"username":"{username}","active_cells":{active_cells}}}</metadata>')
     parts.append("</svg>")
     return "\n".join(parts)
