@@ -54,14 +54,14 @@ THEMES = {
         "greens": ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
         "blue_scale": ["#161b22", "#10253f", "#153b66", "#1b5aa0", "#1f6feb"],
         "piece_hues": [
-            "#ff7b72",  # red
-            "#79c0ff",  # blue
-            "#d2a8ff",  # purple
-            "#ffa657",  # orange
-            "#8ddb8c",  # green
-            "#e3b341",  # yellow
-            "#56d4dd",  # cyan
-            "#f2cc60",  # amber
+            "#ff7b72",
+            "#79c0ff",
+            "#d2a8ff",
+            "#ffa657",
+            "#8ddb8c",
+            "#e3b341",
+            "#56d4dd",
+            "#f2cc60",
         ],
     },
     "light": {
@@ -74,14 +74,14 @@ THEMES = {
         "greens": ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
         "blue_scale": ["#ebedf0", "#dbeafe", "#a8c7ff", "#5b95ff", "#1f6feb"],
         "piece_hues": [
-            "#cf222e",  # red
-            "#0969da",  # blue
-            "#8250df",  # purple
-            "#bc4c00",  # orange
-            "#1a7f37",  # green
-            "#9a6700",  # yellow
-            "#0a7ea4",  # cyan
-            "#b35900",  # amber
+            "#cf222e",
+            "#0969da",
+            "#8250df",
+            "#bc4c00",
+            "#1a7f37",
+            "#9a6700",
+            "#0a7ea4",
+            "#b35900",
         ],
     },
 }
@@ -534,6 +534,9 @@ def solve_component_exact(component):
 
                 tail_score, tail_solution = solve(mask ^ placement["mask"])
 
+                if tail_score is None:
+                    continue
+
                 name = placement["name"]
                 score = (
                     tail_score[0] + (1 if name == "DOT" else 0),
@@ -549,13 +552,25 @@ def solve_component_exact(component):
             memo[mask] = (best_score, best_solution)
             return memo[mask]
 
-        score, solution = solve(all_mask)
-        return score, solution
+        return solve(all_mask)
 
     score, solution = try_solve(allow_connected_dots=False)
 
     if solution is None:
         score, solution = try_solve(allow_connected_dots=True)
+
+    if solution is None:
+        # Совсем аварийный fallback, чтобы workflow не падал.
+        solution = [
+            {
+                "name": "DOT",
+                "shape": ((0, 0),),
+                "origin_x": cell[0],
+                "origin_y": cell[1],
+                "cells": [cell],
+            }
+            for cell in component_cells
+        ]
 
     return [
         {
@@ -750,7 +765,6 @@ def render_piece_live_layers(parts, theme_name, board, pieces, calendar_hash):
     plan = build_animation_plan(pieces, calendar_hash)
 
     for piece, style, anim in zip(pieces, styles, plan):
-        # Осевшая фигура
         parts.append('<g opacity="0">')
         parts.append(
             f'<set attributeName="opacity" to="1" begin="{anim["end"]:.3f}s" fill="freeze" />'
@@ -762,7 +776,6 @@ def render_piece_live_layers(parts, theme_name, board, pieces, calendar_hash):
             parts.append(svg_rect(x, y, w, h, fill, rx=2))
         parts.append("</g>")
 
-        # Летящая фигура
         target_px_x = GRID_X + anim["target_x"] * STEP
         target_px_y = GRID_Y + anim["target_y"] * STEP
         spawn_dx = (anim["spawn_x"] - anim["target_x"]) * STEP
