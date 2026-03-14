@@ -110,21 +110,27 @@ GRID_X = CARD_RIGHT - CARD_PAD - GRID_W
 
 DAY_LABEL_X = GRID_X - 9
 
-TITLE_X = CARD_X + CARD_PAD
-TITLE_Y = CARD_Y + CARD_PAD + 12
-SETTINGS_X = CARD_RIGHT - CARD_PAD
+CONTENT_LEFT = CARD_X + CARD_PAD
+CONTENT_RIGHT = CARD_RIGHT - CARD_PAD
+CONTENT_TOP = CARD_Y + CARD_PAD
+CONTENT_BOTTOM = CARD_BOTTOM - CARD_PAD
+
+TITLE_X = CONTENT_LEFT
+TITLE_Y = CONTENT_TOP + 11
+
+SETTINGS_X = CONTENT_RIGHT
 SETTINGS_Y = TITLE_Y
 
-DIVIDER_Y = TITLE_Y + 14
+DIVIDER_Y = CONTENT_TOP + 20
 
-DAY_LABEL_X = TITLE_X + 23
-GRID_X = DAY_LABEL_X + 9
+GRID_X = CONTENT_RIGHT - GRID_W
 
-MONTH_Y = DIVIDER_Y + 18
+DAY_LABEL_X = GRID_X - 9
 
+MONTH_Y = DIVIDER_Y + 16
 GRID_Y = MONTH_Y + 11
 
-FOOTER_Y = GRID_Y + GRID_H + 18
+FOOTER_Y = CONTENT_BOTTOM
 LEGEND_Y = FOOTER_Y - 10
 LEGEND_BLOCKS_X = CARD_RIGHT - CARD_PAD - 122
 
@@ -1015,7 +1021,7 @@ def render_base(parts, theme_name, month_labels, total):
     )
 
     parts.append(
-        f'<line x1="{CARD_X + 1}" y1="{DIVIDER_Y}" x2="{CARD_RIGHT - 1}" y2="{DIVIDER_Y}" stroke="{theme["divider"]}" stroke-width="1"/>'
+        f'<line x1="{CONTENT_LEFT}" y1="{DIVIDER_Y}" x2="{CONTENT_RIGHT}" y2="{DIVIDER_Y}" stroke="{theme["divider"]}" stroke-width="1"/>'
     )
 
     for month_name, col in month_labels:
