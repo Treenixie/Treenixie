@@ -13,7 +13,7 @@
 <code>&nbsp;<img src="https://cdn.simpleicons.org/notion/24292F/C9D1D9?viewbox=auto" alt="Notion" width="14" height="14" align="absmiddle" />&nbsp;Notion&nbsp;</code>
 <br><br>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/languages-line.svg" alt="" width="100%">
+  <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/languages-line.svg" alt="" width="100%">
 </p>
 <p align="center">
   <b>languages</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
