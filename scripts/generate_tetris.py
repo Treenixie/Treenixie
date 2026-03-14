@@ -61,18 +61,19 @@ THEMES = {
     },
 }
 
+# Размер блока
 CANVAS_W = 767
-CANVAS_H = 212
+CANVAS_H = 196
 
 CARD_X = 8
 CARD_Y = 8
 CARD_W = CANVAS_W - 16
 CARD_H = CANVAS_H - 16
 CARD_RIGHT = CARD_X + CARD_W
-CARD_BOTTOM = CARD_Y + CARD_H
 
+# Позиции сетки
 GRID_X = 69
-GRID_Y = 54
+GRID_Y = 66
 CELL = 10
 GAP = 3
 STEP = CELL + GAP
@@ -263,9 +264,10 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username):
 
     parts.append(
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{CANVAS_W}" height="{CANVAS_H}" '
-        f'viewBox="0 0 {CANVAS_W} {CANVAS_H}" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">'
+        f'viewBox="0 0 {CANVAS_W} {CANVAS_H}">'
     )
 
+    # Фон и карточка
     parts.append(svg_rect(0, 0, CANVAS_W, CANVAS_H, theme["bg"], rx=0))
     parts.append(
         svg_rect(
@@ -279,6 +281,7 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username):
         )
     )
 
+    # Верхняя строка
     parts.append(
         svg_text(
             16,
@@ -287,8 +290,6 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username):
             theme["text"],
             size=14,
             weight="600",
-            anchor="start",
-            baseline="alphabetic",
         )
     )
 
@@ -301,7 +302,6 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username):
             size=11,
             weight="400",
             anchor="end",
-            baseline="alphabetic",
         )
     )
 
@@ -309,67 +309,66 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username):
         f'<line x1="{CARD_X + 1}" y1="40" x2="{CARD_RIGHT - 1}" y2="40" stroke="{theme["divider"]}" stroke-width="1"/>'
     )
 
+    # Месяцы
     for month_name, col in month_labels:
         x = GRID_X + col * STEP
         parts.append(
             svg_text(
                 x,
-                62,
+                56,
                 month_name,
                 theme["text"],
-                size=12,
+                size=11,
                 weight="400",
-                anchor="start",
-                baseline="alphabetic",
             )
         )
 
+    # Подписи дней
     for label, row in (("Mon", 1), ("Wed", 3), ("Fri", 5)):
-        y = GRID_Y + row * STEP + CELL / 2
+        y = GRID_Y + row * STEP + 6
         parts.append(
             svg_text(
                 GRID_X - 18,
                 y,
                 label,
                 theme["text"],
-                size=12,
+                size=11,
                 weight="400",
                 anchor="end",
-                baseline="middle",
             )
         )
 
+    # Сетка
     for row in range(ROWS):
         for col in range(COLS):
             x, y, w, h = cell_rect(col, row)
             parts.append(svg_rect(x, y, w, h, theme["greens"][board[row][col]], rx=2))
 
+    # Нижняя подпись
     parts.append(
         svg_text(
             66,
-            189,
+            176,
             "Learn how we count contributions",
             theme["muted"],
             size=11,
             weight="400",
-            anchor="start",
-            baseline="alphabetic",
         )
     )
 
-    legend_blocks_x = CARD_RIGHT - 92
-    legend_y = 180
+    # Легенда
+    legend_y = 166
+    legend_blocks_x = CARD_RIGHT - 90
 
     parts.append(
         svg_text(
-            legend_blocks_x - 10,
-            189,
+            legend_blocks_x - 8,
+            176,
             "Less",
             theme["text"],
             size=11,
             weight="400",
             anchor="end",
-            baseline="alphabetic",
         )
     )
 
@@ -379,16 +378,16 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username):
     parts.append(
         svg_text(
             legend_blocks_x + 5 * 13 + 4,
-            189,
+            176,
             "More",
             theme["text"],
             size=11,
             weight="400",
             anchor="start",
-            baseline="alphabetic",
         )
     )
 
+    # Metadata
     parts.append(
         f'<metadata>{{"username":"{username}","active_cells":{active_cells}}}</metadata>'
     )
