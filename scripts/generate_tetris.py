@@ -80,7 +80,7 @@ STEP = CELL + GAP
 COLS = 53
 ROWS = 7
 
-FONT_STACK = '-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji"'
+FONT_STACK = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'"
 
 
 def svg_rect(x, y, w, h, fill, rx=2, extra=""):
