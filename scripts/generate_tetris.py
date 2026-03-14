@@ -1,6 +1,5 @@
 from pathlib import Path
 import os
-import calendar as cal
 import datetime as dt
 import hashlib
 import json
@@ -26,7 +25,6 @@ query($from: DateTime!, $to: DateTime!) {
             contributionCount
             contributionLevel
             date
-            weekday
           }
         }
       }
@@ -46,13 +44,7 @@ LEVEL_MAP = {
 THEMES = {
     "dark": {
         "bg": "#0d1117",
-        "border": "#30363d",
-        "divider": "#21262d",
-        "text": "#c9d1d9",
-        "muted": "#8b949e",
         "empty": "#161b22",
-        "greens": ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
-        "blue_scale": ["#161b22", "#10253f", "#153b66", "#1b5aa0", "#1f6feb"],
         "piece_hues": [
             "#ff7b72",
             "#79c0ff",
@@ -66,13 +58,7 @@ THEMES = {
     },
     "light": {
         "bg": "#ffffff",
-        "border": "#d0d7de",
-        "divider": "#d8dee4",
-        "text": "#24292f",
-        "muted": "#57606a",
         "empty": "#ebedf0",
-        "greens": ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
-        "blue_scale": ["#ebedf0", "#dbeafe", "#a8c7ff", "#5b95ff", "#1f6feb"],
         "piece_hues": [
             "#cf222e",
             "#0969da",
@@ -87,57 +73,25 @@ THEMES = {
 }
 
 CANVAS_W = 767
-CANVAS_H = 196
-
-CARD_X = 8
-CARD_Y = 8
-CARD_W = CANVAS_W - 16
-CARD_H = CANVAS_H - 16
-CARD_RIGHT = CARD_X + CARD_W
-CARD_BOTTOM = CARD_Y + CARD_H
-CARD_PAD = 10
-
-CELL = 10
-GAP = 3
-STEP = CELL + GAP
+CANVAS_H = 44
 
 COLS = 53
 ROWS = 7
-GRID_W = COLS * STEP - GAP
-GRID_H = ROWS * STEP - GAP
 
-GRID_X = CARD_RIGHT - CARD_PAD - GRID_W
+GAP_X = 2
+GAP_Y = 2
 
-DAY_LABEL_X = GRID_X - 9
+GRID_X = 0
+GRID_Y = 0
 
-CONTENT_LEFT = CARD_X + CARD_PAD
-CONTENT_RIGHT = CARD_RIGHT - CARD_PAD
-CONTENT_TOP = CARD_Y + CARD_PAD
-CONTENT_BOTTOM = CARD_BOTTOM - CARD_PAD
+CELL_W = (CANVAS_W - GAP_X * (COLS - 1)) / COLS
+CELL_H = 4
 
-HEADER_RIGHT = CARD_RIGHT - CELL
+STEP_X = CELL_W + GAP_X
+STEP_Y = CELL_H + GAP_Y
 
-GRID_X = HEADER_RIGHT - GRID_W
-GRID_Y = 66
-
-DAY_LABEL_X = GRID_X - 9
-
-TITLE_X = GRID_X - 31
-TITLE_Y = 31
-
-SETTINGS_X = HEADER_RIGHT
-SETTINGS_Y = TITLE_Y
-
-HEADER_LEFT = TITLE_X
-DIVIDER_Y = 40
-
-MONTH_Y = 56
-
-FOOTER_Y = GRID_Y + GRID_H + 19
-LEGEND_Y = FOOTER_Y - 10
-LEGEND_BLOCKS_X = CARD_RIGHT - CARD_PAD - 122
-
-FONT_STACK = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'"
+GRID_W = COLS * STEP_X - GAP_X
+GRID_H = ROWS * STEP_Y - GAP_Y
 
 BASE_SHAPES = {
     "I": [(0, 0), (1, 0), (2, 0), (3, 0)],
@@ -165,35 +119,10 @@ def svg_rect(x, y, w, h, fill, rx=2, extra=""):
     return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" ry="{rx}" fill="{fill}" {extra}/>'
 
 
-def svg_text(
-    x,
-    y,
-    text,
-    fill,
-    size=12,
-    weight="400",
-    anchor="start",
-    baseline="alphabetic",
-    family=FONT_STACK,
-):
-    safe = (
-        str(text)
-        .replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
-    )
-    return (
-        f'<text x="{x}" y="{y}" fill="{fill}" '
-        f'font-family="{family}" '
-        f'font-size="{size}" font-weight="{weight}" '
-        f'text-anchor="{anchor}" dominant-baseline="{baseline}">{safe}</text>'
-    )
-
-
 def cell_rect(col, row):
-    x = GRID_X + col * STEP
-    y = GRID_Y + row * STEP
-    return x, y, CELL, CELL
+    x = GRID_X + col * STEP_X
+    y = GRID_Y + row * STEP_Y
+    return x, y, CELL_W, CELL_H
 
 
 def add_grid_clip(parts, clip_id):
@@ -252,7 +181,7 @@ def choose_token():
 
 
 def fetch_calendar(username, token):
-    today = dt.datetime.utcnow().date()
+    today = dt.datetime.now(dt.timezone.utc).date()
     start = today - dt.timedelta(days=370)
 
     response = requests.post(
@@ -287,7 +216,7 @@ def fetch_calendar(username, token):
         )
 
     collection = viewer["contributionsCollection"]
-    calendar = collection["contributionCalendar"]
+    calendar_data = collection["contributionCalendar"]
 
     diagnostics = {
         "viewer_login": viewer["login"],
@@ -296,7 +225,7 @@ def fetch_calendar(username, token):
         "earliest_restricted_contribution_date": collection.get("earliestRestrictedContributionDate"),
     }
 
-    return calendar, diagnostics
+    return calendar_data, diagnostics
 
 
 def pad_weeks(weeks):
@@ -320,7 +249,6 @@ def pad_weeks(weeks):
                     "contributionCount": 0,
                     "contributionLevel": "NONE",
                     "date": day.isoformat(),
-                    "weekday": j,
                 }
             )
         padding.append(
@@ -338,16 +266,8 @@ def normalize_calendar(calendar_data):
 
     board = [[0 for _ in range(COLS)] for _ in range(ROWS)]
     raw_days = []
-    month_labels = []
-    prev_month = None
 
     for col, week in enumerate(weeks):
-        week_start = dt.date.fromisoformat(week["firstDay"])
-        month_name = cal.month_abbr[week_start.month]
-        if month_name != prev_month:
-            month_labels.append((month_name, col))
-            prev_month = month_name
-
         for day in week["contributionDays"]:
             day_date = dt.date.fromisoformat(day["date"])
             row = (day_date.weekday() + 1) % 7
@@ -380,7 +300,7 @@ def normalize_calendar(calendar_data):
         json.dumps(hash_source, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
     ).hexdigest()
 
-    return board, month_labels, total, active_cells, calendar_hash
+    return board, total, active_cells, calendar_hash
 
 
 def normalize_shape(shape):
@@ -548,6 +468,7 @@ def solve_component_exact(component):
     def mask_fragment_penalty(mask):
         if mask == 0:
             return 0
+
         if mask in mask_penalty_cache:
             return mask_penalty_cache[mask]
 
@@ -625,7 +546,7 @@ def solve_component_exact(component):
             placements_by_index[idx].sort(
                 key=lambda p: (
                     piece_penalty(p["name"]),
-                    -(p["size"]),
+                    -p["size"],
                     -p["priority"],
                 )
             )
@@ -672,10 +593,10 @@ def solve_component_exact(component):
 
         return solve(all_mask)
 
-    score, solution = try_solve(allow_connected_dots=False)
+    _, solution = try_solve(allow_connected_dots=False)
 
     if solution is None:
-        score, solution = try_solve(allow_connected_dots=True)
+        _, solution = try_solve(allow_connected_dots=True)
 
     if solution is None:
         solution = [
@@ -928,7 +849,7 @@ def render_piece_static_cells(parts, theme_name, board, pieces):
             level = board[row][col]
             fill = shade_from_level(style["base"], level, theme_name)
             x, y, w, h = cell_rect(col, row)
-            parts.append(svg_rect(x, y, w, h, fill, rx=2))
+            parts.append(svg_rect(x, y, w, h, fill, rx=1))
 
 
 def render_piece_live_layers(parts, theme_name, board, pieces, calendar_hash):
@@ -944,15 +865,15 @@ def render_piece_live_layers(parts, theme_name, board, pieces, calendar_hash):
             level = board[row][col]
             fill = shade_from_level(style["base"], level, theme_name)
             x, y, w, h = cell_rect(col, row)
-            parts.append(svg_rect(x, y, w, h, fill, rx=2))
+            parts.append(svg_rect(x, y, w, h, fill, rx=1))
         parts.append("</g>")
 
-        target_px_x = GRID_X + anim["target_x"] * STEP
-        target_px_y = GRID_Y + anim["target_y"] * STEP
-        spawn_dx = (anim["spawn_x"] - anim["target_x"]) * STEP
-        spawn_dy = (anim["spawn_y"] - anim["target_y"]) * STEP
-        mid_dx = (anim["mid_x"] - anim["target_x"]) * STEP
-        mid_dy = (anim["mid_y"] - anim["target_y"]) * STEP
+        target_px_x = GRID_X + anim["target_x"] * STEP_X
+        target_px_y = GRID_Y + anim["target_y"] * STEP_Y
+        spawn_dx = (anim["spawn_x"] - anim["target_x"]) * STEP_X
+        spawn_dy = (anim["spawn_y"] - anim["target_y"]) * STEP_Y
+        mid_dx = (anim["mid_x"] - anim["target_x"]) * STEP_X
+        mid_dy = (anim["mid_y"] - anim["target_y"]) * STEP_Y
 
         parts.append(f'<g opacity="0" transform="translate({target_px_x} {target_px_y})">')
         parts.append(
@@ -972,78 +893,20 @@ def render_piece_live_layers(parts, theme_name, board, pieces, calendar_hash):
             row = piece["origin_y"] + dy
             level = board[row][col]
             fill = shade_from_level(style["base"], level, theme_name)
-            x = dx * STEP
-            y = dy * STEP
-            parts.append(svg_rect(x, y, CELL, CELL, fill, rx=2))
+            x = dx * STEP_X
+            y = dy * STEP_Y
+            parts.append(svg_rect(x, y, CELL_W, CELL_H, fill, rx=1))
 
         parts.append("</g>")
 
 
-def render_base(parts, theme_name, month_labels, total):
+def render_base(parts, theme_name):
     theme = THEMES[theme_name]
-
     parts.append(
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{CANVAS_W}" height="{CANVAS_H}" '
         f'viewBox="0 0 {CANVAS_W} {CANVAS_H}">'
     )
-
     parts.append(svg_rect(0, 0, CANVAS_W, CANVAS_H, theme["bg"], rx=0))
-    parts.append(
-        svg_rect(
-            CARD_X,
-            CARD_Y,
-            CARD_W,
-            CARD_H,
-            theme["bg"],
-            rx=6,
-            extra=f'stroke="{theme["border"]}" stroke-width="1"',
-        )
-    )
-
-    parts.append(
-        svg_text(
-            TITLE_X,
-            TITLE_Y,
-            f"{total} contributions in the last year",
-            theme["text"],
-            size=14,
-            weight="600",
-        )
-    )
-
-    parts.append(
-        svg_text(
-            SETTINGS_X,
-            SETTINGS_Y,
-            "Contribution settings ▾",
-            theme["muted"],
-            size=11,
-            weight="400",
-            anchor="end",
-        )
-    )
-
-    parts.append(
-      f'<line x1="{HEADER_LEFT}" y1="{DIVIDER_Y}" x2="{HEADER_RIGHT}" y2="{DIVIDER_Y}" stroke="{theme["divider"]}" stroke-width="1"/>'
-    )
-
-    for month_name, col in month_labels:
-        x = GRID_X + col * STEP
-        parts.append(svg_text(x, MONTH_Y, month_name, theme["text"], size=12, weight="400"))
-
-    for label, row in (("Mon", 1), ("Wed", 3), ("Fri", 5)):
-        y = GRID_Y + row * STEP + 6
-        parts.append(
-            svg_text(
-                DAY_LABEL_X,
-                y,
-                label,
-                theme["text"],
-                size=12,
-                weight="400",
-                anchor="end",
-            )
-        )
 
 
 def render_empty_grid(parts, theme_name):
@@ -1051,64 +914,20 @@ def render_empty_grid(parts, theme_name):
     for row in range(ROWS):
         for col in range(COLS):
             x, y, w, h = cell_rect(col, row)
-            parts.append(svg_rect(x, y, w, h, theme["empty"], rx=2))
+            parts.append(svg_rect(x, y, w, h, theme["empty"], rx=1))
 
 
-def render_blue_legend(parts, theme_name):
-    theme = THEMES[theme_name]
-
-    parts.append(
-        svg_text(
-            GRID_X,
-            FOOTER_Y,
-            "Learn how we count contributions",
-            theme["muted"],
-            size=11,
-            weight="400",
-        )
-    )
-
-    parts.append(
-        svg_text(
-            LEGEND_BLOCKS_X - 8,
-            FOOTER_Y,
-            "Less",
-            theme["muted"],
-            size=11,
-            weight="400",
-            anchor="end",
-        )
-    )
-
-    for i, color in enumerate(theme["blue_scale"]):
-        parts.append(svg_rect(LEGEND_BLOCKS_X + i * 13, LEGEND_Y, 10, 10, color, rx=2))
-
-    parts.append(
-        svg_text(
-            LEGEND_BLOCKS_X + 5 * 13 + 4,
-            FOOTER_Y,
-            "More",
-            theme["muted"],
-            size=11,
-            weight="400",
-            anchor="start",
-        )
-    )
-
-
-def render_live_svg(theme_name, board, month_labels, total, active_cells, username, pieces, calendar_hash):
+def render_live_svg(theme_name, board, active_cells, username, pieces, calendar_hash):
     parts = []
     clip_id = f"grid-clip-live-{theme_name}"
 
-    render_base(parts, theme_name, month_labels, total)
+    render_base(parts, theme_name)
     add_grid_clip(parts, clip_id)
     render_empty_grid(parts, theme_name)
 
     parts.append(f'<g clip-path="url(#{clip_id})">')
     render_piece_live_layers(parts, theme_name, board, pieces, calendar_hash)
     parts.append("</g>")
-
-    render_blue_legend(parts, theme_name)
 
     meta_payload = {
         "username": username,
@@ -1120,19 +939,17 @@ def render_live_svg(theme_name, board, month_labels, total, active_cells, userna
     return "\n".join(parts)
 
 
-def render_partition_svg(theme_name, board, month_labels, total, active_cells, username, pieces):
+def render_partition_svg(theme_name, board, active_cells, username, pieces):
     parts = []
     clip_id = f"grid-clip-partition-{theme_name}"
 
-    render_base(parts, theme_name, month_labels, total)
+    render_base(parts, theme_name)
     add_grid_clip(parts, clip_id)
     render_empty_grid(parts, theme_name)
 
     parts.append(f'<g clip-path="url(#{clip_id})">')
     render_piece_static_cells(parts, theme_name, board, pieces)
     parts.append("</g>")
-
-    render_blue_legend(parts, theme_name)
 
     meta_payload = {
         "username": username,
@@ -1154,17 +971,17 @@ def main():
     outdir.mkdir(parents=True, exist_ok=True)
 
     calendar_data, diagnostics = fetch_calendar(username, token)
-    board, month_labels, total, active_cells, calendar_hash = normalize_calendar(calendar_data)
+    board, total, active_cells, calendar_hash = normalize_calendar(calendar_data)
     pieces = partition_into_pieces(board)
 
-    light_live_svg = render_live_svg("light", board, month_labels, total, active_cells, username, pieces, calendar_hash)
-    dark_live_svg = render_live_svg("dark", board, month_labels, total, active_cells, username, pieces, calendar_hash)
+    light_live_svg = render_live_svg("light", board, active_cells, username, pieces, calendar_hash)
+    dark_live_svg = render_live_svg("dark", board, active_cells, username, pieces, calendar_hash)
 
     (outdir / "github-tetris-light.svg").write_text(light_live_svg, encoding="utf-8")
     (outdir / "github-tetris-dark.svg").write_text(dark_live_svg, encoding="utf-8")
 
-    light_partition_svg = render_partition_svg("light", board, month_labels, total, active_cells, username, pieces)
-    dark_partition_svg = render_partition_svg("dark", board, month_labels, total, active_cells, username, pieces)
+    light_partition_svg = render_partition_svg("light", board, active_cells, username, pieces)
+    dark_partition_svg = render_partition_svg("dark", board, active_cells, username, pieces)
 
     (outdir / "github-tetris-light-partition.svg").write_text(light_partition_svg, encoding="utf-8")
     (outdir / "github-tetris-dark-partition.svg").write_text(dark_partition_svg, encoding="utf-8")
