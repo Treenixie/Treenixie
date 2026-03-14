@@ -7,8 +7,11 @@
 </p>
 
 <p align="center">
-  <img src="./assets/languages-dark.svg#gh-dark-mode-only" alt="Languages" width="100%">
-  <img src="./assets/languages-light.svg#gh-light-mode-only" alt="Languages" width="100%">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/languages-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/languages-light.svg">
+    <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/languages-dark.svg" alt="Languages" width="100%">
+  </picture>
 </p>
 
 <b>languages</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>&nbsp;<img src="https://cdn.simpleicons.org/python/24292F/C9D1D9?viewbox=auto" alt="Python" width="14" height="14" align="absmiddle" />&nbsp;Python&nbsp;</code>
