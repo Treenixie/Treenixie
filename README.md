@@ -12,7 +12,7 @@
 <code>&nbsp;<img src="https://cdn.simpleicons.org/javascript/24292F/C9D1D9?viewbox=auto" alt="JavaScript" width="14" height="14" align="absmiddle" />&nbsp;JavaScript&nbsp;</code>
 <code>&nbsp;<img src="https://cdn.simpleicons.org/css/24292F/C9D1D9?viewbox=auto" alt="CSS" width="14" height="14" align="absmiddle" />&nbsp;CSS&nbsp;</code>
 <code>&nbsp;<img src="https://cdn.simpleicons.org/html5/24292F/C9D1D9?viewbox=auto" alt="HTML5" width="14" height="14" align="absmiddle" />&nbsp;HTML5&nbsp;</code>
-<br><br>
+<p align="right"><sub>as well as the Adobe Creative Cloud</sub></p>
 <b>tools</b><br><br>
 <code>&nbsp;<img src="https://cdn.simpleicons.org/unrealengine/24292F/C9D1D9?viewbox=auto" alt="Unreal Engine" width="14" height="14" align="absmiddle" />&nbsp;Unreal Engine&nbsp;</code>
 <code>&nbsp;<img src="https://cdn.simpleicons.org/blender/24292F/C9D1D9?viewbox=auto" alt="Blender" width="14" height="14" align="absmiddle" />&nbsp;Blender&nbsp;</code>
