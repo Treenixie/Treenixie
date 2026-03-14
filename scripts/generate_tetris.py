@@ -118,7 +118,6 @@ CONTENT_BOTTOM = CARD_BOTTOM - CARD_PAD
 HEADER_LEFT = CARD_X + CELL
 HEADER_RIGHT = CARD_RIGHT - CELL
 
-TITLE_X = HEADER_LEFT
 TITLE_Y = CARD_Y + CARD_PAD + 12
 SETTINGS_X = HEADER_RIGHT
 SETTINGS_Y = TITLE_Y
@@ -127,12 +126,14 @@ DIVIDER_Y = TITLE_Y + 14
 
 GRID_X = HEADER_RIGHT - GRID_W
 
-DAY_LABEL_X = HEADER_LEFT
+DAY_LABEL_X = GRID_X - 9
+
+TITLE_X = GRID_X - 31
 
 MONTH_Y = DIVIDER_Y + 18
 GRID_Y = MONTH_Y + 11
 
-FOOTER_Y = CARD_BOTTOM - 13
+FOOTER_Y = GRID_Y + GRID_H + 18
 LEGEND_Y = FOOTER_Y - 10
 LEGEND_BLOCKS_X = CARD_RIGHT - CARD_PAD - 122
 
@@ -1040,7 +1041,7 @@ def render_base(parts, theme_name, month_labels, total):
                 theme["text"],
                 size=12,
                 weight="400",
-                anchor="start",
+                anchor="end",
             )
         )
 
