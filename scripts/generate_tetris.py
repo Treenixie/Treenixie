@@ -560,7 +560,6 @@ def solve_component_exact(component):
         score, solution = try_solve(allow_connected_dots=True)
 
     if solution is None:
-        # Совсем аварийный fallback, чтобы workflow не падал.
         solution = [
             {
                 "name": "DOT",
@@ -694,14 +693,56 @@ def partition_into_pieces(board):
     return pieces
 
 
+def pieces_touch_by_edge(piece_a, piece_b):
+    a_cells = set(piece_a["cells"])
+    b_cells = set(piece_b["cells"])
+
+    for col, row in a_cells:
+        for dc, dr in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            if (col + dc, row + dr) in b_cells:
+                return True
+    return False
+
+
+def build_piece_color_indices(pieces, palette_size):
+    adjacency = {i: set() for i in range(len(pieces))}
+
+    for i in range(len(pieces)):
+        for j in range(i + 1, len(pieces)):
+            if pieces_touch_by_edge(pieces[i], pieces[j]):
+                adjacency[i].add(j)
+                adjacency[j].add(i)
+
+    order = sorted(
+        range(len(pieces)),
+        key=lambda i: (-len(adjacency[i]), -len(pieces[i]["cells"]), i),
+    )
+
+    color_of = {}
+    usage_count = {c: 0 for c in range(palette_size)}
+
+    for idx in order:
+        banned = {color_of[n] for n in adjacency[idx] if n in color_of}
+
+        candidates = [c for c in range(palette_size) if c not in banned]
+        if not candidates:
+            candidates = list(range(palette_size))
+
+        chosen = min(candidates, key=lambda c: (usage_count[c], c))
+        color_of[idx] = chosen
+        usage_count[chosen] += 1
+
+    return [color_of[i] for i in range(len(pieces))]
+
+
 def build_piece_styles(theme_name, pieces):
     hues = THEMES[theme_name]["piece_hues"]
+    color_indices = build_piece_color_indices(pieces, len(hues))
+
     styles = []
-
     for index, piece in enumerate(pieces):
-        base = hues[index % len(hues)]
+        base = hues[color_indices[index]]
         styles.append({"base": base, "name": piece["name"]})
-
     return styles
 
 
@@ -858,7 +899,7 @@ def render_base(parts, theme_name, month_labels, total):
 
     for month_name, col in month_labels:
         x = GRID_X + col * STEP
-        parts.append(svg_text(x, 56, month_name, theme["text"], size=11, weight="400"))
+        parts.append(svg_text(x, 56, month_name, theme["text"], size=12, weight="400"))
 
     for label, row in (("Mon", 1), ("Wed", 3), ("Fri", 5)):
         y = GRID_Y + row * STEP + 6
@@ -904,7 +945,7 @@ def render_blue_legend(parts, theme_name):
             legend_blocks_x - 8,
             176,
             "Less",
-            theme["text"],
+            theme["muted"],
             size=11,
             weight="400",
             anchor="end",
@@ -919,7 +960,7 @@ def render_blue_legend(parts, theme_name):
             legend_blocks_x + 5 * 13 + 4,
             176,
             "More",
-            theme["text"],
+            theme["muted"],
             size=11,
             weight="400",
             anchor="start",
