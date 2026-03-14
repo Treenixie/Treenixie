@@ -72,13 +72,13 @@ THEMES = {
     },
 }
 
-CANVAS_W = 767
+CANVAS_W = 1200
 CANVAS_H = 44
 
 COLS = 53
 ROWS = 7
 
-GAP_X = 2
+GAP_X = 1
 GAP_Y = 2
 
 GRID_X = 0
@@ -114,8 +114,12 @@ ANIM_STEP_DUR = 0.22
 ANIM_PIECE_GAP = 0.08
 ANIM_START_DELAY = 0.18
 
+HOLD_DUR = 2.0
+CLEAR_DUR = 0.9
+CYCLE_GAP = 0.2
 
-def svg_rect(x, y, w, h, fill, rx=2, extra=""):
+
+def svg_rect(x, y, w, h, fill, rx=1, extra=""):
     return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" ry="{rx}" fill="{fill}" {extra}/>'
 
 
@@ -838,7 +842,12 @@ def build_animation_plan(pieces, calendar_hash):
 
         current_t += duration + ANIM_PIECE_GAP
 
-    return plan
+    build_end = max((item["end"] for item in plan), default=0.0)
+    clear_start = build_end + HOLD_DUR
+    clear_end = clear_start + CLEAR_DUR
+    cycle_dur = clear_end + CYCLE_GAP
+
+    return plan, clear_start, clear_end, cycle_dur
 
 
 def render_piece_static_cells(parts, theme_name, board, pieces):
@@ -854,38 +863,58 @@ def render_piece_static_cells(parts, theme_name, board, pieces):
 
 def render_piece_live_layers(parts, theme_name, board, pieces, calendar_hash):
     styles = build_piece_styles(theme_name, pieces)
-    plan = build_animation_plan(pieces, calendar_hash)
+    plan, clear_start, clear_end, cycle_dur = build_animation_plan(pieces, calendar_hash)
+
+    exit_dx = 0
+    exit_dy = GRID_H + CELL_H + 12
 
     for piece, style, anim in zip(pieces, styles, plan):
-        parts.append('<g opacity="0">')
-        parts.append(
-            f'<set attributeName="opacity" to="1" begin="{anim["end"]:.3f}s" fill="freeze" />'
-        )
-        for col, row in piece["cells"]:
-            level = board[row][col]
-            fill = shade_from_level(style["base"], level, theme_name)
-            x, y, w, h = cell_rect(col, row)
-            parts.append(svg_rect(x, y, w, h, fill, rx=1))
-        parts.append("</g>")
-
         target_px_x = GRID_X + anim["target_x"] * STEP_X
         target_px_y = GRID_Y + anim["target_y"] * STEP_Y
+
         spawn_dx = (anim["spawn_x"] - anim["target_x"]) * STEP_X
         spawn_dy = (anim["spawn_y"] - anim["target_y"]) * STEP_Y
+
         mid_dx = (anim["mid_x"] - anim["target_x"]) * STEP_X
         mid_dy = (anim["mid_y"] - anim["target_y"]) * STEP_Y
 
-        parts.append(f'<g opacity="0" transform="translate({target_px_x} {target_px_y})">')
-        parts.append(
-            f'<set attributeName="opacity" to="1" begin="{anim["start"]:.3f}s" fill="freeze" />'
+        start_t = anim["start"] / cycle_dur
+        mid_t = (anim["start"] + anim["dur"] * 0.35) / cycle_dur
+        land_t = anim["end"] / cycle_dur
+        clear_start_t = clear_start / cycle_dur
+        clear_end_t = clear_end / cycle_dur
+
+        values = (
+            f"{spawn_dx} {spawn_dy};"
+            f"{spawn_dx} {spawn_dy};"
+            f"{mid_dx} {mid_dy};"
+            f"0 0;"
+            f"0 0;"
+            f"{exit_dx} {exit_dy};"
+            f"{exit_dx} {exit_dy}"
         )
-        parts.append(
-            f'<set attributeName="opacity" to="0" begin="{anim["end"]:.3f}s" fill="freeze" />'
+
+        key_times = (
+            f"0;"
+            f"{start_t:.6f};"
+            f"{mid_t:.6f};"
+            f"{land_t:.6f};"
+            f"{clear_start_t:.6f};"
+            f"{clear_end_t:.6f};"
+            f"1"
         )
+
+        parts.append(f'<g transform="translate({target_px_x} {target_px_y})">')
         parts.append(
-            f'<animateTransform attributeName="transform" type="translate" additive="sum" '
-            f'begin="{anim["start"]:.3f}s" dur="{anim["dur"]:.3f}s" fill="freeze" '
-            f'values="{spawn_dx} {spawn_dy}; {mid_dx} {mid_dy}; 0 0" keyTimes="0;0.35;1" />'
+            f'<animateTransform '
+            f'attributeName="transform" '
+            f'type="translate" '
+            f'additive="sum" '
+            f'dur="{cycle_dur:.3f}s" '
+            f'repeatCount="indefinite" '
+            f'calcMode="linear" '
+            f'values="{values}" '
+            f'keyTimes="{key_times}" />'
         )
 
         for dx, dy in piece["shape"]:
