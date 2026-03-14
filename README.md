@@ -1,8 +1,8 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-light.svg">
-    <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-dark.svg" alt="GitHub Tetris" width="767">
+    <source media="(prefers-color-scheme: dark)" srcset="/../visual/github-tetris-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="/../visual/github-tetris-light.svg">
+    <img src="/../visual/github-tetris-dark.svg" alt="GitHub Tetris" width="767">
   </picture>
 </p>
 
