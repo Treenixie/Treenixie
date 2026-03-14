@@ -4,6 +4,7 @@ import calendar as cal
 import datetime as dt
 import hashlib
 import json
+import random
 
 import requests
 
@@ -50,6 +51,7 @@ THEMES = {
         "text": "#c9d1d9",
         "muted": "#8b949e",
         "greens": ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
+        "piece_colors": ["#58a6ff", "#d2a8ff", "#ffa657", "#f85149", "#79c0ff", "#ff7b72", "#e3b341", "#8ddb8c"],
     },
     "light": {
         "bg": "#ffffff",
@@ -58,6 +60,7 @@ THEMES = {
         "text": "#24292f",
         "muted": "#57606a",
         "greens": ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
+        "piece_colors": ["#0969da", "#8250df", "#bc4c00", "#cf222e", "#218bff", "#bf3989", "#9a6700", "#1a7f37"],
     },
 }
 
@@ -82,6 +85,24 @@ COLS = 53
 ROWS = 7
 
 FONT_STACK = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'"
+
+# Фигуры
+BASE_SHAPES = {
+    "I": [(0, 0), (1, 0), (2, 0), (3, 0)],
+    "O": [(0, 0), (1, 0), (0, 1), (1, 1)],
+    "T": [(0, 0), (1, 0), (2, 0), (1, 1)],
+    "S": [(1, 0), (2, 0), (0, 1), (1, 1)],
+    "Z": [(0, 0), (1, 0), (1, 1), (2, 1)],
+    "J": [(0, 0), (0, 1), (1, 1), (2, 1)],
+    "L": [(2, 0), (0, 1), (1, 1), (2, 1)],
+    "DOT": [(0, 0)],
+}
+
+PIECE_ORDER = ["T", "L", "J", "S", "Z", "O", "I", "DOT"]
+
+MOVE_DUR = 0.55
+PAUSE_DUR = 0.10
+INITIAL_DELAY = 0.15
 
 
 def svg_rect(x, y, w, h, fill, rx=2, extra=""):
@@ -258,7 +279,201 @@ def normalize_calendar(calendar_data):
     return board, month_labels, total, active_cells, calendar_hash
 
 
-def render_svg(theme_name, board, month_labels, total, active_cells, username):
+def normalize_shape(shape):
+    min_x = min(x for x, _ in shape)
+    min_y = min(y for _, y in shape)
+    return tuple(sorted((x - min_x, y - min_y) for x, y in shape))
+
+
+def rotate_shape(shape):
+    return [(-y, x) for x, y in shape]
+
+
+def get_rotations(shape):
+    result = []
+    current = list(shape)
+    for _ in range(4):
+        norm = normalize_shape(current)
+        if norm not in result:
+            result.append(norm)
+        current = rotate_shape(current)
+    return result
+
+
+ROTATIONS = {name: get_rotations(coords) for name, coords in BASE_SHAPES.items()}
+
+
+def shape_width(shape):
+    return max(x for x, _ in shape) + 1
+
+
+def shape_height(shape):
+    return max(y for _, y in shape) + 1
+
+
+def neighbor_score(cells, active):
+    score = 0
+    cells = set(cells)
+    for col, row in cells:
+        for dc, dr in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            nb = (col + dc, row + dr)
+            if nb in active and nb not in cells:
+                score += 1
+    return score
+
+
+def best_piece_for_anchor(anchor, active):
+    candidates = []
+
+    for piece_name in PIECE_ORDER:
+        for rotation in ROTATIONS[piece_name]:
+            for pivot_x, pivot_y in rotation:
+                origin_x = anchor[0] - pivot_x
+                origin_y = anchor[1] - pivot_y
+                absolute_cells = {(origin_x + x, origin_y + y) for x, y in rotation}
+
+                if not absolute_cells.issubset(active):
+                    continue
+
+                # Чем больше фигура и чем лучше она врастает в соседей, тем лучше.
+                score = len(absolute_cells) * 100 + neighbor_score(absolute_cells, active)
+                candidates.append(
+                    {
+                        "name": piece_name,
+                        "shape": rotation,
+                        "origin_x": origin_x,
+                        "origin_y": origin_y,
+                        "cells": sorted(absolute_cells),
+                        "score": score,
+                        "priority": len(PIECE_ORDER) - PIECE_ORDER.index(piece_name),
+                    }
+                )
+
+    if not candidates:
+        return {
+            "name": "DOT",
+            "shape": ((0, 0),),
+            "origin_x": anchor[0],
+            "origin_y": anchor[1],
+            "cells": [anchor],
+            "score": 1,
+            "priority": 0,
+        }
+
+    candidates.sort(
+        key=lambda item: (
+            item["score"],
+            item["priority"],
+            -shape_width(item["shape"]),
+            -shape_height(item["shape"]),
+        ),
+        reverse=True,
+    )
+    return candidates[0]
+
+
+def partition_into_pieces(board):
+    active = {
+        (col, row)
+        for row in range(ROWS)
+        for col in range(COLS)
+        if board[row][col] > 0
+    }
+
+    pieces = []
+    while active:
+        anchor = min(active, key=lambda c: (c[0], c[1]))
+        piece = best_piece_for_anchor(anchor, active)
+        for cell in piece["cells"]:
+            active.discard(cell)
+        pieces.append(piece)
+
+    # Чуть более естественный порядок для анимации
+    pieces.sort(key=lambda p: (max(r for _, r in p["cells"]), min(c for c, _ in p["cells"])))
+    return pieces
+
+
+def build_animation_plan(pieces, calendar_hash):
+    seed = int(calendar_hash[:8], 16)
+    rng = random.Random(seed)
+
+    plan = []
+    current_t = INITIAL_DELAY
+
+    for idx, piece in enumerate(pieces):
+        width = shape_width(piece["shape"])
+        height = shape_height(piece["shape"])
+
+        target_x = piece["origin_x"]
+        target_y = piece["origin_y"]
+
+        options = [
+            target_x,
+            max(0, target_x - 4),
+            min(COLS - width, target_x + 4),
+        ]
+        options = [x for x in options if 0 <= x <= COLS - width]
+        spawn_x = rng.choice(sorted(set(options))) if options else target_x
+        spawn_y = -height - 1
+
+        # Через промежуточную точку, чтобы было ощущение "манёвра"
+        mid_x = target_x
+        mid_y = spawn_y
+
+        plan.append(
+            {
+                "index": idx,
+                "start": current_t,
+                "end": current_t + MOVE_DUR,
+                "spawn_x": spawn_x,
+                "spawn_y": spawn_y,
+                "mid_x": mid_x,
+                "mid_y": mid_y,
+                "target_x": target_x,
+                "target_y": target_y,
+            }
+        )
+        current_t += MOVE_DUR + PAUSE_DUR
+
+    return plan, current_t + 0.25
+
+
+def render_piece_group(piece, anim, color):
+    # Группа рисуется в относительных координатах, а потом двигается translate-анимацией.
+    shape = piece["shape"]
+
+    spawn_px_x = GRID_X + anim["spawn_x"] * STEP
+    spawn_px_y = GRID_Y + anim["spawn_y"] * STEP
+    mid_px_x = GRID_X + anim["mid_x"] * STEP
+    mid_px_y = GRID_Y + anim["mid_y"] * STEP
+    target_px_x = GRID_X + anim["target_x"] * STEP
+    target_px_y = GRID_Y + anim["target_y"] * STEP
+
+    parts = []
+    parts.append('<g opacity="0">')
+    parts.append(
+        f'<set attributeName="opacity" to="1" begin="{anim["start"]:.3f}s" dur="0.001s" fill="freeze" />'
+    )
+    parts.append(
+        f'<set attributeName="opacity" to="0" begin="{anim["end"]:.3f}s" dur="0.001s" fill="freeze" />'
+    )
+    parts.append(
+        f'<animateTransform attributeName="transform" type="translate" '
+        f'begin="{anim["start"]:.3f}s" dur="{MOVE_DUR:.3f}s" fill="freeze" '
+        f'values="{spawn_px_x} {spawn_px_y}; {mid_px_x} {mid_px_y}; {target_px_x} {target_px_y}" '
+        f'keyTimes="0;0.35;1" calcMode="linear" />'
+    )
+
+    for dx, dy in shape:
+        x = dx * STEP
+        y = dy * STEP
+        parts.append(svg_rect(x, y, CELL, CELL, color, rx=2))
+
+    parts.append("</g>")
+    return "\n".join(parts)
+
+
+def render_svg(theme_name, board, month_labels, total, active_cells, username, pieces, calendar_hash):
     theme = THEMES[theme_name]
     parts = []
 
@@ -338,11 +553,19 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username):
             )
         )
 
-    # Сетка
+    # Сетка: сразу рисуем финальную форму, чтобы даже без анимации был правильный граф.
     for row in range(ROWS):
         for col in range(COLS):
             x, y, w, h = cell_rect(col, row)
             parts.append(svg_rect(x, y, w, h, theme["greens"][board[row][col]], rx=2))
+
+    # Анимация фигур поверх сетки
+    plan, total_dur = build_animation_plan(pieces, calendar_hash)
+    palette = theme["piece_colors"]
+
+    for piece, anim in zip(pieces, plan):
+        color = palette[anim["index"] % len(palette)]
+        parts.append(render_piece_group(piece, anim, color))
 
     # Нижняя подпись
     parts.append(
@@ -389,7 +612,7 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username):
 
     # Metadata
     parts.append(
-        f'<metadata>{{"username":"{username}","active_cells":{active_cells}}}</metadata>'
+        f'<metadata>{{"username":"{username}","active_cells":{active_cells},"pieces":{len(pieces)},"timeline":{total_dur:.3f}}}</metadata>'
     )
     parts.append("</svg>")
 
@@ -407,9 +630,10 @@ def main():
 
     calendar_data, diagnostics = fetch_calendar(username, token)
     board, month_labels, total, active_cells, calendar_hash = normalize_calendar(calendar_data)
+    pieces = partition_into_pieces(board)
 
-    light_svg = render_svg("light", board, month_labels, total, active_cells, username)
-    dark_svg = render_svg("dark", board, month_labels, total, active_cells, username)
+    light_svg = render_svg("light", board, month_labels, total, active_cells, username, pieces, calendar_hash)
+    dark_svg = render_svg("dark", board, month_labels, total, active_cells, username, pieces, calendar_hash)
 
     (outdir / "github-tetris-light.svg").write_text(light_svg, encoding="utf-8")
     (outdir / "github-tetris-dark.svg").write_text(dark_svg, encoding="utf-8")
@@ -419,6 +643,8 @@ def main():
         "total_contributions": total,
         "active_cells": active_cells,
         "calendar_hash": calendar_hash,
+        "pieces_count": len(pieces),
+        "dot_count": sum(1 for p in pieces if p["name"] == "DOT"),
         "diagnostics": diagnostics,
     }
 
@@ -427,7 +653,7 @@ def main():
         encoding="utf-8",
     )
 
-    print("Generated live calendar SVGs.")
+    print("Generated live calendar SVGs with tetris overlay.")
     print(json.dumps(meta, ensure_ascii=False, indent=2))
 
 
