@@ -103,6 +103,8 @@ STEP = CELL + GAP
 
 COLS = 53
 ROWS = 7
+GRID_W = COLS * STEP - GAP
+GRID_H = ROWS * STEP - GAP
 
 FONT_STACK = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'"
 
@@ -161,6 +163,16 @@ def cell_rect(col, row):
     x = GRID_X + col * STEP
     y = GRID_Y + row * STEP
     return x, y, CELL, CELL
+
+
+def add_grid_clip(parts, clip_id):
+    parts.append("<defs>")
+    parts.append(
+        f'<clipPath id="{clip_id}">'
+        f'<rect x="{GRID_X}" y="{GRID_Y}" width="{GRID_W}" height="{GRID_H}" rx="0" ry="0" />'
+        f"</clipPath>"
+    )
+    parts.append("</defs>")
 
 
 def hex_to_rgb(hex_color):
@@ -372,6 +384,15 @@ def shape_height(shape):
     return max(y for _, y in shape) + 1
 
 
+def cell_degree(cell, component):
+    col, row = cell
+    degree = 0
+    for dc, dr in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        if (col + dc, row + dr) in component:
+            degree += 1
+    return degree
+
+
 def neighbor_score(cells, active):
     score = 0
     cells = set(cells)
@@ -409,15 +430,15 @@ def connected_components(active):
 
 def piece_penalty(name):
     if name == "DOT":
-        return 100
+        return 1000
     if name == "DOMINO":
-        return 6
+        return 10
     if name in {"TRI_I", "TRI_L"}:
-        return 3
+        return 4
     return 0
 
 
-def generate_piece_candidates(component):
+def generate_piece_candidates(component, allow_connected_dots):
     component = set(component)
     placements = {}
     priorities = {name: len(PIECE_ORDER) - PIECE_ORDER.index(name) for name in PIECE_ORDER}
@@ -451,14 +472,16 @@ def generate_piece_candidates(component):
                         }
 
     for cell in sorted(component):
-        placements[(cell,)] = {
-            "name": "DOT",
-            "shape": ((0, 0),),
-            "origin_x": cell[0],
-            "origin_y": cell[1],
-            "cells": [cell],
-            "priority": priorities["DOT"],
-        }
+        deg = cell_degree(cell, component)
+        if deg == 0 or allow_connected_dots:
+            placements[(cell,)] = {
+                "name": "DOT",
+                "shape": ((0, 0),),
+                "origin_x": cell[0],
+                "origin_y": cell[1],
+                "cells": [cell],
+                "priority": priorities["DOT"],
+            }
 
     return list(placements.values())
 
@@ -468,62 +491,72 @@ def solve_component_exact(component):
     index_of = {cell: idx for idx, cell in enumerate(component_cells)}
     all_mask = (1 << len(component_cells)) - 1
 
-    placements = generate_piece_candidates(component)
-    placements_by_index = {i: [] for i in range(len(component_cells))}
+    def try_solve(allow_connected_dots):
+        placements = generate_piece_candidates(component, allow_connected_dots=allow_connected_dots)
+        placements_by_index = {i: [] for i in range(len(component_cells))}
 
-    for placement in placements:
-        mask = 0
-        for cell in placement["cells"]:
-            mask |= 1 << index_of[cell]
+        for placement in placements:
+            mask = 0
+            for cell in placement["cells"]:
+                mask |= 1 << index_of[cell]
 
-        item = {
-            "mask": mask,
-            "name": placement["name"],
-            "shape": placement["shape"],
-            "origin_x": placement["origin_x"],
-            "origin_y": placement["origin_y"],
-            "cells": placement["cells"],
-            "priority": placement["priority"],
-        }
+            item = {
+                "mask": mask,
+                "name": placement["name"],
+                "shape": placement["shape"],
+                "origin_x": placement["origin_x"],
+                "origin_y": placement["origin_y"],
+                "cells": placement["cells"],
+                "priority": placement["priority"],
+            }
 
-        for cell in placement["cells"]:
-            placements_by_index[index_of[cell]].append(item)
+            for cell in placement["cells"]:
+                placements_by_index[index_of[cell]].append(item)
 
-    memo = {}
+        memo = {}
 
-    def solve(mask):
-        if mask == 0:
-            return (0, 0, 0), []
+        def solve(mask):
+            if mask == 0:
+                return (0, 0, 0, 0), []
 
-        if mask in memo:
+            if mask in memo:
+                return memo[mask]
+
+            lsb = mask & -mask
+            idx = lsb.bit_length() - 1
+
+            best_score = None
+            best_solution = None
+
+            for placement in placements_by_index[idx]:
+                if placement["mask"] & mask != placement["mask"]:
+                    continue
+
+                tail_score, tail_solution = solve(mask ^ placement["mask"])
+
+                name = placement["name"]
+                score = (
+                    tail_score[0] + (1 if name == "DOT" else 0),
+                    tail_score[1] + piece_penalty(name),
+                    tail_score[2] + (0 if len(placement["cells"]) == 4 else 1),
+                    tail_score[3] + 1,
+                )
+
+                if best_score is None or score < best_score:
+                    best_score = score
+                    best_solution = [placement] + tail_solution
+
+            memo[mask] = (best_score, best_solution)
             return memo[mask]
 
-        lsb = mask & -mask
-        idx = lsb.bit_length() - 1
+        score, solution = solve(all_mask)
+        return score, solution
 
-        best_score = None
-        best_solution = None
+    score, solution = try_solve(allow_connected_dots=False)
 
-        for placement in placements_by_index[idx]:
-            if placement["mask"] & mask != placement["mask"]:
-                continue
+    if solution is None:
+        score, solution = try_solve(allow_connected_dots=True)
 
-            tail_score, tail_solution = solve(mask ^ placement["mask"])
-
-            score = (
-                tail_score[0] + (1 if placement["name"] == "DOT" else 0),
-                tail_score[1] + piece_penalty(placement["name"]),
-                tail_score[2] + 1,
-            )
-
-            if best_score is None or score < best_score:
-                best_score = score
-                best_solution = [placement] + tail_solution
-
-        memo[mask] = (best_score, best_solution)
-        return memo[mask]
-
-    _, solution = solve(all_mask)
     return [
         {
             "name": p["name"],
@@ -540,6 +573,9 @@ def best_piece_for_anchor_greedy(anchor, active):
     candidates = []
 
     for piece_name in PIECE_ORDER:
+        if piece_name == "DOT" and cell_degree(anchor, active) > 0:
+            continue
+
         for rotation in ROTATIONS[piece_name]:
             for pivot_x, pivot_y in rotation:
                 origin_x = anchor[0] - pivot_x
@@ -592,7 +628,14 @@ def solve_component_greedy(component):
     pieces = []
 
     while active:
-        anchor = min(active, key=lambda item: (item[0], item[1]))
+        anchor = min(
+            active,
+            key=lambda item: (
+                cell_degree(item, active) == 0,
+                item[0],
+                item[1],
+            ),
+        )
         piece = best_piece_for_anchor_greedy(anchor, active)
         for cell in piece["cells"]:
             active.discard(cell)
@@ -642,13 +685,7 @@ def build_piece_styles(theme_name, pieces):
 
     for index, piece in enumerate(pieces):
         base = hues[index % len(hues)]
-        styles.append(
-            {
-                "base": base,
-                "stroke": blend(base, "#ffffff" if theme_name == "dark" else "#000000", 0.18),
-                "name": piece["name"],
-            }
-        )
+        styles.append({"base": base, "name": piece["name"]})
 
     return styles
 
@@ -668,8 +705,8 @@ def build_animation_plan(pieces, calendar_hash):
         ty = piece["origin_y"]
 
         max_spawn_x = max(0, COLS - w)
-        spawn_options = [tx, max(0, tx - 4), min(max_spawn_x, tx + 4)]
-        spawn_x = rng.choice(sorted(set(spawn_options)))
+        side_shift = rng.choice([-3, -2, 0, 0, 2, 3])
+        spawn_x = max(0, min(max_spawn_x, tx + side_shift))
         spawn_y = -h - rng.randint(1, 2)
 
         mid_x = tx
@@ -705,17 +742,7 @@ def render_piece_static_cells(parts, theme_name, board, pieces):
             level = board[row][col]
             fill = shade_from_level(style["base"], level, theme_name)
             x, y, w, h = cell_rect(col, row)
-            parts.append(
-                svg_rect(
-                    x,
-                    y,
-                    w,
-                    h,
-                    fill,
-                    rx=2,
-                    extra=f'stroke="{style["stroke"]}" stroke-width="0.9"',
-                )
-            )
+            parts.append(svg_rect(x, y, w, h, fill, rx=2))
 
 
 def render_piece_live_layers(parts, theme_name, board, pieces, calendar_hash):
@@ -723,7 +750,7 @@ def render_piece_live_layers(parts, theme_name, board, pieces, calendar_hash):
     plan = build_animation_plan(pieces, calendar_hash)
 
     for piece, style, anim in zip(pieces, styles, plan):
-        # 1. Осевшая фигура: изначально скрыта, появляется в момент посадки
+        # Осевшая фигура
         parts.append('<g opacity="0">')
         parts.append(
             f'<set attributeName="opacity" to="1" begin="{anim["end"]:.3f}s" fill="freeze" />'
@@ -732,20 +759,10 @@ def render_piece_live_layers(parts, theme_name, board, pieces, calendar_hash):
             level = board[row][col]
             fill = shade_from_level(style["base"], level, theme_name)
             x, y, w, h = cell_rect(col, row)
-            parts.append(
-                svg_rect(
-                    x,
-                    y,
-                    w,
-                    h,
-                    fill,
-                    rx=2,
-                    extra=f'stroke="{style["stroke"]}" stroke-width="0.9"',
-                )
-            )
+            parts.append(svg_rect(x, y, w, h, fill, rx=2))
         parts.append("</g>")
 
-        # 2. Летящая фигура: скрыта до старта, видна только во время движения
+        # Летящая фигура
         target_px_x = GRID_X + anim["target_x"] * STEP
         target_px_y = GRID_Y + anim["target_y"] * STEP
         spawn_dx = (anim["spawn_x"] - anim["target_x"]) * STEP
@@ -771,20 +788,9 @@ def render_piece_live_layers(parts, theme_name, board, pieces, calendar_hash):
             row = piece["origin_y"] + dy
             level = board[row][col]
             fill = shade_from_level(style["base"], level, theme_name)
-
             x = dx * STEP
             y = dy * STEP
-            parts.append(
-                svg_rect(
-                    x,
-                    y,
-                    CELL,
-                    CELL,
-                    fill,
-                    rx=2,
-                    extra=f'stroke="{style["stroke"]}" stroke-width="0.9"',
-                )
-            )
+            parts.append(svg_rect(x, y, CELL, CELL, fill, rx=2))
 
         parts.append("</g>")
 
@@ -910,9 +916,16 @@ def render_blue_legend(parts, theme_name):
 
 def render_live_svg(theme_name, board, month_labels, total, active_cells, username, pieces, calendar_hash):
     parts = []
+    clip_id = f"grid-clip-live-{theme_name}"
+
     render_base(parts, theme_name, month_labels, total)
+    add_grid_clip(parts, clip_id)
     render_empty_grid(parts, theme_name)
+
+    parts.append(f'<g clip-path="url(#{clip_id})">')
     render_piece_live_layers(parts, theme_name, board, pieces, calendar_hash)
+    parts.append("</g>")
+
     render_blue_legend(parts, theme_name)
 
     meta_payload = {
@@ -927,9 +940,16 @@ def render_live_svg(theme_name, board, month_labels, total, active_cells, userna
 
 def render_partition_svg(theme_name, board, month_labels, total, active_cells, username, pieces):
     parts = []
+    clip_id = f"grid-clip-partition-{theme_name}"
+
     render_base(parts, theme_name, month_labels, total)
+    add_grid_clip(parts, clip_id)
     render_empty_grid(parts, theme_name)
+
+    parts.append(f'<g clip-path="url(#{clip_id})">')
     render_piece_static_cells(parts, theme_name, board, pieces)
+    parts.append("</g>")
+
     render_blue_legend(parts, theme_name)
 
     meta_payload = {
