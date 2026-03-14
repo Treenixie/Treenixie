@@ -120,7 +120,7 @@ DAY_LABEL_X = GRID_X - 18
 
 FOOTER_Y = GRID_Y + GRID_H + 18
 LEGEND_Y = FOOTER_Y - 10
-LEGEND_BLOCKS_X = CARD_RIGHT - CARD_PAD - 96
+LEGEND_BLOCKS_X = CARD_RIGHT - CARD_PAD - 122
 
 FONT_STACK = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'"
 
