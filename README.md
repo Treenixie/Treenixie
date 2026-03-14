@@ -6,6 +6,11 @@
   </picture>
 </p>
 
+<p align="center">
+  <img src="./assets/languages-dark.svg#gh-dark-mode-only" alt="Languages" width="100%">
+  <img src="./assets/languages-light.svg#gh-light-mode-only" alt="Languages" width="100%">
+</p>
+
 <b>languages</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>&nbsp;<img src="https://cdn.simpleicons.org/python/24292F/C9D1D9?viewbox=auto" alt="Python" width="14" height="14" align="absmiddle" />&nbsp;Python&nbsp;</code>
 <code>&nbsp;<img src="https://cdn.simpleicons.org/cplusplus/24292F/C9D1D9?viewbox=auto" alt="C++" width="14" height="14" align="absmiddle" />&nbsp;C++&nbsp;</code>
 <code>&nbsp;<img src="https://cdn.simpleicons.org/javascript/24292F/C9D1D9?viewbox=auto" alt="JavaScript" width="14" height="14" align="absmiddle" />&nbsp;JavaScript&nbsp;</code>
