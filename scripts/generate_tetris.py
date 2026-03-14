@@ -4,6 +4,7 @@ import calendar as cal
 import datetime as dt
 import hashlib
 import json
+import random
 
 import requests
 
@@ -49,8 +50,19 @@ THEMES = {
         "divider": "#21262d",
         "text": "#c9d1d9",
         "muted": "#8b949e",
+        "empty": "#161b22",
         "greens": ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
-        "piece_colors": ["#58a6ff", "#d2a8ff", "#ffa657", "#f85149", "#79c0ff", "#ff7b72", "#e3b341", "#8ddb8c"],
+        "blue_scale": ["#161b22", "#10253f", "#153b66", "#1b5aa0", "#1f6feb"],
+        "piece_hues": [
+            "#ff7b72",
+            "#79c0ff",
+            "#d2a8ff",
+            "#ffa657",
+            "#8ddb8c",
+            "#e3b341",
+            "#56d4dd",
+            "#f2cc60",
+        ],
     },
     "light": {
         "bg": "#ffffff",
@@ -58,12 +70,22 @@ THEMES = {
         "divider": "#d8dee4",
         "text": "#24292f",
         "muted": "#57606a",
+        "empty": "#ebedf0",
         "greens": ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
-        "piece_colors": ["#0969da", "#8250df", "#bc4c00", "#cf222e", "#218bff", "#bf3989", "#9a6700", "#1a7f37"],
+        "blue_scale": ["#ebedf0", "#dbeafe", "#a8c7ff", "#5b95ff", "#1f6feb"],
+        "piece_hues": [
+            "#cf222e",
+            "#0969da",
+            "#8250df",
+            "#bc4c00",
+            "#1a7f37",
+            "#9a6700",
+            "#0a7ea4",
+            "#b35900",
+        ],
     },
 }
 
-# Размер блока
 CANVAS_W = 767
 CANVAS_H = 196
 
@@ -73,7 +95,6 @@ CARD_W = CANVAS_W - 16
 CARD_H = CANVAS_H - 16
 CARD_RIGHT = CARD_X + CARD_W
 
-# Позиции сетки
 GRID_X = 69
 GRID_Y = 66
 CELL = 10
@@ -97,6 +118,11 @@ BASE_SHAPES = {
 }
 
 PIECE_ORDER = ["T", "L", "J", "S", "Z", "O", "I", "DOT"]
+EXACT_COMPONENT_LIMIT = 18
+
+ANIM_STEP_DUR = 0.22
+ANIM_PIECE_GAP = 0.08
+ANIM_START_DELAY = 0.18
 
 
 def svg_rect(x, y, w, h, fill, rx=2, extra=""):
@@ -132,6 +158,44 @@ def cell_rect(col, row):
     x = GRID_X + col * STEP
     y = GRID_Y + row * STEP
     return x, y, CELL, CELL
+
+
+def hex_to_rgb(hex_color):
+    hex_color = hex_color.lstrip("#")
+    return tuple(int(hex_color[i:i + 2], 16) for i in (0, 2, 4))
+
+
+def rgb_to_hex(rgb):
+    return "#{:02x}{:02x}{:02x}".format(
+        max(0, min(255, int(round(rgb[0])))),
+        max(0, min(255, int(round(rgb[1])))),
+        max(0, min(255, int(round(rgb[2])))),
+    )
+
+
+def blend(c1, c2, t):
+    r1, g1, b1 = hex_to_rgb(c1)
+    r2, g2, b2 = hex_to_rgb(c2)
+    return rgb_to_hex((
+        r1 + (r2 - r1) * t,
+        g1 + (g2 - g1) * t,
+        b1 + (b2 - b1) * t,
+    ))
+
+
+def shade_from_level(base_color, level, theme_name):
+    theme = THEMES[theme_name]
+    if level <= 0:
+        return theme["empty"]
+
+    visibility = {
+        1: 0.38,
+        2: 0.56,
+        3: 0.76,
+        4: 0.98,
+    }[level]
+
+    return blend(theme["empty"], base_color, visibility)
 
 
 def choose_token():
@@ -316,8 +380,157 @@ def neighbor_score(cells, active):
     return score
 
 
-def best_piece_for_anchor(anchor, active):
+def connected_components(active):
+    remaining = set(active)
+    components = []
+
+    while remaining:
+        start = remaining.pop()
+        stack = [start]
+        comp = {start}
+
+        while stack:
+            col, row = stack.pop()
+            for dc, dr in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                nb = (col + dc, row + dr)
+                if nb in remaining:
+                    remaining.remove(nb)
+                    comp.add(nb)
+                    stack.append(nb)
+
+        components.append(comp)
+
+    components.sort(key=lambda comp: min((c, r) for c, r in comp))
+    return components
+
+
+def generate_piece_candidates(component):
+    component = set(component)
+    placements = {}
+    priorities = {name: len(PIECE_ORDER) - PIECE_ORDER.index(name) for name in PIECE_ORDER}
+
+    for piece_name in PIECE_ORDER:
+        if piece_name == "DOT":
+            continue
+
+        for rotation in ROTATIONS[piece_name]:
+            for anchor_col, anchor_row in component:
+                for pivot_x, pivot_y in rotation:
+                    origin_x = anchor_col - pivot_x
+                    origin_y = anchor_row - pivot_y
+
+                    absolute_cells = tuple(
+                        sorted((origin_x + x, origin_y + y) for x, y in rotation)
+                    )
+
+                    if not set(absolute_cells).issubset(component):
+                        continue
+
+                    key = absolute_cells
+                    if key not in placements:
+                        placements[key] = {
+                            "name": piece_name,
+                            "shape": rotation,
+                            "origin_x": origin_x,
+                            "origin_y": origin_y,
+                            "cells": list(absolute_cells),
+                            "priority": priorities[piece_name],
+                        }
+
+    for cell in sorted(component):
+        placements[(cell,)] = {
+            "name": "DOT",
+            "shape": ((0, 0),),
+            "origin_x": cell[0],
+            "origin_y": cell[1],
+            "cells": [cell],
+            "priority": priorities["DOT"],
+        }
+
+    return list(placements.values())
+
+
+def solve_component_exact(component):
+    component_cells = sorted(component)
+    index_of = {cell: idx for idx, cell in enumerate(component_cells)}
+    all_mask = (1 << len(component_cells)) - 1
+
+    placements = generate_piece_candidates(component)
+
+    encoded = []
+    placements_by_index = {i: [] for i in range(len(component_cells))}
+
+    for pid, placement in enumerate(placements):
+        mask = 0
+        for cell in placement["cells"]:
+            mask |= 1 << index_of[cell]
+
+        item = {
+            "id": pid,
+            "mask": mask,
+            "name": placement["name"],
+            "shape": placement["shape"],
+            "origin_x": placement["origin_x"],
+            "origin_y": placement["origin_y"],
+            "cells": placement["cells"],
+            "priority": placement["priority"],
+        }
+        encoded.append(item)
+
+        for cell in placement["cells"]:
+            placements_by_index[index_of[cell]].append(item)
+
+    memo = {}
+
+    def solve(mask):
+        if mask == 0:
+            return (0, 0, 0), []
+
+        if mask in memo:
+            return memo[mask]
+
+        lsb = mask & -mask
+        idx = lsb.bit_length() - 1
+
+        best_score = None
+        best_solution = None
+
+        for placement in placements_by_index[idx]:
+            if placement["mask"] & mask != placement["mask"]:
+                continue
+
+            tail_score, tail_solution = solve(mask ^ placement["mask"])
+            dot_cost = 1 if placement["name"] == "DOT" else 0
+
+            score = (
+                tail_score[0] + dot_cost,
+                tail_score[1] - placement["priority"],
+                tail_score[2] + 1,
+            )
+
+            if best_score is None or score < best_score:
+                best_score = score
+                best_solution = [placement] + tail_solution
+
+        memo[mask] = (best_score, best_solution)
+        return memo[mask]
+
+    _, solution = solve(all_mask)
+    return [
+        {
+            "name": p["name"],
+            "shape": p["shape"],
+            "origin_x": p["origin_x"],
+            "origin_y": p["origin_y"],
+            "cells": p["cells"],
+        }
+        for p in solution
+    ]
+
+
+def best_piece_for_anchor_greedy(anchor, active):
     candidates = []
+    priorities = {name: len(PIECE_ORDER) - PIECE_ORDER.index(name) for name in PIECE_ORDER}
 
     for piece_name in PIECE_ORDER:
         for rotation in ROTATIONS[piece_name]:
@@ -329,7 +542,12 @@ def best_piece_for_anchor(anchor, active):
                 if not absolute_cells.issubset(active):
                     continue
 
-                score = len(absolute_cells) * 100 + neighbor_score(absolute_cells, active)
+                score = (
+                    len(absolute_cells) * 100
+                    + neighbor_score(absolute_cells, active) * 10
+                    + priorities[piece_name]
+                )
+
                 candidates.append(
                     {
                         "name": piece_name,
@@ -338,7 +556,6 @@ def best_piece_for_anchor(anchor, active):
                         "origin_y": origin_y,
                         "cells": sorted(absolute_cells),
                         "score": score,
-                        "priority": len(PIECE_ORDER) - PIECE_ORDER.index(piece_name),
                     }
                 )
 
@@ -350,19 +567,39 @@ def best_piece_for_anchor(anchor, active):
             "origin_y": anchor[1],
             "cells": [anchor],
             "score": 1,
-            "priority": 0,
         }
 
     candidates.sort(
         key=lambda item: (
             item["score"],
-            item["priority"],
             -shape_width(item["shape"]),
             -shape_height(item["shape"]),
         ),
         reverse=True,
     )
     return candidates[0]
+
+
+def solve_component_greedy(component):
+    active = set(component)
+    pieces = []
+
+    while active:
+        anchor = min(active, key=lambda item: (item[0], item[1]))
+        piece = best_piece_for_anchor_greedy(anchor, active)
+        for cell in piece["cells"]:
+            active.discard(cell)
+        pieces.append(
+            {
+                "name": piece["name"],
+                "shape": piece["shape"],
+                "origin_x": piece["origin_x"],
+                "origin_y": piece["origin_y"],
+                "cells": piece["cells"],
+            }
+        )
+
+    return pieces
 
 
 def partition_into_pieces(board):
@@ -373,51 +610,157 @@ def partition_into_pieces(board):
         if board[row][col] > 0
     }
 
+    components = connected_components(active)
     pieces = []
-    while active:
-        anchor = min(active, key=lambda item: (item[0], item[1]))
-        piece = best_piece_for_anchor(anchor, active)
-        for cell in piece["cells"]:
-            active.discard(cell)
-        pieces.append(piece)
 
-    pieces.sort(key=lambda p: (max(r for _, r in p["cells"]), min(c for c, _ in p["cells"])))
+    for comp in components:
+        if len(comp) <= EXACT_COMPONENT_LIMIT:
+            pieces.extend(solve_component_exact(comp))
+        else:
+            pieces.extend(solve_component_greedy(comp))
+
+    pieces.sort(
+        key=lambda p: (
+            max(r for _, r in p["cells"]),
+            min(c for c, _ in p["cells"]),
+            p["name"],
+        )
+    )
     return pieces
 
 
-def render_piece_overlay(parts, theme_name, pieces):
-    palette = THEMES[theme_name]["piece_colors"]
+def build_piece_styles(theme_name, pieces):
+    hues = THEMES[theme_name]["piece_hues"]
+    styles = []
 
     for index, piece in enumerate(pieces):
-        color = palette[index % len(palette)]
-        stroke_width = 1.4 if piece["name"] != "DOT" else 1.8
-        opacity = 0.95 if piece["name"] != "DOT" else 1.0
+        base = hues[index % len(hues)]
+        styles.append(
+            {
+                "base": base,
+                "stroke": blend(base, "#ffffff" if theme_name == "dark" else "#000000", 0.18),
+                "name": piece["name"],
+            }
+        )
 
+    return styles
+
+
+def build_animation_plan(pieces, calendar_hash):
+    seed = int(calendar_hash[:8], 16)
+    rng = random.Random(seed)
+
+    plan = []
+    current_t = ANIM_START_DELAY
+
+    for piece in pieces:
+        w = shape_width(piece["shape"])
+        h = shape_height(piece["shape"])
+
+        tx = piece["origin_x"]
+        ty = piece["origin_y"]
+
+        max_spawn_x = max(0, COLS - w)
+        spawn_options = [tx, max(0, tx - 4), min(max_spawn_x, tx + 4)]
+        spawn_x = rng.choice(sorted(set(spawn_options)))
+        spawn_y = -h - rng.randint(1, 2)
+
+        mid_x = tx
+        mid_y = min(-1, ty - 2)
+
+        steps = max(abs(spawn_x - tx), abs(spawn_y - ty), 1)
+        duration = max(0.38, steps * ANIM_STEP_DUR * 0.42)
+
+        plan.append(
+            {
+                "start": current_t,
+                "dur": duration,
+                "spawn_x": spawn_x,
+                "spawn_y": spawn_y,
+                "mid_x": mid_x,
+                "mid_y": mid_y,
+                "target_x": tx,
+                "target_y": ty,
+            }
+        )
+
+        current_t += duration + ANIM_PIECE_GAP
+
+    return plan
+
+
+def render_piece_static_cells(parts, theme_name, board, pieces):
+    styles = build_piece_styles(theme_name, pieces)
+
+    for piece, style in zip(pieces, styles):
         for col, row in piece["cells"]:
+            level = board[row][col]
+            fill = shade_from_level(style["base"], level, theme_name)
             x, y, w, h = cell_rect(col, row)
             parts.append(
                 svg_rect(
-                    x + 0.6,
-                    y + 0.6,
-                    w - 1.2,
-                    h - 1.2,
-                    "none",
+                    x,
+                    y,
+                    w,
+                    h,
+                    fill,
                     rx=2,
-                    extra=f'stroke="{color}" stroke-width="{stroke_width}" opacity="{opacity}"',
+                    extra=f'stroke="{style["stroke"]}" stroke-width="0.9"',
                 )
             )
 
 
-def render_svg(theme_name, board, month_labels, total, active_cells, username, pieces=None):
+def render_piece_animation(parts, theme_name, board, pieces, calendar_hash):
+    styles = build_piece_styles(theme_name, pieces)
+    plan = build_animation_plan(pieces, calendar_hash)
+
+    for piece, style, anim in zip(pieces, styles, plan):
+        target_px_x = GRID_X + anim["target_x"] * STEP
+        target_px_y = GRID_Y + anim["target_y"] * STEP
+
+        spawn_dx = (anim["spawn_x"] - anim["target_x"]) * STEP
+        spawn_dy = (anim["spawn_y"] - anim["target_y"]) * STEP
+        mid_dx = (anim["mid_x"] - anim["target_x"]) * STEP
+        mid_dy = (anim["mid_y"] - anim["target_y"]) * STEP
+
+        parts.append(f'<g transform="translate({target_px_x} {target_px_y})">')
+        parts.append(
+            f'<animateTransform attributeName="transform" type="translate" additive="sum" '
+            f'begin="{anim["start"]:.3f}s" dur="{anim["dur"]:.3f}s" fill="freeze" '
+            f'values="{spawn_dx} {spawn_dy}; {mid_dx} {mid_dy}; 0 0" keyTimes="0;0.35;1" />'
+        )
+
+        for dx, dy in piece["shape"]:
+            col = piece["origin_x"] + dx
+            row = piece["origin_y"] + dy
+            level = board[row][col]
+            fill = shade_from_level(style["base"], level, theme_name)
+
+            x = dx * STEP
+            y = dy * STEP
+            parts.append(
+                svg_rect(
+                    x,
+                    y,
+                    CELL,
+                    CELL,
+                    fill,
+                    rx=2,
+                    extra=f'stroke="{style["stroke"]}" stroke-width="0.9"',
+                )
+            )
+
+        parts.append("</g>")
+
+
+def render_base(parts, theme_name, month_labels, total):
     theme = THEMES[theme_name]
-    parts = []
 
     parts.append(
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{CANVAS_W}" height="{CANVAS_H}" '
         f'viewBox="0 0 {CANVAS_W} {CANVAS_H}">'
     )
 
-    # Фон и карточка
     parts.append(svg_rect(0, 0, CANVAS_W, CANVAS_H, theme["bg"], rx=0))
     parts.append(
         svg_rect(
@@ -431,7 +774,6 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username, p
         )
     )
 
-    # Верхняя строка
     parts.append(
         svg_text(
             16,
@@ -459,21 +801,10 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username, p
         f'<line x1="{CARD_X + 1}" y1="40" x2="{CARD_RIGHT - 1}" y2="40" stroke="{theme["divider"]}" stroke-width="1"/>'
     )
 
-    # Месяцы
     for month_name, col in month_labels:
         x = GRID_X + col * STEP
-        parts.append(
-            svg_text(
-                x,
-                56,
-                month_name,
-                theme["text"],
-                size=11,
-                weight="400",
-            )
-        )
+        parts.append(svg_text(x, 56, month_name, theme["text"], size=11, weight="400"))
 
-    # Подписи дней
     for label, row in (("Mon", 1), ("Wed", 3), ("Fri", 5)):
         y = GRID_Y + row * STEP + 6
         parts.append(
@@ -488,17 +819,21 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username, p
             )
         )
 
-    # Сетка
+
+def render_empty_grid(parts, theme_name):
+    theme = THEMES[theme_name]
     for row in range(ROWS):
         for col in range(COLS):
             x, y, w, h = cell_rect(col, row)
-            parts.append(svg_rect(x, y, w, h, theme["greens"][board[row][col]], rx=2))
+            parts.append(svg_rect(x, y, w, h, theme["empty"], rx=2))
 
-    # Overlay preview
-    if pieces is not None:
-        render_piece_overlay(parts, theme_name, pieces)
 
-    # Нижняя подпись
+def render_blue_legend(parts, theme_name):
+    theme = THEMES[theme_name]
+
+    legend_y = 166
+    legend_blocks_x = CARD_RIGHT - 118
+
     parts.append(
         svg_text(
             66,
@@ -509,10 +844,6 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username, p
             weight="400",
         )
     )
-
-    # Легенда
-    legend_y = 166
-    legend_blocks_x = CARD_RIGHT - 118
 
     parts.append(
         svg_text(
@@ -526,7 +857,7 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username, p
         )
     )
 
-    for i, color in enumerate(theme["greens"]):
+    for i, color in enumerate(theme["blue_scale"]):
         parts.append(svg_rect(legend_blocks_x + i * 13, legend_y, 10, 10, color, rx=2))
 
     parts.append(
@@ -541,15 +872,38 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username, p
         )
     )
 
-    # Metadata
+
+def render_live_svg(theme_name, board, month_labels, total, active_cells, username, pieces, calendar_hash):
+    parts = []
+    render_base(parts, theme_name, month_labels, total)
+    render_empty_grid(parts, theme_name)
+    render_piece_animation(parts, theme_name, board, pieces, calendar_hash)
+    render_blue_legend(parts, theme_name)
+
     meta_payload = {
         "username": username,
         "active_cells": active_cells,
-        "pieces_overlay": pieces is not None,
+        "mode": "live-animation",
     }
     parts.append(f"<metadata>{json.dumps(meta_payload, ensure_ascii=False)}</metadata>")
     parts.append("</svg>")
+    return "\n".join(parts)
 
+
+def render_partition_svg(theme_name, board, month_labels, total, active_cells, username, pieces):
+    parts = []
+    render_base(parts, theme_name, month_labels, total)
+    render_empty_grid(parts, theme_name)
+    render_piece_static_cells(parts, theme_name, board, pieces)
+    render_blue_legend(parts, theme_name)
+
+    meta_payload = {
+        "username": username,
+        "active_cells": active_cells,
+        "mode": "partition-preview",
+    }
+    parts.append(f"<metadata>{json.dumps(meta_payload, ensure_ascii=False)}</metadata>")
+    parts.append("</svg>")
     return "\n".join(parts)
 
 
@@ -566,16 +920,16 @@ def main():
     board, month_labels, total, active_cells, calendar_hash = normalize_calendar(calendar_data)
     pieces = partition_into_pieces(board)
 
-    # Обычные live SVG
-    light_svg = render_svg("light", board, month_labels, total, active_cells, username, pieces=None)
-    dark_svg = render_svg("dark", board, month_labels, total, active_cells, username, pieces=None)
+    # Live animation SVG
+    light_live_svg = render_live_svg("light", board, month_labels, total, active_cells, username, pieces, calendar_hash)
+    dark_live_svg = render_live_svg("dark", board, month_labels, total, active_cells, username, pieces, calendar_hash)
 
-    (outdir / "github-tetris-light.svg").write_text(light_svg, encoding="utf-8")
-    (outdir / "github-tetris-dark.svg").write_text(dark_svg, encoding="utf-8")
+    (outdir / "github-tetris-light.svg").write_text(light_live_svg, encoding="utf-8")
+    (outdir / "github-tetris-dark.svg").write_text(dark_live_svg, encoding="utf-8")
 
-    # Preview разбиения на фигуры
-    light_partition_svg = render_svg("light", board, month_labels, total, active_cells, username, pieces=pieces)
-    dark_partition_svg = render_svg("dark", board, month_labels, total, active_cells, username, pieces=pieces)
+    # Partition preview SVG
+    light_partition_svg = render_partition_svg("light", board, month_labels, total, active_cells, username, pieces)
+    dark_partition_svg = render_partition_svg("dark", board, month_labels, total, active_cells, username, pieces)
 
     (outdir / "github-tetris-light-partition.svg").write_text(light_partition_svg, encoding="utf-8")
     (outdir / "github-tetris-dark-partition.svg").write_text(dark_partition_svg, encoding="utf-8")
@@ -600,7 +954,7 @@ def main():
         encoding="utf-8",
     )
 
-    print("Generated live calendar SVGs + partition previews.")
+    print("Generated live animation SVGs + partition previews.")
     print(json.dumps(meta, ensure_ascii=False, indent=2))
 
 
