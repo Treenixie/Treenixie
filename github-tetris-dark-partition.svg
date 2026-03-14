@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="767" height="196" viewBox="0 0 767 196">
 <rect x="0" y="0" width="767" height="196" rx="0" ry="0" fill="#0d1117" />
 <rect x="8" y="8" width="751" height="180" rx="6" ry="6" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
-<text x="18" y="29" fill="#c9d1d9" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="14" font-weight="600" text-anchor="start" dominant-baseline="alphabetic">129 contributions in the last year</text>
-<text x="749" y="29" fill="#8b949e" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Contribution settings ▾</text>
-<line x1="9" y1="35" x2="758" y2="35" stroke="#21262d" stroke-width="1"/>
+<text x="18" y="31" fill="#c9d1d9" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="14" font-weight="600" text-anchor="start" dominant-baseline="alphabetic">130 contributions in the last year</text>
+<text x="749" y="31" fill="#8b949e" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Contribution settings ▾</text>
+<line x1="9" y1="40" x2="758" y2="40" stroke="#21262d" stroke-width="1"/>
 <text x="63" y="52" fill="#c9d1d9" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="12" font-weight="400" text-anchor="start" dominant-baseline="alphabetic">Mar</text>
 <text x="115" y="52" fill="#c9d1d9" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="12" font-weight="400" text-anchor="start" dominant-baseline="alphabetic">Apr</text>
 <text x="167" y="52" fill="#c9d1d9" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="12" font-weight="400" text-anchor="start" dominant-baseline="alphabetic">May</text>
@@ -17,9 +17,9 @@
 <text x="622" y="52" fill="#c9d1d9" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="12" font-weight="400" text-anchor="start" dominant-baseline="alphabetic">Jan</text>
 <text x="674" y="52" fill="#c9d1d9" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="12" font-weight="400" text-anchor="start" dominant-baseline="alphabetic">Feb</text>
 <text x="726" y="52" fill="#c9d1d9" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="12" font-weight="400" text-anchor="start" dominant-baseline="alphabetic">Mar</text>
-<text x="45" y="81" fill="#c9d1d9" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Mon</text>
-<text x="45" y="107" fill="#c9d1d9" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Wed</text>
-<text x="45" y="133" fill="#c9d1d9" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Fri</text>
+<text x="45" y="81" fill="#c9d1d9" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="12" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Mon</text>
+<text x="45" y="107" fill="#c9d1d9" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="12" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Wed</text>
+<text x="45" y="133" fill="#c9d1d9" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="12" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Fri</text>
 <defs>
 <clipPath id="grid-clip-partition-dark"><rect x="63" y="62" width="686" height="88" rx="0" ry="0" /></clipPath>
 </defs>
@@ -400,7 +400,7 @@
 <rect x="700" y="88" width="10" height="10" rx="2" ry="2" fill="#2e6169" />
 <rect x="739" y="62" width="10" height="10" rx="2" ry="2" fill="#5d5176" />
 <rect x="739" y="75" width="10" height="10" rx="2" ry="2" fill="#7f6a9e" />
-<rect x="739" y="88" width="10" height="10" rx="2" ry="2" fill="#7f6a9e" />
+<rect x="739" y="88" width="10" height="10" rx="2" ry="2" fill="#5d5176" />
 <rect x="76" y="114" width="10" height="10" rx="2" ry="2" fill="#6a5e3a" />
 <rect x="700" y="114" width="10" height="10" rx="2" ry="2" fill="#6f3f40" />
 <rect x="713" y="101" width="10" height="10" rx="2" ry="2" fill="#6f3f40" />
@@ -412,13 +412,13 @@
 <rect x="739" y="127" width="10" height="10" rx="2" ry="2" fill="#6f5036" />
 <rect x="739" y="140" width="10" height="10" rx="2" ry="2" fill="#faa356" />
 </g>
-<text x="63" y="176" fill="#8b949e" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="start" dominant-baseline="alphabetic">Learn how we count contributions</text>
-<text x="639" y="176" fill="#8b949e" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Less</text>
-<rect x="647" y="166" width="10" height="10" rx="2" ry="2" fill="#161b22" />
-<rect x="660" y="166" width="10" height="10" rx="2" ry="2" fill="#10253f" />
-<rect x="673" y="166" width="10" height="10" rx="2" ry="2" fill="#153b66" />
-<rect x="686" y="166" width="10" height="10" rx="2" ry="2" fill="#1b5aa0" />
-<rect x="699" y="166" width="10" height="10" rx="2" ry="2" fill="#1f6feb" />
-<text x="716" y="176" fill="#8b949e" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="start" dominant-baseline="alphabetic">More</text>
+<text x="63" y="168" fill="#8b949e" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="start" dominant-baseline="alphabetic">Learn how we count contributions</text>
+<text x="645" y="168" fill="#8b949e" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Less</text>
+<rect x="653" y="158" width="10" height="10" rx="2" ry="2" fill="#161b22" />
+<rect x="666" y="158" width="10" height="10" rx="2" ry="2" fill="#10253f" />
+<rect x="679" y="158" width="10" height="10" rx="2" ry="2" fill="#153b66" />
+<rect x="692" y="158" width="10" height="10" rx="2" ry="2" fill="#1b5aa0" />
+<rect x="705" y="158" width="10" height="10" rx="2" ry="2" fill="#1f6feb" />
+<text x="722" y="168" fill="#8b949e" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="start" dominant-baseline="alphabetic">More</text>
 <metadata>{"username": "Treenixie", "active_cells": 16, "mode": "partition-preview"}</metadata>
 </svg>
