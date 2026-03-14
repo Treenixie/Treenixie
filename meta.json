@@ -1,10 +1,14 @@
 {
   "username": "Treenixie",
-  "total_contributions": 120,
+  "total_contributions": 121,
   "active_cells": 16,
-  "calendar_hash": "cd578349d9f8c019df340c931f98e2e6018a54cd6e3bbdef1e8d15d7ffd823c2",
+  "calendar_hash": "95577e2c9cf3975c62fc392f080ef2d47cc4ddbc6968b5a860ac88e4ecf02e84",
   "pieces_count": 13,
   "dot_count": 12,
+  "piece_breakdown": {
+    "DOT": 12,
+    "J": 1
+  },
   "diagnostics": {
     "viewer_login": "Treenixie",
     "has_any_restricted_contributions": false,

@@ -391,6 +391,22 @@
 <rect x="719" y="144" width="10" height="10" rx="2" ry="2" fill="#ebedf0" />
 <rect x="732" y="144" width="10" height="10" rx="2" ry="2" fill="#ebedf0" />
 <rect x="745" y="144" width="10" height="10" rx="2" ry="2" fill="#216e39" />
+<rect x="641.6" y="66.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#0969da" stroke-width="1.8" opacity="1.0"/>
+<rect x="745.6" y="66.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#8250df" stroke-width="1.8" opacity="1.0"/>
+<rect x="745.6" y="79.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#bc4c00" stroke-width="1.8" opacity="1.0"/>
+<rect x="667.6" y="92.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#cf222e" stroke-width="1.8" opacity="1.0"/>
+<rect x="706.6" y="92.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#218bff" stroke-width="1.8" opacity="1.0"/>
+<rect x="745.6" y="92.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#bf3989" stroke-width="1.8" opacity="1.0"/>
+<rect x="719.6" y="105.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#9a6700" stroke-width="1.8" opacity="1.0"/>
+<rect x="82.6" y="118.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#1a7f37" stroke-width="1.8" opacity="1.0"/>
+<rect x="732.6" y="131.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#0969da" stroke-width="1.8" opacity="1.0"/>
+<rect x="745.6" y="131.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#8250df" stroke-width="1.8" opacity="1.0"/>
+<rect x="628.6" y="144.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#bc4c00" stroke-width="1.8" opacity="1.0"/>
+<rect x="706.6" y="118.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#cf222e" stroke-width="1.4" opacity="0.95"/>
+<rect x="706.6" y="131.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#cf222e" stroke-width="1.4" opacity="0.95"/>
+<rect x="706.6" y="144.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#cf222e" stroke-width="1.4" opacity="0.95"/>
+<rect x="719.6" y="118.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#cf222e" stroke-width="1.4" opacity="0.95"/>
+<rect x="745.6" y="144.6" width="8.8" height="8.8" rx="2" ry="2" fill="none" stroke="#218bff" stroke-width="1.8" opacity="1.0"/>
 <text x="66" y="176" fill="#57606a" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="start" dominant-baseline="alphabetic">Learn how we count contributions</text>
 <text x="633" y="176" fill="#24292f" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="end" dominant-baseline="alphabetic">Less</text>
 <rect x="641" y="166" width="10" height="10" rx="2" ry="2" fill="#ebedf0" />
@@ -399,5 +415,5 @@
 <rect x="680" y="166" width="10" height="10" rx="2" ry="2" fill="#30a14e" />
 <rect x="693" y="166" width="10" height="10" rx="2" ry="2" fill="#216e39" />
 <text x="710" y="176" fill="#24292f" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'" font-size="11" font-weight="400" text-anchor="start" dominant-baseline="alphabetic">More</text>
-<metadata>{"username": "Treenixie", "active_cells": 16, "pieces_overlay": false}</metadata>
+<metadata>{"username": "Treenixie", "active_cells": 16, "pieces_overlay": true}</metadata>
 </svg>
