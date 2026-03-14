@@ -94,9 +94,9 @@ CARD_Y = 8
 CARD_W = CANVAS_W - 16
 CARD_H = CANVAS_H - 16
 CARD_RIGHT = CARD_X + CARD_W
+CARD_BOTTOM = CARD_Y + CARD_H
+CARD_PAD = 10
 
-GRID_X = 69
-GRID_Y = 66
 CELL = 10
 GAP = 3
 STEP = CELL + GAP
@@ -105,6 +105,22 @@ COLS = 53
 ROWS = 7
 GRID_W = COLS * STEP - GAP
 GRID_H = ROWS * STEP - GAP
+
+TITLE_X = CARD_X + CARD_PAD
+TITLE_Y = CARD_Y + CARD_PAD + 11
+SETTINGS_X = CARD_RIGHT - CARD_PAD
+SETTINGS_Y = TITLE_Y
+DIVIDER_Y = CARD_Y + 27
+
+GRID_X = CARD_RIGHT - CARD_PAD - GRID_W
+GRID_Y = 62
+
+MONTH_Y = GRID_Y - 10
+DAY_LABEL_X = GRID_X - 18
+
+FOOTER_Y = CARD_BOTTOM - CARD_PAD - 2
+LEGEND_Y = FOOTER_Y - 10
+LEGEND_BLOCKS_X = CARD_RIGHT - CARD_PAD - 82
 
 FONT_STACK = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'"
 
@@ -429,12 +445,22 @@ def connected_components(active):
 
 
 def piece_penalty(name):
+    if name == "O":
+        return 0
+    if name in {"T", "L", "J"}:
+        return 1
+    if name in {"S", "Z"}:
+        return 2
+    if name == "I":
+        return 3
+    if name == "TRI_L":
+        return 6
+    if name == "TRI_I":
+        return 8
+    if name == "DOMINO":
+        return 14
     if name == "DOT":
         return 1000
-    if name == "DOMINO":
-        return 10
-    if name in {"TRI_I", "TRI_L"}:
-        return 4
     return 0
 
 
@@ -491,6 +517,72 @@ def solve_component_exact(component):
     index_of = {cell: idx for idx, cell in enumerate(component_cells)}
     all_mask = (1 << len(component_cells)) - 1
 
+    neighbor_masks = []
+    original_degree = []
+    for cell in component_cells:
+        mask = 0
+        for dc, dr in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            nb = (cell[0] + dc, cell[1] + dr)
+            if nb in index_of:
+                mask |= 1 << index_of[nb]
+        neighbor_masks.append(mask)
+        original_degree.append(mask.bit_count())
+
+    mask_penalty_cache = {}
+
+    def mask_fragment_penalty(mask):
+        if mask == 0:
+            return 0
+        if mask in mask_penalty_cache:
+            return mask_penalty_cache[mask]
+
+        remaining = mask
+        component_sizes = []
+        newly_isolated_connected = 0
+
+        while remaining:
+            lsb = remaining & -remaining
+            idx = lsb.bit_length() - 1
+
+            queue = [idx]
+            comp_mask = 0
+            remaining ^= 1 << idx
+
+            while queue:
+                cur = queue.pop()
+                comp_mask |= 1 << cur
+                nb_mask = neighbor_masks[cur] & remaining
+                while nb_mask:
+                    lsb2 = nb_mask & -nb_mask
+                    j = lsb2.bit_length() - 1
+                    remaining ^= 1 << j
+                    queue.append(j)
+                    nb_mask ^= lsb2
+
+            size = comp_mask.bit_count()
+            component_sizes.append(size)
+
+        for i in range(len(component_cells)):
+            if mask & (1 << i):
+                deg_now = (neighbor_masks[i] & mask).bit_count()
+                if deg_now == 0 and original_degree[i] > 0:
+                    newly_isolated_connected += 1
+
+        singletons = sum(1 for s in component_sizes if s == 1)
+        pairs = sum(1 for s in component_sizes if s == 2)
+        triples = sum(1 for s in component_sizes if s == 3)
+
+        penalty = (
+            singletons * 40
+            + pairs * 8
+            + triples * 2
+            + len(component_sizes) * 3
+            + newly_isolated_connected * 18
+        )
+
+        mask_penalty_cache[mask] = penalty
+        return penalty
+
     def try_solve(allow_connected_dots):
         placements = generate_piece_candidates(component, allow_connected_dots=allow_connected_dots)
         placements_by_index = {i: [] for i in range(len(component_cells))}
@@ -508,10 +600,20 @@ def solve_component_exact(component):
                 "origin_y": placement["origin_y"],
                 "cells": placement["cells"],
                 "priority": placement["priority"],
+                "size": len(placement["cells"]),
             }
 
             for cell in placement["cells"]:
                 placements_by_index[index_of[cell]].append(item)
+
+        for idx in placements_by_index:
+            placements_by_index[idx].sort(
+                key=lambda p: (
+                    piece_penalty(p["name"]),
+                    -(p["size"]),
+                    -p["priority"],
+                )
+            )
 
         memo = {}
 
@@ -532,7 +634,8 @@ def solve_component_exact(component):
                 if placement["mask"] & mask != placement["mask"]:
                     continue
 
-                tail_score, tail_solution = solve(mask ^ placement["mask"])
+                remaining_mask = mask ^ placement["mask"]
+                tail_score, tail_solution = solve(remaining_mask)
 
                 if tail_score is None:
                     continue
@@ -540,8 +643,8 @@ def solve_component_exact(component):
                 name = placement["name"]
                 score = (
                     tail_score[0] + (1 if name == "DOT" else 0),
-                    tail_score[1] + piece_penalty(name),
-                    tail_score[2] + (0 if len(placement["cells"]) == 4 else 1),
+                    tail_score[1] + piece_penalty(name) + mask_fragment_penalty(remaining_mask),
+                    tail_score[2] + (0 if placement["size"] == 4 else 1),
                     tail_score[3] + 1,
                 )
 
@@ -583,6 +686,17 @@ def solve_component_exact(component):
     ]
 
 
+def greedy_after_penalty(active, chosen_cells):
+    remaining = set(active) - set(chosen_cells)
+    penalty = 0
+    for cell in remaining:
+        old_deg = cell_degree(cell, active)
+        new_deg = cell_degree(cell, remaining)
+        if old_deg > 0 and new_deg == 0:
+            penalty += 18
+    return penalty
+
+
 def best_piece_for_anchor_greedy(anchor, active):
     candidates = []
 
@@ -602,7 +716,8 @@ def best_piece_for_anchor_greedy(anchor, active):
                 score = (
                     len(absolute_cells) * 100
                     + neighbor_score(absolute_cells, active) * 10
-                    - piece_penalty(piece_name)
+                    - piece_penalty(piece_name) * 6
+                    - greedy_after_penalty(active, absolute_cells)
                 )
 
                 candidates.append(
@@ -872,8 +987,8 @@ def render_base(parts, theme_name, month_labels, total):
 
     parts.append(
         svg_text(
-            16,
-            31,
+            TITLE_X,
+            TITLE_Y,
             f"{total} contributions in the last year",
             theme["text"],
             size=14,
@@ -883,8 +998,8 @@ def render_base(parts, theme_name, month_labels, total):
 
     parts.append(
         svg_text(
-            CARD_RIGHT - 16,
-            31,
+            SETTINGS_X,
+            SETTINGS_Y,
             "Contribution settings ▾",
             theme["muted"],
             size=11,
@@ -894,18 +1009,18 @@ def render_base(parts, theme_name, month_labels, total):
     )
 
     parts.append(
-        f'<line x1="{CARD_X + 1}" y1="40" x2="{CARD_RIGHT - 1}" y2="40" stroke="{theme["divider"]}" stroke-width="1"/>'
+        f'<line x1="{CARD_X + 1}" y1="{DIVIDER_Y}" x2="{CARD_RIGHT - 1}" y2="{DIVIDER_Y}" stroke="{theme["divider"]}" stroke-width="1"/>'
     )
 
     for month_name, col in month_labels:
         x = GRID_X + col * STEP
-        parts.append(svg_text(x, 56, month_name, theme["text"], size=12, weight="400"))
+        parts.append(svg_text(x, MONTH_Y, month_name, theme["text"], size=12, weight="400"))
 
     for label, row in (("Mon", 1), ("Wed", 3), ("Fri", 5)):
         y = GRID_Y + row * STEP + 6
         parts.append(
             svg_text(
-                GRID_X - 18,
+                DAY_LABEL_X,
                 y,
                 label,
                 theme["text"],
@@ -926,13 +1041,11 @@ def render_empty_grid(parts, theme_name):
 
 def render_blue_legend(parts, theme_name):
     theme = THEMES[theme_name]
-    legend_y = 166
-    legend_blocks_x = CARD_RIGHT - 118
 
     parts.append(
         svg_text(
-            66,
-            176,
+            GRID_X,
+            FOOTER_Y,
             "Learn how we count contributions",
             theme["muted"],
             size=11,
@@ -942,8 +1055,8 @@ def render_blue_legend(parts, theme_name):
 
     parts.append(
         svg_text(
-            legend_blocks_x - 8,
-            176,
+            LEGEND_BLOCKS_X - 8,
+            FOOTER_Y,
             "Less",
             theme["muted"],
             size=11,
@@ -953,12 +1066,12 @@ def render_blue_legend(parts, theme_name):
     )
 
     for i, color in enumerate(theme["blue_scale"]):
-        parts.append(svg_rect(legend_blocks_x + i * 13, legend_y, 10, 10, color, rx=2))
+        parts.append(svg_rect(LEGEND_BLOCKS_X + i * 13, LEGEND_Y, 10, 10, color, rx=2))
 
     parts.append(
         svg_text(
-            legend_blocks_x + 5 * 13 + 4,
-            176,
+            LEGEND_BLOCKS_X + 5 * 13 + 4,
+            FOOTER_Y,
             "More",
             theme["muted"],
             size=11,
