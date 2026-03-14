@@ -358,7 +358,7 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username):
 
     # Легенда
     legend_y = 166
-    legend_blocks_x = CARD_RIGHT - 90
+    legend_blocks_x = CARD_RIGHT - 118
 
     parts.append(
         svg_text(
