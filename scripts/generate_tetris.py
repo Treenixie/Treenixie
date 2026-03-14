@@ -4,6 +4,7 @@ import calendar as cal
 import datetime as dt
 import hashlib
 import json
+
 import requests
 
 GRAPHQL_URL = "https://api.github.com/graphql"
@@ -61,7 +62,7 @@ THEMES = {
 }
 
 CANVAS_W = 767
-CANVAS_H = 220
+CANVAS_H = 212
 
 CARD_X = 8
 CARD_Y = 8
@@ -70,8 +71,8 @@ CARD_H = CANVAS_H - 16
 CARD_RIGHT = CARD_X + CARD_W
 CARD_BOTTOM = CARD_Y + CARD_H
 
-GRID_X = 60
-GRID_Y = 72
+GRID_X = 69
+GRID_Y = 54
 CELL = 10
 GAP = 3
 STEP = CELL + GAP
@@ -176,6 +177,9 @@ def pad_weeks(weeks):
     if len(weeks) >= COLS:
         return weeks[-COLS:]
 
+    if not weeks:
+        raise RuntimeError("GitHub вернул пустой список weeks.")
+
     missing = COLS - len(weeks)
     first_day = dt.date.fromisoformat(weeks[0]["firstDay"])
     padding = []
@@ -204,7 +208,7 @@ def pad_weeks(weeks):
 
 
 def normalize_calendar(calendar_data):
-    weeks = pad_weeks(calendar_data["weeks"])
+    weeks = pad_weeks(calendar_data["weeks"][-COLS:])
 
     board = [[0 for _ in range(COLS)] for _ in range(ROWS)]
     raw_days = []
@@ -220,7 +224,7 @@ def normalize_calendar(calendar_data):
 
         for day in week["contributionDays"]:
             day_date = dt.date.fromisoformat(day["date"])
-            row = (day_date.weekday() + 1) % 7
+            row = (day_date.weekday() + 1) % 7  # Sunday first
             level = LEVEL_MAP.get(day["contributionLevel"], 0)
             count = int(day["contributionCount"])
 
@@ -261,136 +265,135 @@ def render_svg(theme_name, board, month_labels, total, active_cells, username):
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{CANVAS_W}" height="{CANVAS_H}" '
         f'viewBox="0 0 {CANVAS_W} {CANVAS_H}" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">'
     )
+
     parts.append(svg_rect(0, 0, CANVAS_W, CANVAS_H, theme["bg"], rx=0))
-parts.append(
-    svg_rect(
-        CARD_X,
-        CARD_Y,
-        CARD_W,
-        CARD_H,
-        theme["bg"],
-        rx=6,
-        extra=f'stroke="{theme["border"]}" stroke-width="1"',
+    parts.append(
+        svg_rect(
+            CARD_X,
+            CARD_Y,
+            CARD_W,
+            CARD_H,
+            theme["bg"],
+            rx=6,
+            extra=f'stroke="{theme["border"]}" stroke-width="1"',
+        )
     )
-)
 
-# Верхняя строка
-parts.append(
-    svg_text(
-        16,
-        31,
-        f"{total} contributions in the last year",
-        theme["text"],
-        size=14,
-        weight="600",
-        anchor="start",
-        baseline="alphabetic",
-    )
-)
-
-parts.append(
-    svg_text(
-        CARD_RIGHT - 16,
-        31,
-        "Contribution settings ▾",
-        theme["muted"],
-        size=11,
-        weight="400",
-        anchor="end",
-        baseline="alphabetic",
-    )
-)
-
-parts.append(
-    f'<line x1="{CARD_X + 1}" y1="40" x2="{CARD_RIGHT - 1}" y2="40" stroke="{theme["divider"]}" stroke-width="1"/>'
-)
-
-# Месяцы
-for month_name, col in month_labels:
-    x = GRID_X + col * STEP
     parts.append(
         svg_text(
-            x,
-            62,
-            month_name,
+            16,
+            31,
+            f"{total} contributions in the last year",
             theme["text"],
-            size=12,
+            size=14,
+            weight="600",
+            anchor="start",
+            baseline="alphabetic",
+        )
+    )
+
+    parts.append(
+        svg_text(
+            CARD_RIGHT - 16,
+            31,
+            "Contribution settings ▾",
+            theme["muted"],
+            size=11,
+            weight="400",
+            anchor="end",
+            baseline="alphabetic",
+        )
+    )
+
+    parts.append(
+        f'<line x1="{CARD_X + 1}" y1="40" x2="{CARD_RIGHT - 1}" y2="40" stroke="{theme["divider"]}" stroke-width="1"/>'
+    )
+
+    for month_name, col in month_labels:
+        x = GRID_X + col * STEP
+        parts.append(
+            svg_text(
+                x,
+                62,
+                month_name,
+                theme["text"],
+                size=12,
+                weight="400",
+                anchor="start",
+                baseline="alphabetic",
+            )
+        )
+
+    for label, row in (("Mon", 1), ("Wed", 3), ("Fri", 5)):
+        y = GRID_Y + row * STEP + CELL / 2
+        parts.append(
+            svg_text(
+                GRID_X - 18,
+                y,
+                label,
+                theme["text"],
+                size=12,
+                weight="400",
+                anchor="end",
+                baseline="middle",
+            )
+        )
+
+    for row in range(ROWS):
+        for col in range(COLS):
+            x, y, w, h = cell_rect(col, row)
+            parts.append(svg_rect(x, y, w, h, theme["greens"][board[row][col]], rx=2))
+
+    parts.append(
+        svg_text(
+            66,
+            189,
+            "Learn how we count contributions",
+            theme["muted"],
+            size=11,
             weight="400",
             anchor="start",
             baseline="alphabetic",
         )
     )
 
-# Подписи дней
-for label, row in (("Mon", 1), ("Wed", 3), ("Fri", 5)):
-    y = GRID_Y + row * STEP + CELL / 2
+    legend_blocks_x = CARD_RIGHT - 92
+    legend_y = 180
+
     parts.append(
         svg_text(
-            GRID_X - 18,
-            y,
-            label,
+            legend_blocks_x - 10,
+            189,
+            "Less",
             theme["text"],
-            size=12,
+            size=11,
             weight="400",
             anchor="end",
-            baseline="middle",
+            baseline="alphabetic",
         )
     )
 
-# Сетка
-for row in range(ROWS):
-    for col in range(COLS):
-        x, y, w, h = cell_rect(col, row)
-        parts.append(svg_rect(x, y, w, h, theme["greens"][board[row][col]], rx=2))
+    for i, color in enumerate(theme["greens"]):
+        parts.append(svg_rect(legend_blocks_x + i * 13, legend_y, 10, 10, color, rx=2))
 
-# Нижняя подпись
-parts.append(
-    svg_text(
-        66,
-        197,
-        "Learn how we count contributions",
-        theme["muted"],
-        size=11,
-        weight="400",
-        anchor="start",
-        baseline="alphabetic",
+    parts.append(
+        svg_text(
+            legend_blocks_x + 5 * 13 + 4,
+            189,
+            "More",
+            theme["text"],
+            size=11,
+            weight="400",
+            anchor="start",
+            baseline="alphabetic",
+        )
     )
-)
 
-# Less / More
-legend_blocks_x = CARD_RIGHT - 88
-legend_y = 188
-
-parts.append(
-    svg_text(
-        legend_blocks_x - 10,
-        197,
-        "Less",
-        theme["text"],
-        size=11,
-        weight="400",
-        anchor="end",
-        baseline="alphabetic",
+    parts.append(
+        f'<metadata>{{"username":"{username}","active_cells":{active_cells}}}</metadata>'
     )
-)
-
-for i, color in enumerate(theme["greens"]):
-    parts.append(svg_rect(legend_blocks_x + i * 13, legend_y, 10, 10, color, rx=2))
-
-parts.append(
-    svg_text(
-        legend_blocks_x + 5 * 13 + 4,
-        197,
-        "More",
-        theme["text"],
-        size=11,
-        weight="400",
-        anchor="start",
-        baseline="alphabetic",
-    )
-)
-    parts.append(f'<metadata>{{"username":"{username}","active_cells":{active_cells}}}</metadata>')
     parts.append("</svg>")
+
     return "\n".join(parts)
 
 
@@ -419,6 +422,7 @@ def main():
         "calendar_hash": calendar_hash,
         "diagnostics": diagnostics,
     }
+
     (outdir / "meta.json").write_text(
         json.dumps(meta, indent=2, ensure_ascii=False),
         encoding="utf-8",
