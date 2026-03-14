@@ -107,10 +107,10 @@ GRID_W = COLS * STEP - GAP
 GRID_H = ROWS * STEP - GAP
 
 TITLE_X = CARD_X + CARD_PAD
-TITLE_Y = CARD_Y + CARD_PAD + 11
+TITLE_Y = CARD_Y + CARD_PAD + 13
 SETTINGS_X = CARD_RIGHT - CARD_PAD
 SETTINGS_Y = TITLE_Y
-DIVIDER_Y = CARD_Y + 27
+DIVIDER_Y = TITLE_Y + 9
 
 GRID_X = CARD_RIGHT - CARD_PAD - GRID_W
 GRID_Y = 62
@@ -118,9 +118,9 @@ GRID_Y = 62
 MONTH_Y = GRID_Y - 10
 DAY_LABEL_X = GRID_X - 18
 
-FOOTER_Y = CARD_BOTTOM - CARD_PAD - 2
+FOOTER_Y = GRID_Y + GRID_H + 18
 LEGEND_Y = FOOTER_Y - 10
-LEGEND_BLOCKS_X = CARD_RIGHT - CARD_PAD - 102
+LEGEND_BLOCKS_X = CARD_RIGHT - CARD_PAD - 96
 
 FONT_STACK = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'"
 
@@ -1024,7 +1024,7 @@ def render_base(parts, theme_name, month_labels, total):
                 y,
                 label,
                 theme["text"],
-                size=11,
+                size=12,
                 weight="400",
                 anchor="end",
             )
