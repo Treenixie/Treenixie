@@ -1,5 +1,60 @@
 from pathlib import Path
 import os
+import calendar as cal
+import datetime as dt
+import hashlib
+import json
+import requests
+
+GRAPHQL_URL = "https://api.github.com/graphql"
+
+GRAPHQL_QUERY = """
+query($login: String!, $from: DateTime!, $to: DateTime!) {
+  user(login: $login) {
+    contributionsCollection(from: $from, to: $to) {
+      contributionCalendar {
+        totalContributions
+        weeks {
+          firstDay
+          contributionDays {
+            contributionCount
+            contributionLevel
+            date
+            weekday
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
+LEVEL_MAP = {
+    "NONE": 0,
+    "FIRST_QUARTILE": 1,
+    "SECOND_QUARTILE": 2,
+    "THIRD_QUARTILE": 3,
+    "FOURTH_QUARTILE": 4,
+}
+
+THEMES = {
+    "dark": {
+        "bg": "#0d1117",
+        "border": "#30363d",
+        "divider": "#21262d",
+        "text": "#c9d1d9",
+        "muted": "#8b949e",
+        "greens": ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
+    },
+    "light": {
+        "bg": "#ffffff",
+        "border": "#d0d7de",
+        "divider": "#d8dee4",
+        "text": "#24292f",
+        "muted": "#57606a",
+        "greens": ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
+    },
+}
 
 CANVAS_W = 767
 CANVAS_H = 220
@@ -13,35 +68,6 @@ STEP = CELL + GAP
 COLS = 53
 ROWS = 7
 
-THEMES = {
-    "dark": {
-        "bg": "#0d1117",
-        "border": "#30363d",
-        "divider": "#21262d",
-        "text": "#c9d1d9",
-        "muted": "#8b949e",
-        "empty": "#161b22",
-        "greens": ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
-        "piece_colors": ["#58a6ff", "#d2a8ff", "#ffa657", "#f85149", "#79c0ff", "#ff7b72"],
-    },
-    "light": {
-        "bg": "#ffffff",
-        "border": "#d0d7de",
-        "divider": "#d8dee4",
-        "text": "#24292f",
-        "muted": "#57606a",
-        "empty": "#ebedf0",
-        "greens": ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
-        "piece_colors": ["#0969da", "#8250df", "#bc4c00", "#cf222e", "#218bff", "#bf3989"],
-    },
-}
-
-
-def cell_rect(col: int, row: int):
-    x = GRID_X + col * STEP
-    y = GRID_Y + row * STEP
-    return x, y, CELL, CELL
-
 
 def svg_rect(x, y, w, h, fill, rx=2, extra=""):
     return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" ry="{rx}" fill="{fill}" {extra}/>'
@@ -49,7 +75,8 @@ def svg_rect(x, y, w, h, fill, rx=2, extra=""):
 
 def svg_text(x, y, text, fill, size=12, weight="400"):
     safe = (
-        text.replace("&", "&amp;")
+        str(text)
+        .replace("&", "&amp;")
         .replace("<", "&lt;")
         .replace(">", "&gt;")
     )
@@ -59,7 +86,134 @@ def svg_text(x, y, text, fill, size=12, weight="400"):
     )
 
 
-def make_base(theme_name: str):
+def cell_rect(col, row):
+    x = GRID_X + col * STEP
+    y = GRID_Y + row * STEP
+    return x, y, CELL, CELL
+
+
+def choose_token():
+    token = os.getenv("PROFILE_TOKEN") or os.getenv("GITHUB_TOKEN")
+    if not token:
+        raise RuntimeError("Не найден токен. Нужен PROFILE_TOKEN в secrets.")
+    return token
+
+
+def fetch_calendar(username, token):
+    today = dt.datetime.utcnow().date()
+    start = today - dt.timedelta(days=370)
+
+    response = requests.post(
+        GRAPHQL_URL,
+        headers={
+            "Authorization": f"bearer {token}",
+            "Accept": "application/vnd.github+json",
+        },
+        json={
+            "query": GRAPHQL_QUERY,
+            "variables": {
+                "login": username,
+                "from": f"{start.isoformat()}T00:00:00Z",
+                "to": f"{today.isoformat()}T23:59:59Z",
+            },
+        },
+        timeout=30,
+    )
+    response.raise_for_status()
+    payload = response.json()
+
+    if "errors" in payload:
+        raise RuntimeError(f"GitHub GraphQL error: {payload['errors']}")
+
+    user = payload.get("data", {}).get("user")
+    if not user:
+        raise RuntimeError("GitHub не вернул user. Проверь username и PROFILE_TOKEN.")
+
+    return user["contributionsCollection"]["contributionCalendar"]
+
+
+def pad_weeks(weeks):
+    if len(weeks) >= COLS:
+        return weeks[-COLS:]
+
+    missing = COLS - len(weeks)
+    first_day = dt.date.fromisoformat(weeks[0]["firstDay"])
+    padding = []
+
+    for i in range(missing, 0, -1):
+        week_start = first_day - dt.timedelta(days=7 * i)
+        contribution_days = []
+        for j in range(7):
+            day = week_start + dt.timedelta(days=j)
+            contribution_days.append(
+                {
+                    "contributionCount": 0,
+                    "contributionLevel": "NONE",
+                    "date": day.isoformat(),
+                    "weekday": j,
+                }
+            )
+        padding.append(
+            {
+                "firstDay": week_start.isoformat(),
+                "contributionDays": contribution_days,
+            }
+        )
+
+    return padding + weeks
+
+
+def normalize_calendar(calendar_data):
+    weeks = pad_weeks(calendar_data["weeks"])
+
+    board = [[0 for _ in range(COLS)] for _ in range(ROWS)]
+    raw_days = []
+    month_labels = []
+    prev_month = None
+
+    for col, week in enumerate(weeks):
+        week_start = dt.date.fromisoformat(week["firstDay"])
+        month_name = cal.month_abbr[week_start.month]
+        if month_name != prev_month:
+            month_labels.append((month_name, col))
+            prev_month = month_name
+
+        for day in week["contributionDays"]:
+            day_date = dt.date.fromisoformat(day["date"])
+            row = (day_date.weekday() + 1) % 7
+            level = LEVEL_MAP.get(day["contributionLevel"], 0)
+            count = int(day["contributionCount"])
+
+            board[row][col] = level
+            raw_days.append(
+                {
+                    "date": day["date"],
+                    "col": col,
+                    "row": row,
+                    "level": level,
+                    "count": count,
+                }
+            )
+
+    total = int(calendar_data["totalContributions"])
+    active_cells = sum(1 for item in raw_days if item["level"] > 0)
+
+    hash_source = {
+        "total": total,
+        "days": [
+            [item["date"], item["col"], item["row"], item["level"], item["count"]]
+            for item in raw_days
+        ],
+    }
+
+    calendar_hash = hashlib.sha256(
+        json.dumps(hash_source, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    ).hexdigest()
+
+    return board, month_labels, total, active_cells, calendar_hash
+
+
+def render_svg(theme_name, board, month_labels, total, active_cells, username):
     theme = THEMES[theme_name]
     parts = []
 
@@ -67,24 +221,36 @@ def make_base(theme_name: str):
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{CANVAS_W}" height="{CANVAS_H}" viewBox="0 0 {CANVAS_W} {CANVAS_H}">'
     )
     parts.append(svg_rect(0, 0, CANVAS_W, CANVAS_H, theme["bg"], rx=0))
-    parts.append(svg_rect(8, 8, CANVAS_W - 16, CANVAS_H - 16, theme["bg"], rx=6, extra=f'stroke="{theme["border"]}" stroke-width="1"'))
+    parts.append(
+        svg_rect(
+            8,
+            8,
+            CANVAS_W - 16,
+            CANVAS_H - 16,
+            theme["bg"],
+            rx=6,
+            extra=f'stroke="{theme["border"]}" stroke-width="1"',
+        )
+    )
 
-    parts.append(svg_text(16, 30, "GitHub Tetris bootstrap mode", theme["text"], size=15, weight="700"))
+    parts.append(svg_text(16, 30, f"{total} contributions in the last year", theme["text"], size=15, weight="700"))
     parts.append(svg_text(CANVAS_W - 150, 30, "Contribution settings ▾", theme["muted"], size=11))
     parts.append(f'<line x1="9" y1="40" x2="{CANVAS_W - 9}" y2="40" stroke="{theme["divider"]}" stroke-width="1"/>')
 
-    months = ["Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar"]
-    month_cols = [0, 4, 8, 12, 16, 21, 25, 30, 34, 39, 44, 47, 51]
-    for label, col in zip(months, month_cols):
+    for month_name, col in month_labels:
         x = GRID_X + col * STEP
-        parts.append(svg_text(x, 62, label, theme["text"], size=12))
+        parts.append(svg_text(x, 62, month_name, theme["text"], size=12))
 
-    day_rows = [("Mon", 1), ("Wed", 3), ("Fri", 5)]
-    for label, row in day_rows:
+    for label, row in (("Mon", 1), ("Wed", 3), ("Fri", 5)):
         y = GRID_Y + row * STEP + 9
         parts.append(svg_text(18, y, label, theme["text"], size=12))
 
-    parts.append(svg_text(66, 197, "Pipeline test: next step is real contribution data", theme["muted"], size=11))
+    for row in range(ROWS):
+        for col in range(COLS):
+            x, y, w, h = cell_rect(col, row)
+            parts.append(svg_rect(x, y, w, h, theme["greens"][board[row][col]], rx=2))
+
+    parts.append(svg_text(66, 197, "Live GitHub calendar data", theme["muted"], size=11))
 
     parts.append(svg_text(CANVAS_W - 120, 197, "Less", theme["text"], size=11))
     legend_x = CANVAS_W - 90
@@ -92,60 +258,42 @@ def make_base(theme_name: str):
         parts.append(svg_rect(legend_x + i * 13, 188, 10, 10, color, rx=2))
     parts.append(svg_text(CANVAS_W - 22, 197, "More", theme["text"], size=11))
 
-    return parts
-
-
-def draw_empty_board(parts, theme_name: str):
-    theme = THEMES[theme_name]
-    for row in range(ROWS):
-        for col in range(COLS):
-            x, y, w, h = cell_rect(col, row)
-            parts.append(svg_rect(x, y, w, h, theme["empty"], rx=2))
-
-
-def make_test_shapes(parts, theme_name: str):
-    theme = THEMES[theme_name]
-    colors = theme["piece_colors"]
-
-    shapes = [
-        [(44, 0), (45, 0), (46, 0), (45, 1)],  # T
-        [(48, 2), (48, 3), (49, 3), (50, 3)],  # J
-        [(51, 1), (51, 2), (51, 3), (52, 3)],  # L
-        [(40, 5)],                              # DOT
-    ]
-
-    for idx, shape in enumerate(shapes):
-        color = colors[idx % len(colors)]
-        for col, row in shape:
-            x, y, w, h = cell_rect(col, row)
-            parts.append(svg_rect(x, y, w, h, color, rx=2))
-
-    parts.append(svg_text(60, 178, "If you can see this block, visual branch works.", theme["muted"], size=11))
-
-
-def write_svg(theme_name: str, output_path: Path):
-    parts = make_base(theme_name)
-    draw_empty_board(parts, theme_name)
-    make_test_shapes(parts, theme_name)
+    parts.append(f'<metadata>{{"username":"{username}","active_cells":{active_cells}}}</metadata>')
     parts.append("</svg>")
-    output_path.write_text("\n".join(parts), encoding="utf-8")
+    return "\n".join(parts)
 
 
 def main():
-    username = os.getenv("GITHUB_USERNAME", "unknown-user")
+    username = os.getenv("GITHUB_USERNAME")
+    if not username:
+        raise RuntimeError("Нет GITHUB_USERNAME в окружении.")
 
+    token = choose_token()
     outdir = Path("generated")
     outdir.mkdir(parents=True, exist_ok=True)
 
-    write_svg("light", outdir / "github-tetris-light.svg")
-    write_svg("dark", outdir / "github-tetris-dark.svg")
+    calendar_data = fetch_calendar(username, token)
+    board, month_labels, total, active_cells, calendar_hash = normalize_calendar(calendar_data)
 
-    meta = outdir / "meta.txt"
-    meta.write_text(f"Generated for {username}\n", encoding="utf-8")
+    light_svg = render_svg("light", board, month_labels, total, active_cells, username)
+    dark_svg = render_svg("dark", board, month_labels, total, active_cells, username)
 
-    print("Generated:")
-    print(outdir / "github-tetris-light.svg")
-    print(outdir / "github-tetris-dark.svg")
+    (outdir / "github-tetris-light.svg").write_text(light_svg, encoding="utf-8")
+    (outdir / "github-tetris-dark.svg").write_text(dark_svg, encoding="utf-8")
+
+    meta = {
+        "username": username,
+        "total_contributions": total,
+        "active_cells": active_cells,
+        "calendar_hash": calendar_hash,
+    }
+    (outdir / "meta.json").write_text(
+        json.dumps(meta, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    print("Generated live calendar SVGs.")
+    print(json.dumps(meta, ensure_ascii=False))
 
 
 if __name__ == "__main__":
