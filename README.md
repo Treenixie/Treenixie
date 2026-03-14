@@ -18,4 +18,4 @@
 <code>&nbsp;<img src="https://cdn.simpleicons.org/figma/24292F/C9D1D9?viewbox=auto" alt="Figma" width="14" height="14" align="absmiddle" />&nbsp;Figma&nbsp;</code>
 <code>&nbsp;<img src="https://cdn.simpleicons.org/miro/24292F/C9D1D9?viewbox=auto" alt="Miro" width="14" height="14" align="absmiddle" />&nbsp;Miro&nbsp;</code>
 <code>&nbsp;<img src="https://cdn.simpleicons.org/notion/24292F/C9D1D9?viewbox=auto" alt="Notion" width="14" height="14" align="absmiddle" />&nbsp;Notion&nbsp;</code>
-<p align="right"><sub>as well as the Adobe Creative Cloud</sub></p>
+<code>&nbsp;as well as the Adobe Creative Cloud&nbsp;</code>
