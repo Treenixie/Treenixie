@@ -9,9 +9,13 @@ import requests
 GRAPHQL_URL = "https://api.github.com/graphql"
 
 GRAPHQL_QUERY = """
-query($login: String!, $from: DateTime!, $to: DateTime!) {
-  user(login: $login) {
+query($from: DateTime!, $to: DateTime!) {
+  viewer {
+    login
     contributionsCollection(from: $from, to: $to) {
+      hasAnyRestrictedContributions
+      restrictedContributionsCount
+      earliestRestrictedContributionDate
       contributionCalendar {
         totalContributions
         weeks {
@@ -112,7 +116,6 @@ def fetch_calendar(username, token):
         json={
             "query": GRAPHQL_QUERY,
             "variables": {
-                "login": username,
                 "from": f"{start.isoformat()}T00:00:00Z",
                 "to": f"{today.isoformat()}T23:59:59Z",
             },
@@ -125,11 +128,27 @@ def fetch_calendar(username, token):
     if "errors" in payload:
         raise RuntimeError(f"GitHub GraphQL error: {payload['errors']}")
 
-    user = payload.get("data", {}).get("user")
-    if not user:
-        raise RuntimeError("GitHub не вернул user. Проверь username и PROFILE_TOKEN.")
+    viewer = payload.get("data", {}).get("viewer")
+    if not viewer:
+        raise RuntimeError("GitHub не вернул viewer. Проверь PROFILE_TOKEN.")
 
-    return user["contributionsCollection"]["contributionCalendar"]
+    if viewer.get("login", "").lower() != username.lower():
+        raise RuntimeError(
+            f"PROFILE_TOKEN авторизован не как {username}, а как {viewer.get('login')}. "
+            "Токен должен принадлежать аккаунту Treenixie."
+        )
+
+    collection = viewer["contributionsCollection"]
+    calendar = collection["contributionCalendar"]
+
+    diagnostics = {
+        "viewer_login": viewer["login"],
+        "has_any_restricted_contributions": collection.get("hasAnyRestrictedContributions"),
+        "restricted_contributions_count": collection.get("restrictedContributionsCount"),
+        "earliest_restricted_contribution_date": collection.get("earliestRestrictedContributionDate"),
+    }
+
+    return calendar, diagnostics
 
 
 def pad_weeks(weeks):
@@ -272,7 +291,7 @@ def main():
     outdir = Path("generated")
     outdir.mkdir(parents=True, exist_ok=True)
 
-    calendar_data = fetch_calendar(username, token)
+    calendar_data, diagnostics = fetch_calendar(username, token)
     board, month_labels, total, active_cells, calendar_hash = normalize_calendar(calendar_data)
 
     light_svg = render_svg("light", board, month_labels, total, active_cells, username)
@@ -286,6 +305,7 @@ def main():
         "total_contributions": total,
         "active_cells": active_cells,
         "calendar_hash": calendar_hash,
+        "diagnostics": diagnostics,
     }
     (outdir / "meta.json").write_text(
         json.dumps(meta, indent=2, ensure_ascii=False),
@@ -293,7 +313,7 @@ def main():
     )
 
     print("Generated live calendar SVGs.")
-    print(json.dumps(meta, ensure_ascii=False))
+    print(json.dumps(meta, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
