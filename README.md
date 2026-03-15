@@ -29,4 +29,4 @@ Hi! I'm Anna (Treenixie), and I focus on game development. I usually create smal
   </picture>
 </p>
 <h1></h1>
-<p align="right"><sup>Design by Anna Treenixie</sup></p>
+<p align="center"><sup>Design by Anna Treenixie</sup></p>
