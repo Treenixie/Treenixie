@@ -2,7 +2,7 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-light.svg">
-    <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-dark.svg" alt="GitHub Tetris" width="100%">
+    <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-dark.svg" alt="GitHub Tetris" width="2000">
   </picture>
 </p>
 <p align="center">
@@ -13,7 +13,7 @@
   </picture>
 </p>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/languages-line.svg" alt="" width="100%">
+  <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/languages-line.svg" alt="" width="2000">
 </p>
 <p align="center">
   <code>&nbsp;<img src="https://cdn.simpleicons.org/python/36D6E7/36D6E7?viewbox=auto" alt="Python" width="14" height="14" align="absmiddle" />&nbsp;Python&nbsp;</code>
