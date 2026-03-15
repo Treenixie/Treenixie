@@ -2,7 +2,7 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-light.svg">
-    <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-dark.svg" alt="GitHub Tetris" width="2000">
+    <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-dark.svg" alt="GitHub Tetris">
   </picture>
 </p>
 <p align="center">
