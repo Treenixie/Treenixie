@@ -7,12 +7,10 @@
   </picture>
 </p>
 <p align="right">
-  <em>
-    <sup>“A week and a half left until the project deadline?<br>
-    My GitHub README desperately needs a Tetris-style contribution animation!”</sup>
-  </em>
+    <sup>A week and a half left until the project deadline?<br>
+    My GitHub README desperately needs a Tetris-style contribution animation!</sup>
 </p>
-<h6>Hi! I'm Anna, also known as Treenixie, and I focus on game development.
+<h6>Hi! I'm Anna (Treenixie), and I focus on game development.
 I usually create small shooters, platformers, puzzles, and simulation games, but I also plan to take on larger projects in the future. Here, I share my work, experiments, and coding practice. Feel free to explore and borrow ideas from the open repositories on my profile, that is exactly what they are for. Thanks for stopping by!</h6>
 <!-- Line -->
 <p align="center">
@@ -39,4 +37,4 @@ I usually create small shooters, platformers, puzzles, and simulation games, but
 <p align="center">
   <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/languages-line.svg" alt="" width="100%">
 </p>
-<p align="right"><sub><i>Design by Anna Treenixie</i></sub></p>
+<p align="right"><sub>Design by Anna Treenixie</sub></p>
