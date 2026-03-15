@@ -5,13 +5,13 @@
     <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-dark.svg" alt="GitHub Tetris" width="2000">
   </picture>
 </p>
-<b>tools</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>&nbsp;<img src="https://cdn.simpleicons.org/unrealengine/24292F/C9D1D9?viewbox=auto" alt="Unreal Engine" width="14" height="14" align="absmiddle" />&nbsp;Unreal Engine&nbsp;</code>
-<code>&nbsp;<img src="https://cdn.simpleicons.org/blender/24292F/C9D1D9?viewbox=auto" alt="Blender" width="14" height="14" align="absmiddle" />&nbsp;Blender&nbsp;</code>
-<code>&nbsp;<img src="https://cdn.simpleicons.org/aseprite/24292F/C9D1D9?viewbox=auto" alt="Aseprite" width="14" height="14" align="absmiddle" />&nbsp;Aseprite&nbsp;</code>
-<code>&nbsp;<img src="https://cdn.simpleicons.org/figma/24292F/C9D1D9?viewbox=auto" alt="Figma" width="14" height="14" align="absmiddle" />&nbsp;Figma&nbsp;</code>
-<code>&nbsp;<img src="https://cdn.simpleicons.org/miro/24292F/C9D1D9?viewbox=auto" alt="Miro" width="14" height="14" align="absmiddle" />&nbsp;Miro&nbsp;</code>
-<code>&nbsp;<img src="https://cdn.simpleicons.org/notion/24292F/C9D1D9?viewbox=auto" alt="Notion" width="14" height="14" align="absmiddle" />&nbsp;Notion&nbsp;</code>
-<br><br>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/cloud-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/cloud-light.svg">
+    <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/cloud-dark.svg" alt="Skills cloud" width="980">
+  </picture>
+</p>
 <p align="center">
   <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/languages-line.svg" alt="" width="100%">
 </p>
