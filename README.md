@@ -28,3 +28,5 @@ Hi! I'm Anna (Treenixie), and I focus on game development. I usually create smal
     <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/cloud-dark.svg" alt="Skills cloud" width="70%">
   </picture>
 </p>
+<h1></h1>
+<p align="right"><sup>Design by Anna Treenixie</sup></p>
