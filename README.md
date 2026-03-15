@@ -2,14 +2,14 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-light.svg">
-    <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-dark.svg" alt="GitHub Tetris">
+    <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-dark.svg" alt="GitHub Tetris" width="100%">
   </picture>
 </p>
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/cloud-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/cloud-light.svg">
-    <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/cloud-dark.svg" alt="Skills cloud" width="980">
+    <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/cloud-dark.svg" alt="Skills cloud" width="70%">
   </picture>
 </p>
 <p align="center">
