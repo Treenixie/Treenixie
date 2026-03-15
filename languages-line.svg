@@ -1,7 +1,7 @@
-<svg width="1000" height="4" viewBox="0 0 1000 4" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Languages line">
+<svg width="100%" height="4" viewBox="0 0 1000 4" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Languages line">
   <defs>
     <clipPath id="languages-line-clip">
-      <rect x="0" y="0.75" width="1000" height="2.5" rx="1.25" ry="1.25"/>
+      <rect x="0" y="0.75" width="100%" height="2.5" rx="1.25" ry="1.25"/>
     </clipPath>
   </defs>
 
