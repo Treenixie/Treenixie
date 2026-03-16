@@ -7,7 +7,8 @@
   </picture>
 </p>
 <h3 align="center">Hi! I'm Anna (Treenixie)</h3>
-<p align="left">I focus on game development. I usually create small shooters, platformers, puzzles, and simulation games, but I also plan to take on larger projects in the future. Here, I share my work, experiments, and coding practice. Feel free to explore and borrow ideas from the open repositories on my profile, that is exactly what they are for.</p>
+<p align="left">I focus on game development. I usually create small shooters, platformers, puzzles, and simulation games, but I also plan to take on larger projects in the future. Here, I share my work, experiments, and coding practice. 
+<p align="left">Feel free to explore and borrow ideas from the open repositories on my profile, that is exactly what they are for.</p>
 <p align="right"><b>Thanks for stopping by!</b></p>
 <!-- Line -->
 <p align="center">
