@@ -1,14 +1,15 @@
 {
   "username": "Treenixie",
-  "total_contributions": 192,
-  "active_cells": 20,
-  "calendar_hash": "18d0d245b1fc38d4a45a3a925589556601e1943ef5939e74137ec361394d9f71",
+  "total_contributions": 194,
+  "active_cells": 21,
+  "calendar_hash": "b3af76836412f54edd43a5807aa68f58d4991635954ffdfb63a9e7d5d9eeabd9",
   "pieces_count": 10,
   "dot_count": 4,
   "piece_breakdown": {
     "DOT": 4,
+    "L": 1,
     "TRI_I": 1,
-    "TRI_L": 3,
+    "TRI_L": 2,
     "DOMINO": 2
   },
   "diagnostics": {
