@@ -377,14 +377,15 @@
 <g clip-path="url(#grid-clip-partition-dark)">
 <rect x="512.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#3a838b" />
 <rect x="625.0" y="10.0" width="10" height="5" rx="1" ry="1" fill="#fa7970" />
-<rect x="625.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
 <rect x="637.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
 <rect x="650.0" y="10.0" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
+<rect x="650.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
 <rect x="537.5" y="25.0" width="10" height="5" rx="1" ry="1" fill="#eec85f" />
 <rect x="575.0" y="25.0" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
 <rect x="612.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
 <rect x="612.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#6198ca" />
 <rect x="612.5" y="25.0" width="10" height="5" rx="1" ry="1" fill="#4d779e" />
+<rect x="625.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
 <rect x="575.0" y="40.0" width="10" height="5" rx="1" ry="1" fill="#5d5176" />
 <rect x="587.5" y="32.5" width="10" height="5" rx="1" ry="1" fill="#5d5176" />
 <rect x="587.5" y="40.0" width="10" height="5" rx="1" ry="1" fill="#5d5176" />
@@ -397,5 +398,5 @@
 <rect x="612.5" y="47.5" width="10" height="5" rx="1" ry="1" fill="#43644a" />
 <rect x="612.5" y="55.0" width="10" height="5" rx="1" ry="1" fill="#8bd78a" />
 </g>
-<metadata>{"username": "Treenixie", "active_cells": 21, "mode": "partition-preview"}</metadata>
+<metadata>{"username": "Treenixie", "active_cells": 22, "mode": "partition-preview"}</metadata>
 </svg>
