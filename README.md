@@ -11,9 +11,10 @@
 <p align="left">Feel free to explore and borrow ideas from the open repositories on my profile, that is exactly what they are for.</p>
 <p align="right"><b>Thanks for stopping by!</b></p>
 <!-- Line -->
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/languages-line.svg" alt="" width="100%">
-</p><!-- Languages -->
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/static-visual/languages-line.svg" width="100%" alt="languages-line.svg">
+</div>
+<!-- Languages -->
 <p align="right">
   <code>&nbsp;<img src="https://cdn.simpleicons.org/python/36D6E7/36D6E7?viewbox=auto" alt="Python" width="14" height="14" align="absmiddle" />&nbsp;Python&nbsp;</code>
   <code>&nbsp;<img src="https://cdn.simpleicons.org/cplusplus/1A4A8A/1A4A8A?viewbox=auto" alt="C++" width="14" height="14" align="absmiddle" />&nbsp;C++&nbsp;</code>
