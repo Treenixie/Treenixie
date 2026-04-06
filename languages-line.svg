@@ -2,13 +2,15 @@
      width="1000"
      height="3"
      viewBox="0 0 1000 3"
+     preserveAspectRatio="none"
+     shape-rendering="crispEdges"
      role="img"
      aria-label="Languages line">
-  <rect x="0"       y="0" width="143" height="3" fill="#114A8B"/>
-  <rect x="143"     y="0" width="143" height="3" fill="#20DDF3"/>
-  <rect x="286"     y="0" width="143" height="3" fill="#12B981"/>
-  <rect x="429"     y="0" width="143" height="3" fill="#EA8FB2"/>
-  <rect x="572"     y="0" width="143" height="3" fill="#F0B429"/>
-  <rect x="715"     y="0" width="143" height="3" fill="#8DBF3C"/>
-  <rect x="858"     y="0" width="142" height="3" fill="#9B59B6"/>
+  <rect x="0"   y="0" width="144" height="4" fill="#114A8B"/>
+  <rect x="143" y="0" width="144" height="4" fill="#20DDF3"/>
+  <rect x="286" y="0" width="144" height="4" fill="#12B981"/>
+  <rect x="429" y="0" width="144" height="4" fill="#EA8FB2"/>
+  <rect x="572" y="0" width="144" height="4" fill="#F0B429"/>
+  <rect x="715" y="0" width="144" height="4" fill="#8DBF3C"/>
+  <rect x="858" y="0" width="142" height="4" fill="#9B59B6"/>
 </svg>
