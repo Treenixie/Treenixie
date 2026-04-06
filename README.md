@@ -30,14 +30,20 @@ My work includes **game concepts**, **design experiments**, and **practical mobi
 ## What I build
 
 ### Games
-- gameplay prototypes
-- puzzle and simulation concepts
-- mechanic-driven experiments
+I create game design concepts and interactive prototypes focused on mechanics, structure, and player experience.
+
+- gameplay prototypes for new ideas and systems
+- puzzle and simulation-driven concepts
+- experiments focused on game mechanics
+- small playable prototypes testing core gameplay loops
 
 ### Apps
-- practical mobile products
-- health and comfort oriented concepts
-- UX-focused interfaces
+I design practical mobile app concepts with an emphasis on usability, clarity, and everyday comfort.
+
+- health and lifestyle oriented product ideas
+- UX-focused interfaces for simple, smooth interaction
+- feature concepts built around real user habits
+- product structures that balance usefulness and accessibility
 
 <p align="right"><b>Thanks for stopping by!</b></p>
 <!-- Line -->
