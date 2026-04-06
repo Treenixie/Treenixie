@@ -11,8 +11,6 @@
 
 # Hi, I'm Anna (Treenixie)
 
-### game designer, building games & mobile apps
-
 I design interactive products with a focus on **gameplay systems**, **prototyping**, **UI/UX**, and **clear product logic**.  
 My work includes **game concepts**, **design experiments**, and **practical mobile app ideas**.
 
