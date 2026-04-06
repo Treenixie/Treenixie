@@ -27,7 +27,7 @@ My work includes **game concepts**, **design experiments**, and **practical mobi
 
 ---
 
-## What I build
+## What am I developing
 
 ### Games
 I create game design concepts and interactive prototypes focused on mechanics, structure, and player experience.
