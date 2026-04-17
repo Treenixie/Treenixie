@@ -52,13 +52,13 @@ I design practical mobile app concepts with an emphasis on usability, clarity, a
 </div>
 <!-- Languages -->
 <p align="right">
-  <code>&nbsp;<img src="https://cdn.simpleicons.org/cplusplus/114A8B/114A8B?viewbox=auto" alt="C++" width="14" height="14" align="absmiddle" />&nbsp;C++&nbsp;</code>
-  <code>&nbsp;<img src="https://cdn.simpleicons.org/python/20DDF3/20DDF3?viewbox=auto" alt="Python" width="14" height="14" align="absmiddle" />&nbsp;Python&nbsp;</code>
-  <code>&nbsp;<img src="https://cdn.simpleicons.org/flutter/12B981/12B981?viewbox=auto" alt="Flutter" width="14" height="14" align="absmiddle" />&nbsp;Flutter&nbsp;</code>
-  <code>&nbsp;<img src="https://cdn.simpleicons.org/javascript/EA8FB2/EA8FB2?viewbox=auto" alt="JavaScript" width="14" height="14" align="absmiddle" />&nbsp;JavaScript&nbsp;</code>
-  <code>&nbsp;<img src="https://cdn.simpleicons.org/html5/F0B429/F0B429?viewbox=auto" alt="HTML5" width="14" height="14" align="absmiddle" />&nbsp;HTML5&nbsp;</code>
-  <code>&nbsp;<img src="https://cdn.simpleicons.org/css/8DBF3C/8DBF3C?viewbox=auto" alt="CSS" width="14" height="14" align="absmiddle" />&nbsp;CSS&nbsp;</code>
-  <code>&nbsp;<img src="https://cdn.simpleicons.org/git/9B59B6/9B59B6?viewbox=auto" alt="Git" width="14" height="14" align="absmiddle" />&nbsp;Git&nbsp;</code>
+  <img src="https://img.shields.io/badge/C%2B%2B-0d1117?style=flat&logo=cplusplus&logoColor=114A8B" alt="C++" />
+  <img src="https://img.shields.io/badge/Python-0d1117?style=flat&logo=python&logoColor=20DDF3" alt="Python" />
+  <img src="https://img.shields.io/badge/Flutter-0d1117?style=flat&logo=flutter&logoColor=12B981" alt="Flutter" />
+  <img src="https://img.shields.io/badge/JavaScript-0d1117?style=flat&logo=javascript&logoColor=EA8FB2" alt="JavaScript" />
+  <img src="https://img.shields.io/badge/HTML5-0d1117?style=flat&logo=html5&logoColor=F0B429" alt="HTML5" />
+  <img src="https://img.shields.io/badge/CSS-0d1117?style=flat&logo=css&logoColor=8DBF3C" alt="CSS" />
+  <img src="https://img.shields.io/badge/Git-0d1117?style=flat&logo=git&logoColor=9B59B6" alt="Git" />
 </p>
 <br>
 <!-- Cloud -->
