@@ -376,88 +376,88 @@
 <rect x="650.0" y="55.0" width="10" height="5" rx="1" ry="1" fill="#ebedf0" />
 <g clip-path="url(#grid-clip-live-light)">
 <g transform="translate(450.0 10.0)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="25.0 -15.0;25.0 -15.0;0.0 -15.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.013410;0.023318;0.041719;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="0.0 -15.0;0.0 -15.0;0.0 -15.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.012993;0.022593;0.040422;0.920601;0.985564;1" />
 <rect x="0.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#b095e6" />
 </g>
 <g transform="translate(562.5 10.0)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="-37.5 -22.5;-37.5 -22.5;0.0 -15.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.047679;0.057587;0.075988;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="25.0 -30.0;25.0 -30.0;0.0 -15.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.046196;0.055796;0.073625;0.920601;0.985564;1" />
 <rect x="0.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#d02632" />
 <rect x="12.5" y="0.0" width="10" height="5" rx="1" ry="1" fill="#e0a0a6" />
 <rect x="25.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#e0a0a6" />
 <rect x="25.0" y="7.5" width="10" height="5" rx="1" ry="1" fill="#e0a0a6" />
 </g>
 <g transform="translate(600.0 10.0)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="-37.5 -30.0;-37.5 -30.0;0.0 -15.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.081948;0.091856;0.110257;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="37.5 -30.0;37.5 -30.0;0.0 -15.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.079399;0.089000;0.106828;0.920601;0.985564;1" />
 <rect x="0.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#9cc3aa" />
 <rect x="0.0" y="7.5" width="10" height="5" rx="1" ry="1" fill="#9cc3aa" />
 <rect x="12.5" y="0.0" width="10" height="5" rx="1" ry="1" fill="#76af88" />
 </g>
 <g transform="translate(637.5 10.0)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="0.0 -22.5;0.0 -22.5;0.0 -15.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.116217;0.126125;0.144526;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="-37.5 -22.5;-37.5 -22.5;0.0 -15.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.112603;0.122203;0.140032;0.920601;0.985564;1" />
 <rect x="0.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#e0a0a6" />
 <rect x="0.0" y="7.5" width="10" height="5" rx="1" ry="1" fill="#e0a0a6" />
 </g>
 <g transform="translate(475.0 25.0)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="0.0 -30.0;0.0 -30.0;0.0 -22.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.150486;0.160394;0.178795;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="0.0 -37.5;0.0 -37.5;0.0 -22.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.145806;0.157478;0.179154;0.920601;0.985564;1" />
 <rect x="0.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#bd4f05" />
 </g>
 <g transform="translate(512.5 25.0)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="37.5 -30.0;37.5 -30.0;0.0 -22.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.184755;0.194663;0.213064;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="-37.5 -37.5;-37.5 -37.5;0.0 -22.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.184929;0.196600;0.218276;0.920601;0.985564;1" />
 <rect x="0.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#9cc3aa" />
 </g>
 <g transform="translate(550.0 10.0)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="0.0 -30.0;0.0 -30.0;0.0 -15.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.219024;0.228932;0.247333;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="37.5 -37.5;37.5 -37.5;0.0 -15.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.224051;0.235723;0.257399;0.920601;0.985564;1" />
 <rect x="0.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#95bbe8" />
 <rect x="0.0" y="7.5" width="10" height="5" rx="1" ry="1" fill="#3f89df" />
 <rect x="0.0" y="15.0" width="10" height="5" rx="1" ry="1" fill="#6ca3e4" />
 <rect x="12.5" y="7.5" width="10" height="5" rx="1" ry="1" fill="#95bbe8" />
 </g>
 <g transform="translate(512.5 32.5)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="-25.0 -45.0;-25.0 -45.0;0.0 -30.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.253293;0.267748;0.294594;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="37.5 -45.0;37.5 -45.0;0.0 -30.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.263173;0.277179;0.303190;0.920601;0.985564;1" />
 <rect x="0.0" y="7.5" width="10" height="5" rx="1" ry="1" fill="#ccba95" />
 <rect x="12.5" y="0.0" width="10" height="5" rx="1" ry="1" fill="#ccba95" />
 <rect x="12.5" y="7.5" width="10" height="5" rx="1" ry="1" fill="#ccba95" />
 </g>
 <g transform="translate(600.0 25.0)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="0.0 -45.0;0.0 -45.0;0.0 -22.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.300554;0.315010;0.341856;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="0.0 -45.0;0.0 -45.0;0.0 -22.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.308965;0.322971;0.348982;0.920601;0.985564;1" />
 <rect x="0.0" y="7.5" width="10" height="5" rx="1" ry="1" fill="#b095e6" />
 <rect x="12.5" y="0.0" width="10" height="5" rx="1" ry="1" fill="#c3b1ea" />
 <rect x="12.5" y="7.5" width="10" height="5" rx="1" ry="1" fill="#c3b1ea" />
 <rect x="12.5" y="15.0" width="10" height="5" rx="1" ry="1" fill="#c3b1ea" />
 </g>
 <g transform="translate(575.0 40.0)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="0.0 -52.5;0.0 -52.5;0.0 -37.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.347816;0.364681;0.396001;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="0.0 -52.5;0.0 -52.5;0.0 -37.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.354757;0.371097;0.401444;0.920601;0.985564;1" />
 <rect x="0.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#95bbe8" />
 <rect x="0.0" y="7.5" width="10" height="5" rx="1" ry="1" fill="#95bbe8" />
 </g>
 <g transform="translate(600.0 40.0)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="-37.5 -52.5;-37.5 -52.5;0.0 -37.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.401961;0.418826;0.450146;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="-37.5 -52.5;-37.5 -52.5;0.0 -37.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.407218;0.423559;0.453905;0.920601;0.985564;1" />
 <rect x="0.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#d9b095" />
 <rect x="0.0" y="7.5" width="10" height="5" rx="1" ry="1" fill="#d9b095" />
 <rect x="12.5" y="7.5" width="10" height="5" rx="1" ry="1" fill="#d9b095" />
 <rect x="25.0" y="7.5" width="10" height="5" rx="1" ry="1" fill="#d9b095" />
 </g>
 <g transform="translate(437.5 55.0)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="-37.5 -67.5;-37.5 -67.5;0.0 -52.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.456106;0.477789;0.518058;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="0.0 -60.0;0.0 -60.0;0.0 -52.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.459680;0.478354;0.513036;0.920601;0.985564;1" />
 <rect x="0.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#9c6a05" />
 </g>
 <g transform="translate(512.5 47.5)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="37.5 -60.0;37.5 -60.0;0.0 -45.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.524018;0.543292;0.579087;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="0.0 -67.5;0.0 -67.5;0.0 -45.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.518810;0.539820;0.578836;0.920601;0.985564;1" />
 <rect x="0.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#96c3d3" />
 <rect x="0.0" y="7.5" width="10" height="5" rx="1" ry="1" fill="#96c3d3" />
 </g>
 <g transform="translate(537.5 47.5)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="-37.5 -60.0;-37.5 -60.0;0.0 -45.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.585047;0.604321;0.640116;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="37.5 -67.5;37.5 -67.5;0.0 -45.0;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.584611;0.605620;0.644637;0.920601;0.985564;1" />
 <rect x="0.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#d6b595" />
 <rect x="12.5" y="0.0" width="10" height="5" rx="1" ry="1" fill="#d6b595" />
 <rect x="12.5" y="7.5" width="10" height="5" rx="1" ry="1" fill="#b45c05" />
 </g>
 <g transform="translate(587.5 55.0)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="-37.5 -60.0;-37.5 -60.0;0.0 -52.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.646075;0.665350;0.701144;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="-25.0 -67.5;-25.0 -67.5;0.0 -52.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.650411;0.671421;0.710437;0.920601;0.985564;1" />
 <rect x="0.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#96c3d3" />
 </g>
 <g transform="translate(650.0 55.0)">
-<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.423s" repeatCount="indefinite" calcMode="linear" values="0.0 -67.5;0.0 -67.5;0.0 -52.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.707104;0.728787;0.769057;0.918052;0.985100;1" />
+<animateTransform attributeName="transform" type="translate" additive="sum" dur="13.854s" repeatCount="indefinite" calcMode="linear" values="0.0 -67.5;0.0 -67.5;0.0 -52.5;0 0;0 0;0 67.0;0 67.0" keyTimes="0;0.716212;0.737221;0.776238;0.920601;0.985564;1" />
 <rect x="0.0" y="0.0" width="10" height="5" rx="1" ry="1" fill="#b45c05" />
 </g>
 </g>
