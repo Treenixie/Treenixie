@@ -1,17 +1,18 @@
 {
   "username": "Treenixie",
-  "total_contributions": 733,
-  "active_cells": 75,
-  "calendar_hash": "506d50f978eefe4b2e6348974fc69b7e63807503a951ee407ec96eaa21bf0a05",
+  "total_contributions": 734,
+  "active_cells": 76,
+  "calendar_hash": "a535ed87f6993119b2feaf882d59708f6da58f5274724bfd3c70995f1ba5a5ec",
   "pieces_count": 26,
   "dot_count": 6,
   "piece_breakdown": {
     "DOT": 6,
     "J": 6,
     "TRI_L": 3,
-    "DOMINO": 4,
+    "DOMINO": 3,
     "T": 4,
-    "L": 3
+    "L": 3,
+    "TRI_I": 1
   },
   "diagnostics": {
     "viewer_login": "Treenixie",
