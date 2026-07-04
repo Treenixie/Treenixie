@@ -431,15 +431,16 @@
 <rect x="625.0" y="25.0" width="10" height="5" rx="1" ry="1" fill="#5d5176" />
 <rect x="625.0" y="32.5" width="10" height="5" rx="1" ry="1" fill="#5d5176" />
 <rect x="625.0" y="40.0" width="10" height="5" rx="1" ry="1" fill="#5d5176" />
-<rect x="637.5" y="32.5" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
-<rect x="650.0" y="32.5" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
-<rect x="650.0" y="40.0" width="10" height="5" rx="1" ry="1" fill="#98514f" />
 <rect x="475.0" y="40.0" width="10" height="5" rx="1" ry="1" fill="#6a5e3a" />
 <rect x="475.0" y="47.5" width="10" height="5" rx="1" ry="1" fill="#6a5e3a" />
 <rect x="500.0" y="40.0" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
 <rect x="500.0" y="47.5" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
 <rect x="512.5" y="47.5" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
 <rect x="525.0" y="47.5" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
+<rect x="637.5" y="32.5" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
+<rect x="650.0" y="32.5" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
+<rect x="650.0" y="40.0" width="10" height="5" rx="1" ry="1" fill="#98514f" />
+<rect x="650.0" y="47.5" width="10" height="5" rx="1" ry="1" fill="#98514f" />
 <rect x="337.5" y="55.0" width="10" height="5" rx="1" ry="1" fill="#faa356" />
 <rect x="412.5" y="47.5" width="10" height="5" rx="1" ry="1" fill="#43644a" />
 <rect x="412.5" y="55.0" width="10" height="5" rx="1" ry="1" fill="#43644a" />
@@ -462,7 +463,7 @@
 <rect x="625.0" y="55.0" width="10" height="5" rx="1" ry="1" fill="#2e6169" />
 <rect x="637.5" y="47.5" width="10" height="5" rx="1" ry="1" fill="#2e6169" />
 <rect x="637.5" y="55.0" width="10" height="5" rx="1" ry="1" fill="#47a8b0" />
-<rect x="650.0" y="47.5" width="10" height="5" rx="1" ry="1" fill="#3a838b" />
+<rect x="650.0" y="55.0" width="10" height="5" rx="1" ry="1" fill="#2e6169" />
 </g>
-<metadata>{"username": "Treenixie", "active_cells": 88, "mode": "partition-preview"}</metadata>
+<metadata>{"username": "Treenixie", "active_cells": 89, "mode": "partition-preview"}</metadata>
 </svg>
