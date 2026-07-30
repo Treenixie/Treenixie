@@ -376,8 +376,8 @@
 <rect x="650.0" y="55.0" width="10" height="5" rx="1" ry="1" fill="#161b22" />
 <g clip-path="url(#grid-clip-partition-dark)">
 <rect x="300.0" y="10.0" width="10" height="5" rx="1" ry="1" fill="#7f6a9e" />
-<rect x="600.0" y="10.0" width="10" height="5" rx="1" ry="1" fill="#64552e" />
-<rect x="612.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#897033" />
+<rect x="600.0" y="10.0" width="10" height="5" rx="1" ry="1" fill="#2e6169" />
+<rect x="612.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#3a838b" />
 <rect x="412.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#47a8b0" />
 <rect x="412.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#2e6169" />
 <rect x="425.0" y="10.0" width="10" height="5" rx="1" ry="1" fill="#2e6169" />
@@ -395,8 +395,6 @@
 <rect x="562.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
 <rect x="575.0" y="10.0" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
 <rect x="575.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#98514f" />
-<rect x="637.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#2e6169" />
-<rect x="637.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#3a838b" />
 <rect x="325.0" y="25.0" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
 <rect x="400.0" y="10.0" width="10" height="5" rx="1" ry="1" fill="#43644a" />
 <rect x="400.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#59875d" />
@@ -409,6 +407,10 @@
 <rect x="600.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#986940" />
 <rect x="600.0" y="25.0" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
 <rect x="612.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#986940" />
+<rect x="637.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
+<rect x="637.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#4d779e" />
+<rect x="637.5" y="25.0" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
+<rect x="650.0" y="25.0" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
 <rect x="512.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#43644a" />
 <rect x="512.5" y="25.0" width="10" height="5" rx="1" ry="1" fill="#59875d" />
 <rect x="512.5" y="32.5" width="10" height="5" rx="1" ry="1" fill="#59875d" />
@@ -418,10 +420,6 @@
 <rect x="550.0" y="25.0" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
 <rect x="562.5" y="25.0" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
 <rect x="562.5" y="32.5" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
-<rect x="637.5" y="25.0" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
-<rect x="637.5" y="32.5" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
-<rect x="650.0" y="25.0" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
-<rect x="650.0" y="32.5" width="10" height="5" rx="1" ry="1" fill="#4d779e" />
 <rect x="375.0" y="40.0" width="10" height="5" rx="1" ry="1" fill="#43644a" />
 <rect x="425.0" y="40.0" width="10" height="5" rx="1" ry="1" fill="#64552e" />
 <rect x="450.0" y="32.5" width="10" height="5" rx="1" ry="1" fill="#5d5176" />
@@ -439,6 +437,9 @@
 <rect x="612.5" y="25.0" width="10" height="5" rx="1" ry="1" fill="#917e45" />
 <rect x="612.5" y="32.5" width="10" height="5" rx="1" ry="1" fill="#917e45" />
 <rect x="612.5" y="40.0" width="10" height="5" rx="1" ry="1" fill="#917e45" />
+<rect x="637.5" y="32.5" width="10" height="5" rx="1" ry="1" fill="#64552e" />
+<rect x="650.0" y="32.5" width="10" height="5" rx="1" ry="1" fill="#897033" />
+<rect x="650.0" y="40.0" width="10" height="5" rx="1" ry="1" fill="#64552e" />
 <rect x="450.0" y="40.0" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
 <rect x="450.0" y="47.5" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
 <rect x="462.5" y="47.5" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
@@ -470,5 +471,5 @@
 <rect x="625.0" y="47.5" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
 <rect x="625.0" y="55.0" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
 </g>
-<metadata>{"username": "Treenixie", "active_cells": 94, "mode": "partition-preview"}</metadata>
+<metadata>{"username": "Treenixie", "active_cells": 95, "mode": "partition-preview"}</metadata>
 </svg>
