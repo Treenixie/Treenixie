@@ -386,8 +386,8 @@
 <rect x="325.0" y="10.0" width="10" height="5" rx="1" ry="1" fill="#5d5176" />
 <rect x="325.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#5d5176" />
 <rect x="337.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#5d5176" />
-<rect x="362.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#43644a" />
-<rect x="362.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#43644a" />
+<rect x="362.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#64552e" />
+<rect x="362.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#64552e" />
 <rect x="412.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#6a5e3a" />
 <rect x="412.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#917e45" />
 <rect x="425.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#eec85f" />
@@ -396,10 +396,11 @@
 <rect x="437.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
 <rect x="450.0" y="10.0" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
 <rect x="450.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#98514f" />
-<rect x="562.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#64552e" />
-<rect x="562.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#64552e" />
-<rect x="637.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#47a8b0" />
-<rect x="637.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#2e6169" />
+<rect x="562.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#2e6169" />
+<rect x="562.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#2e6169" />
+<rect x="637.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#c7854a" />
+<rect x="637.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
+<rect x="650.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
 <rect x="200.0" y="25.0" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
 <rect x="275.0" y="10.0" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
 <rect x="275.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#4d779e" />
@@ -461,9 +462,9 @@
 <rect x="550.0" y="40.0" width="10" height="5" rx="1" ry="1" fill="#6a5e3a" />
 <rect x="550.0" y="47.5" width="10" height="5" rx="1" ry="1" fill="#6a5e3a" />
 <rect x="162.5" y="55.0" width="10" height="5" rx="1" ry="1" fill="#47a8b0" />
-<rect x="262.5" y="47.5" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
-<rect x="275.0" y="47.5" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
-<rect x="275.0" y="55.0" width="10" height="5" rx="1" ry="1" fill="#faa356" />
+<rect x="262.5" y="47.5" width="10" height="5" rx="1" ry="1" fill="#43644a" />
+<rect x="275.0" y="47.5" width="10" height="5" rx="1" ry="1" fill="#43644a" />
+<rect x="275.0" y="55.0" width="10" height="5" rx="1" ry="1" fill="#8bd78a" />
 <rect x="375.0" y="55.0" width="10" height="5" rx="1" ry="1" fill="#6198ca" />
 <rect x="387.5" y="40.0" width="10" height="5" rx="1" ry="1" fill="#6198ca" />
 <rect x="387.5" y="47.5" width="10" height="5" rx="1" ry="1" fill="#4d779e" />
@@ -492,5 +493,5 @@
 <rect x="637.5" y="47.5" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
 <rect x="637.5" y="55.0" width="10" height="5" rx="1" ry="1" fill="#98514f" />
 </g>
-<metadata>{"username": "Treenixie", "active_cells": 116, "mode": "partition-preview"}</metadata>
+<metadata>{"username": "Treenixie", "active_cells": 117, "mode": "partition-preview"}</metadata>
 </svg>
