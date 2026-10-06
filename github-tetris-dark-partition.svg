@@ -398,9 +398,6 @@
 <rect x="450.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#98514f" />
 <rect x="562.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#2e6169" />
 <rect x="562.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#2e6169" />
-<rect x="637.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#c7854a" />
-<rect x="637.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
-<rect x="650.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
 <rect x="200.0" y="25.0" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
 <rect x="275.0" y="10.0" width="10" height="5" rx="1" ry="1" fill="#3c5a76" />
 <rect x="275.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#4d779e" />
@@ -417,6 +414,10 @@
 <rect x="512.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#986940" />
 <rect x="512.5" y="25.0" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
 <rect x="525.0" y="25.0" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
+<rect x="637.5" y="10.0" width="10" height="5" rx="1" ry="1" fill="#c7854a" />
+<rect x="637.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
+<rect x="650.0" y="17.5" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
+<rect x="650.0" y="25.0" width="10" height="5" rx="1" ry="1" fill="#6f5036" />
 <rect x="387.5" y="17.5" width="10" height="5" rx="1" ry="1" fill="#43644a" />
 <rect x="387.5" y="25.0" width="10" height="5" rx="1" ry="1" fill="#59875d" />
 <rect x="387.5" y="32.5" width="10" height="5" rx="1" ry="1" fill="#59875d" />
@@ -493,5 +494,5 @@
 <rect x="637.5" y="47.5" width="10" height="5" rx="1" ry="1" fill="#6f3f40" />
 <rect x="637.5" y="55.0" width="10" height="5" rx="1" ry="1" fill="#98514f" />
 </g>
-<metadata>{"username": "Treenixie", "active_cells": 117, "mode": "partition-preview"}</metadata>
+<metadata>{"username": "Treenixie", "active_cells": 118, "mode": "partition-preview"}</metadata>
 </svg>
