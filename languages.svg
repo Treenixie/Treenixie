@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="350" viewBox="0 0 1000 350" role="img">
+<title>Programming language footprint by source file size</title>
+<desc>Aggregate source file sizes across three active repositories.</desc>
+<rect width="1000" height="350" rx="15" fill="#111923"/>
+<rect x="1" y="1" width="998" height="348" rx="15" fill="none" stroke="#364457"/>
+<text x="35" y="46" fill="#F2F6FA" font-family="Arial,sans-serif" font-size="25" font-weight="800">LANGUAGE FOOTPRINT</text>
+<text x="35" y="73" fill="#95ADBD" font-family="Consolas,monospace" font-size="13">SOURCE FILE BYTES / ACTIVE REPOSITORIES</text>
+<text x="964" y="46" text-anchor="end" fill="#79DCCB" font-family="Consolas,monospace" font-size="13">3 CODEBASES</text>
+<text x="964" y="72" text-anchor="end" fill="#A8B8C9" font-family="Consolas,monospace" font-size="12">UPDATED 2026-10-11</text>
+<rect x="35" y="100" width="930" height="34" rx="6" fill="#263240"/>
+<rect x="35.00" y="100" width="631.98" height="34" fill="#5B92EA"/>
+<rect x="666.98" y="100" width="131.77" height="34" fill="#5FD3DB"/>
+<rect x="798.75" y="100" width="118.20" height="34" fill="#B597F5"/>
+<rect x="916.95" y="100" width="15.75" height="34" fill="#E8C35F"/>
+<rect x="932.70" y="100" width="14.73" height="34" fill="#8FC678"/>
+<rect x="947.43" y="100" width="13.56" height="34" fill="#EFA1C0"/>
+<rect x="960.99" y="100" width="3.67" height="34" fill="#F29365"/>
+<rect x="964.66" y="100" width="0.34" height="34" fill="#8DAD86"/>
+<rect x="37" y="172" width="12" height="12" rx="2" fill="#5B92EA"/>
+<text x="60" y="183" font-family="Consolas,monospace" font-weight="600" font-size="17" fill="#DBE5EC">TypeScript</text>
+<text x="477" y="183" font-family="Consolas,monospace" text-anchor="end" font-size="16" fill="#D8E0EC">68.0%</text>
+<rect x="523" y="172" width="12" height="12" rx="2" fill="#5FD3DB"/>
+<text x="546" y="183" font-family="Consolas,monospace" font-weight="600" font-size="17" fill="#DBE5EC">Dart</text>
+<text x="963" y="183" font-family="Consolas,monospace" text-anchor="end" font-size="16" fill="#D8E0EC">14.2%</text>
+<rect x="37" y="208" width="12" height="12" rx="2" fill="#B597F5"/>
+<text x="60" y="219" font-family="Consolas,monospace" font-weight="600" font-size="17" fill="#DBE5EC">HCL</text>
+<text x="477" y="219" font-family="Consolas,monospace" text-anchor="end" font-size="16" fill="#D8E0EC">12.7%</text>
+<rect x="523" y="208" width="12" height="12" rx="2" fill="#E8C35F"/>
+<text x="546" y="219" font-family="Consolas,monospace" font-weight="600" font-size="17" fill="#DBE5EC">JavaScript</text>
+<text x="963" y="219" font-family="Consolas,monospace" text-anchor="end" font-size="16" fill="#D8E0EC">1.7%</text>
+<rect x="37" y="244" width="12" height="12" rx="2" fill="#8FC678"/>
+<text x="60" y="255" font-family="Consolas,monospace" font-weight="600" font-size="17" fill="#DBE5EC">Python</text>
+<text x="477" y="255" font-family="Consolas,monospace" text-anchor="end" font-size="16" fill="#D8E0EC">1.6%</text>
+<rect x="523" y="244" width="12" height="12" rx="2" fill="#EFA1C0"/>
+<text x="546" y="255" font-family="Consolas,monospace" font-weight="600" font-size="17" fill="#DBE5EC">CSS</text>
+<text x="963" y="255" font-family="Consolas,monospace" text-anchor="end" font-size="16" fill="#D8E0EC">1.5%</text>
+<rect x="37" y="280" width="12" height="12" rx="2" fill="#F29365"/>
+<text x="60" y="291" font-family="Consolas,monospace" font-weight="600" font-size="17" fill="#DBE5EC">HTML</text>
+<text x="477" y="291" font-family="Consolas,monospace" text-anchor="end" font-size="16" fill="#D8E0EC">0.4%</text>
+<rect x="523" y="280" width="12" height="12" rx="2" fill="#8DAD86"/>
+<text x="546" y="291" font-family="Consolas,monospace" font-weight="600" font-size="17" fill="#DBE5EC">Shell</text>
+<text x="963" y="291" font-family="Consolas,monospace" text-anchor="end" font-size="16" fill="#D8E0EC">0.0%</text>
+<path d="M35 316 H965" stroke="#354456"/>
+<text x="35" y="337" font-family="Consolas,monospace" fill="#92A8B9" font-size="12">Based on tracked source-file extensions, not GitHub Linguist or commit counts</text></svg>
