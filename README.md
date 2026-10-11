@@ -1,20 +1,41 @@
-<div align="center">
+<p align="center">
   <a href="https://github.com/Treenixie">
     <img src="assets/hero.svg" alt="Anna Treenixie | Game designer and creative developer" width="100%" />
   </a>
-</div>
+</p>
 
-<div align="center">
+<p align="center">
   <img src="assets/focus-grid.svg" alt="Game design, development, and creative technology" width="100%" />
-</div>
+</p>
 
-<div align="center">
-  <img src="assets/selected-work.svg" alt="Selected work: Cervantes and Avelea" width="100%" />
-</div>
+## Selected work
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/language-stats/languages.svg" alt="Live language footprint, updated by GitHub Actions" width="100%" />
-</div>
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%">
+      <a href="https://github.com/Ritegear">
+        <img src="assets/cervantes-official.png" width="126" alt="Cervantes official logo" />
+      </a>
+      <h3>Cervantes</h3>
+      <p><strong>Community tools · Discord automation</strong></p>
+      <p>A multi-guild Discord bot focused on community management, moderation, and automation.</p>
+    </td>
+    <td align="center" valign="top" width="50%">
+      <a href="https://github.com/Avelea-app">
+        <img src="https://avatars.githubusercontent.com/u/273770300?v=4" width="126" alt="Avelea official logo" />
+      </a>
+      <h3>Avelea</h3>
+      <p><strong>Mobile application · Flutter</strong></p>
+      <p>A lightweight menstrual tracker designed around clarity, privacy, and everyday usability.</p>
+    </td>
+  </tr>
+</table>
+
+## Language footprint
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/language-stats/languages.svg" alt="Programming languages used across active repositories; automatically updated" width="100%" />
+</p>
 
 ## GitHub activity / Tetris
 
@@ -27,4 +48,6 @@
   </picture>
 </p>
 
-<p align="center"><sub>Every contribution drops a piece.</sub></p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/language-stats/year.svg" alt="Current year, updated automatically" width="88" />
+</p>
