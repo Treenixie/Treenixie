@@ -1,0 +1,68 @@
+name: Update profile language chart
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 4 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-language-chart
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out profile repository
+        uses: actions/checkout@v4
+
+      - name: Use Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Scan metadata and source-file sizes
+        env:
+          PROFILE_TOKEN: ${{ secrets.PROFILE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/generate_languages.py
+
+      - name: Publish SVG only to isolated language-stats branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -eu
+          REPO_URL="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          rm -rf .language-stats
+          if git ls-remote --exit-code --heads "${REPO_URL}" language-stats >/dev/null 2>&1; then
+            git clone --depth 1 --branch language-stats "${REPO_URL}" .language-stats
+          else
+            mkdir .language-stats
+            (
+              cd .language-stats
+              git init
+              git checkout -b language-stats
+              git remote add origin "${REPO_URL}"
+            )
+          fi
+
+          find .language-stats -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp generated-languages/languages.svg .language-stats/languages.svg
+
+          (
+            cd .language-stats
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            if git diff --cached --quiet; then
+              echo "No language-chart changes."
+              exit 0
+            fi
+            git commit -m "Update profile language chart"
+            git push origin language-stats
+          )
