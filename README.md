@@ -11,12 +11,12 @@
 ## Studio
 
 <a href="https://github.com/Ritegear">
-  <img src="https://raw.githubusercontent.com/Ritegear/.github/main/profile/Logo.png" alt="Ritegear" width="76" align="left" />
+  <img src="https://raw.githubusercontent.com/Ritegear/.github/main/profile/Logo.png" alt="Ritegear" width="62" align="left" />
 </a>
 
 **[Ritegear](https://github.com/Ritegear)**  
 *Small rituals for large systems.*  
-An independent development studio creating Discord bots, mobile apps, gamified digital products, and small interactive games.
+Independent studio building Discord bots, apps, and interactive experiences.
 
 ## Language footprint
 
