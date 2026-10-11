@@ -8,34 +8,21 @@
   <img src="assets/focus-grid.svg" alt="Game design, development, and creative technology" width="100%" />
 </p>
 
-## Selected work
-
-<br>
+## [Ritegear](https://github.com/Ritegear)
 
 <table>
   <tr>
-    <td align="center" valign="top" width="50%">
+    <td width="76" valign="middle" align="center">
       <a href="https://github.com/Ritegear">
-        <img src="assets/cervantes-official.png" width="94" alt="Cervantes official logo" />
+        <img src="https://raw.githubusercontent.com/Ritegear/.github/main/profile/Logo.png" width="56" alt="Ritegear gear logo" />
       </a>
-      <div><strong>Cervantes</strong></div>
-      <div><strong>Community tools · Discord automation</strong></div>
-      <div>A multi-guild Discord bot focused on community management, moderation, and automation.</div>
-      <br>
     </td>
-    <td align="center" valign="top" width="50%">
-      <a href="https://github.com/Avelea-app">
-        <img src="https://avatars.githubusercontent.com/u/273770300?v=4" width="94" alt="Avelea official logo" />
-      </a>
-      <div><strong>Avelea</strong></div>
-      <div><strong>Mobile application · Flutter</strong></div>
-      <div>A lightweight menstrual tracker for cycles, symptoms, and medication notes.</div>
-      <br>
+    <td valign="middle">
+      <strong>Small rituals for large systems.</strong>
+      <div>An independent development studio creating Discord bots, mobile apps, gamified digital products, and small interactive games.</div>
     </td>
   </tr>
 </table>
-
-<br>
 
 ## Language footprint
 
