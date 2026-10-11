@@ -7,25 +7,16 @@
 <table>
 <tr>
 <td width="34%" valign="top">
-
-### 01 / GAME DESIGN
-
-Gameplay systems, interactive prototypes, player experience, and experimentation.
-
+  <h3>01 / GAME DESIGN</h3>
+  <p>Gameplay systems, interactive prototypes, player experience, and experimentation.</p>
 </td>
 <td width="33%" valign="top">
-
-### 02 / DEVELOPMENT
-
-Apps, Discord automation, and tools designed around real people's needs.
-
+  <h3>02 / DEVELOPMENT</h3>
+  <p>Apps, Discord automation, and tools designed around real people's needs.</p>
 </td>
 <td width="33%" valign="top">
-
-### 03 / CREATIVE TECH
-
-AR lenses, visual systems, and curious ideas worth prototyping.
-
+  <h3>03 / CREATIVE TECH</h3>
+  <p>AR lenses, visual systems, and curious ideas worth prototyping.</p>
 </td>
 </tr>
 </table>
