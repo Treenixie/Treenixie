@@ -30,6 +30,21 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/generate_languages.py
 
+      - name: Refresh plain-text year in README
+        run: python scripts/sync_profile_year.py
+
+      - name: Commit year only if it changed
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "Current year is already displayed."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add README.md
+            git commit -m "Update profile year"
+            git push origin HEAD:main
+          fi
+
       - name: Publish SVG only to isolated language-stats branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
