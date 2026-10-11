@@ -30,7 +30,7 @@
   <h3>Cervantes</h3>
   <p><strong>Community tools / Discord automation</strong></p>
   <p>Modular systems for multi-guild communities, from permissions to moderation and automation.</p>
-  <p><sub>TYPE SCRIPT &nbsp; · &nbsp; DISCORD.JS &nbsp; · &nbsp; POSTGRESQL</sub></p>
+  <p><sub>TYPESCRIPT &nbsp; · &nbsp; DISCORD.JS &nbsp; · &nbsp; POSTGRESQL</sub></p>
 </td>
 <td width="50%" valign="top" align="center">
   <a href="https://github.com/Avelea-app">
