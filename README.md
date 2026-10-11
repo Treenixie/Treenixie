@@ -10,6 +10,8 @@
 
 ## Selected work
 
+<br>
+
 <table>
   <tr>
     <td align="center" valign="top" width="50%">
@@ -19,6 +21,7 @@
       <div><strong>Cervantes</strong></div>
       <div><strong>Community tools · Discord automation</strong></div>
       <div>A multi-guild Discord bot focused on community management, moderation, and automation.</div>
+      <br>
     </td>
     <td align="center" valign="top" width="50%">
       <a href="https://github.com/Avelea-app">
@@ -27,9 +30,12 @@
       <div><strong>Avelea</strong></div>
       <div><strong>Mobile application · Flutter</strong></div>
       <div>A lightweight menstrual tracker for cycles, symptoms, and medication notes.</div>
+      <br>
     </td>
   </tr>
 </table>
+
+<br>
 
 ## Language footprint
 
