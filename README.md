@@ -15,8 +15,8 @@
 </a>
 
 **[Ritegear](https://github.com/Ritegear)**  
-*Small rituals for large systems.*  
-Independent studio building Discord bots, apps, and interactive experiences.
+<sub>Small rituals for large systems.</sub>  
+Discord bot and app development.
 
 ## Language footprint
 
