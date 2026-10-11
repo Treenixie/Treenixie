@@ -129,42 +129,48 @@ def svg_chart(totals, count, skipped):
     remainder = sum(value for _, value in ordered[7:])
     if remainder:
         top.append(("Other", remainder))
+    w, h = 1000, 242
     s = [
-        '<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="350" viewBox="0 0 1000 350" role="img">',
-        '<title>Programming language footprint by source file size</title>',
-        '<desc>Aggregate source file sizes across accessible active repositories, updated automatically.</desc>',
-        '<rect width="1000" height="350" rx="15" fill="#111923"/>',
-        '<rect x="1" y="1" width="998" height="348" rx="15" fill="none" stroke="#364457"/>',
-        '<text x="35" y="46" fill="#F2F6FA" font-family="Arial,sans-serif" font-size="25" font-weight="800">LANGUAGE FOOTPRINT</text>',
-        '<text x="35" y="73" fill="#95ADBD" font-family="Consolas,monospace" font-size="13">SOURCE FILE BYTES / ACTIVE REPOSITORIES</text>',
-        '<text x="964" y="46" text-anchor="end" fill="#79DCCB" font-family="Consolas,monospace" font-size="13">' + str(count) + ' CODEBASES</text>',
-        '<text x="964" y="72" text-anchor="end" fill="#A8B8C9" font-family="Consolas,monospace" font-size="12">UPDATED ' + now + '</text>',
-        '<rect x="35" y="100" width="930" height="34" rx="6" fill="#263240"/>'
+        '<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="242" viewBox="0 0 1000 242" role="img">',
+        '<title>Live language footprint by source-file size</title>',
+        '<desc>Aggregated source file sizes across accessible active repositories.</desc>',
+        '<rect width="1000" height="242" rx="15" fill="#111923"/>',
+        '<rect x="1" y="1" width="998" height="240" rx="14" fill="none" stroke="#354456"/>',
+        '<text x="36" y="40" font-family="Arial,Helvetica,sans-serif" font-size="25" fill="#F2F6FA" font-weight="800">LANGUAGE FOOTPRINT</text>',
+        '<text x="36" y="61" font-family="Consolas,monospace" font-size="12" fill="#9FB3C5">SOURCE FILE BYTES</text>',
+        '<rect x="846" y="25" width="119" height="24" rx="6" fill="#1B2939"/>',
+        '<text x="905" y="42" text-anchor="middle" font-family="Consolas,monospace" font-size="12" fill="#77DDD4">' + str(count) + ' CODEBASES</text>',
     ]
-    cursor = 35.0
+    # Same compact cells and spacing as the animated Tetris calendar.
+    cells = 53 * 3
+    cumulative = []
+    running = 0
     for i, (name, amount) in enumerate(top):
-        width = 930.0 * amount / grand_total
-        color = COLORS.get(name, FALLBACK_COLORS[i % len(FALLBACK_COLORS)])
-        s.append('<rect x="{:.2f}" y="100" width="{:.2f}" height="34" fill="{}"/>'.format(cursor, width, color))
-        cursor += width
+        running += amount
+        cumulative.append((running / grand_total, name, COLORS.get(name, FALLBACK_COLORS[i % len(FALLBACK_COLORS)])))
+    for index in range(cells):
+        col = index % 53
+        row = index // 53
+        x = 36 + col * 17.5
+        y = 81 + row * 10
+        t = (index + 0.5) / cells
+        color = "#202A37"
+        for threshold, name, item_color in cumulative:
+            if t <= threshold:
+                color = item_color
+                break
+        s.append('<rect x="{:.1f}" y="{}" width="12" height="6" rx="1" fill="{}"/>'.format(x, y, color))
     for i, (name, amount) in enumerate(top):
-        col = i % 2
-        row = i // 2
-        x = 37 + col * 486
-        y = 183 + row * 36
+        col, row = i % 4, i // 4
+        x, y = 36 + col * 238, 155 + row * 40
         color = COLORS.get(name, FALLBACK_COLORS[i % len(FALLBACK_COLORS)])
-        label = escape(name)
-        percent = 100 * amount / grand_total
-        s += [
-            '<rect x="{}" y="{}" width="12" height="12" rx="2" fill="{}"/>'.format(x, y-11, color),
-            '<text x="{}" y="{}" font-family="Consolas,monospace" font-weight="600" font-size="17" fill="#DBE5EC">{}</text>'.format(x+23, y, label),
-            '<text x="{}" y="{}" font-family="Consolas,monospace" text-anchor="end" font-size="16" fill="#D8E0EC">{:.1f}%</text>'.format(x+440, y, percent),
-        ]
-    s.append('<path d="M35 316 H965" stroke="#354456"/>')
-    footnote = "Based on tracked source-file extensions, not GitHub Linguist or commit counts"
+        s.extend([
+            '<rect x="{}" y="{}" width="12" height="12" rx="2" fill="{}"/>'.format(x, y - 11, color),
+            '<text x="{}" y="{}" font-family="Consolas,monospace" font-size="15" font-weight="600" fill="#E4EDF5">{}</text>'.format(x + 23, y, escape(name)),
+            '<text x="{}" y="{}" text-anchor="end" font-family="Consolas,monospace" font-size="15" fill="#E4EDF5">{:.1f}%</text>'.format(x + 213, y, 100 * amount / grand_total),
+        ])
     if skipped:
-        footnote += " · " + str(skipped) + " repositories inaccessible"
-    s.append('<text x="35" y="337" font-family="Consolas,monospace" fill="#92A8B9" font-size="12">' + escape(footnote) + '</text>')
+        s.append('<text x="36" y="227" font-family="Consolas,monospace" font-size="11" fill="#AEBCCB">Partial: ' + str(skipped) + ' repositories not accessible</text>')
     s.append('</svg>')
     return "\n".join(s) + "\n"
 
