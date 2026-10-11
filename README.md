@@ -14,19 +14,19 @@
   <tr>
     <td align="center" valign="top" width="50%">
       <a href="https://github.com/Ritegear">
-        <img src="assets/cervantes-official.png" width="126" alt="Cervantes official logo" />
+        <img src="assets/cervantes-official.png" width="94" alt="Cervantes official logo" />
       </a>
-      <h3>Cervantes</h3>
-      <p><strong>Community tools · Discord automation</strong></p>
-      <p>A multi-guild Discord bot focused on community management, moderation, and automation.</p>
+      <div><strong>Cervantes</strong></div>
+      <div><strong>Community tools · Discord automation</strong></div>
+      <div>A multi-guild Discord bot focused on community management, moderation, and automation.</div>
     </td>
     <td align="center" valign="top" width="50%">
       <a href="https://github.com/Avelea-app">
-        <img src="https://avatars.githubusercontent.com/u/273770300?v=4" width="126" alt="Avelea official logo" />
+        <img src="https://avatars.githubusercontent.com/u/273770300?v=4" width="94" alt="Avelea official logo" />
       </a>
-      <h3>Avelea</h3>
-      <p><strong>Mobile application · Flutter</strong></p>
-      <p>A lightweight menstrual tracker for cycles, symptoms, and medication notes.</p>
+      <div><strong>Avelea</strong></div>
+      <div><strong>Mobile application · Flutter</strong></div>
+      <div>A lightweight menstrual tracker for cycles, symptoms, and medication notes.</div>
     </td>
   </tr>
 </table>
@@ -48,6 +48,6 @@
   </picture>
 </p>
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/language-stats/year.svg" alt="Current year, updated automatically" width="88" />
-</p>
+<!-- PROFILE_YEAR_START -->
+<p align="center"><sub>2026</sub></p>
+<!-- PROFILE_YEAR_END -->
