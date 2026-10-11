@@ -26,7 +26,7 @@
       </a>
       <h3>Avelea</h3>
       <p><strong>Mobile application · Flutter</strong></p>
-      <p>A lightweight menstrual tracker designed around clarity, privacy, and everyday usability.</p>
+      <p>A lightweight menstrual tracker for cycles, symptoms, and medication notes.</p>
     </td>
   </tr>
 </table>
