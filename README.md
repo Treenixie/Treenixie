@@ -8,21 +8,15 @@
   <img src="assets/focus-grid.svg" alt="Game design, development, and creative technology" width="100%" />
 </p>
 
-## [Ritegear](https://github.com/Ritegear)
+## Studio
 
-<table>
-  <tr>
-    <td width="76" valign="middle" align="center">
-      <a href="https://github.com/Ritegear">
-        <img src="https://raw.githubusercontent.com/Ritegear/.github/main/profile/Logo.png" width="56" alt="Ritegear gear logo" />
-      </a>
-    </td>
-    <td valign="middle">
-      <strong>Small rituals for large systems.</strong>
-      <div>An independent development studio creating Discord bots, mobile apps, gamified digital products, and small interactive games.</div>
-    </td>
-  </tr>
-</table>
+<a href="https://github.com/Ritegear">
+  <img src="https://raw.githubusercontent.com/Ritegear/.github/main/profile/Logo.png" alt="Ritegear" width="52" align="left" />
+</a>
+
+**[Ritegear](https://github.com/Ritegear)**  
+*Small rituals for large systems.*  
+An independent development studio creating Discord bots, mobile apps, gamified digital products, and small interactive games.
 
 ## Language footprint
 
