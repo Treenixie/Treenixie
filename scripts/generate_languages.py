@@ -122,57 +122,60 @@ def scan(token):
     return totals, count, skipped
 
 def svg_chart(totals, count, skipped):
-    now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
     grand_total = sum(totals.values())
     ordered = sorted(totals.items(), key=lambda entry: (-entry[1], entry[0]))
     top = ordered[:7]
     remainder = sum(value for _, value in ordered[7:])
     if remainder:
         top.append(("Other", remainder))
-    w, h = 1000, 242
+
     s = [
-        '<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="242" viewBox="0 0 1000 242" role="img">',
-        '<title>Live language footprint by source-file size</title>',
-        '<desc>Aggregated source file sizes across accessible active repositories.</desc>',
-        '<rect width="1000" height="242" rx="15" fill="#111923"/>',
-        '<rect x="1" y="1" width="998" height="240" rx="14" fill="none" stroke="#354456"/>',
-        '<text x="36" y="40" font-family="Arial,Helvetica,sans-serif" font-size="25" fill="#F2F6FA" font-weight="800">LANGUAGE FOOTPRINT</text>',
-        '<text x="36" y="61" font-family="Consolas,monospace" font-size="12" fill="#9FB3C5">SOURCE FILE BYTES</text>',
-        '<rect x="846" y="25" width="119" height="24" rx="6" fill="#1B2939"/>',
-        '<text x="905" y="42" text-anchor="middle" font-family="Consolas,monospace" font-size="12" fill="#77DDD4">' + str(count) + ' CODEBASES</text>',
+        '<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="190" viewBox="0 0 1000 190" role="img">',
+        '<title>Language footprint</title>',
+        '<desc>Automatically refreshed language distribution based on source-file sizes.</desc>',
+        '<rect width="1000" height="190" rx="13" fill="#111923"/>',
+        '<rect x="1" y="1" width="998" height="188" rx="12" fill="none" stroke="#354456"/>',
     ]
-    # Same compact cells and spacing as the animated Tetris calendar.
-    cells = 53 * 3
+    # Tetris-inspired color cells; percentages are computed anew on every run.
     cumulative = []
     running = 0
     for i, (name, amount) in enumerate(top):
         running += amount
-        cumulative.append((running / grand_total, name, COLORS.get(name, FALLBACK_COLORS[i % len(FALLBACK_COLORS)])))
-    for index in range(cells):
-        col = index % 53
-        row = index // 53
-        x = 36 + col * 17.5
-        y = 81 + row * 10
-        t = (index + 0.5) / cells
-        color = "#202A37"
-        for threshold, name, item_color in cumulative:
-            if t <= threshold:
-                color = item_color
-                break
+        cumulative.append((running / grand_total, COLORS.get(name, FALLBACK_COLORS[i % len(FALLBACK_COLORS)])))
+    for index in range(159):
+        col, row = index % 53, index // 53
+        x, y = 36 + col * 17.5, 24 + row * 10
+        point = (index + .5) / 159
+        color = next((color for threshold, color in cumulative if point <= threshold), cumulative[-1][1])
         s.append('<rect x="{:.1f}" y="{}" width="12" height="6" rx="1" fill="{}"/>'.format(x, y, color))
+
     for i, (name, amount) in enumerate(top):
         col, row = i % 4, i // 4
-        x, y = 36 + col * 238, 155 + row * 40
+        x, y = 36 + col * 238, 106 + row * 44
         color = COLORS.get(name, FALLBACK_COLORS[i % len(FALLBACK_COLORS)])
+        percent = 100 * amount / grand_total
+        percent_label = "<0.1%" if 0 < percent < .05 else "{:.1f}%".format(percent)
         s.extend([
             '<rect x="{}" y="{}" width="12" height="12" rx="2" fill="{}"/>'.format(x, y - 11, color),
             '<text x="{}" y="{}" font-family="Consolas,monospace" font-size="15" font-weight="600" fill="#E4EDF5">{}</text>'.format(x + 23, y, escape(name)),
-            '<text x="{}" y="{}" text-anchor="end" font-family="Consolas,monospace" font-size="15" fill="#E4EDF5">{:.1f}%</text>'.format(x + 213, y, 100 * amount / grand_total),
+            '<text x="{}" y="{}" text-anchor="end" font-family="Consolas,monospace" font-size="15" fill="#E4EDF5">{}</text>'.format(x + 215, y, percent_label),
         ])
     if skipped:
-        s.append('<text x="36" y="227" font-family="Consolas,monospace" font-size="11" fill="#AEBCCB">Partial: ' + str(skipped) + ' repositories not accessible</text>')
+        s.append('<text x="36" y="177" font-family="Consolas,monospace" font-size="11" fill="#9BAFC2">PARTIAL DATA</text>')
     s.append('</svg>')
     return "\n".join(s) + "\n"
+
+
+def year_svg():
+    year = dt.datetime.now(dt.timezone.utc).year
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="38" viewBox="0 0 200 38" role="img">'
+        '<title>Current year</title>'
+        '<text x="100" y="28" text-anchor="middle" font-family="Consolas,monospace" '
+        'font-size="20" letter-spacing="3" fill="#9CB2C9">' + str(year) + '</text>'
+        '</svg>\n'
+    )
+
 
 def main():
     token = os.environ.get("PROFILE_TOKEN") or os.environ.get("GITHUB_TOKEN")
@@ -182,6 +185,7 @@ def main():
     destination = Path("generated-languages")
     destination.mkdir(exist_ok=True)
     destination.joinpath("languages.svg").write_text(svg_chart(totals, count, skipped), encoding="utf-8")
+    destination.joinpath("year.svg").write_text(year_svg(), encoding="utf-8")
     print("Rendered language chart from " + str(count) + " accessible codebases.")
     if skipped:
         print(str(skipped) + " repositories inaccessible, partial coverage noted in chart.")
