@@ -11,7 +11,7 @@
 ## Studio
 
 <a href="https://github.com/Ritegear">
-  <img src="https://raw.githubusercontent.com/Ritegear/.github/main/profile/Logo.png" alt="Ritegear" width="52" align="left" />
+  <img src="https://raw.githubusercontent.com/Ritegear/.github/main/profile/Logo.png" alt="Ritegear" width="76" align="left" />
 </a>
 
 **[Ritegear](https://github.com/Ritegear)**  
