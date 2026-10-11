@@ -124,10 +124,9 @@ def scan(token):
 def svg_chart(totals, count, skipped):
     grand_total = sum(totals.values())
     ordered = sorted(totals.items(), key=lambda entry: (-entry[1], entry[0]))
-    top = ordered[:7]
-    remainder = sum(value for _, value in ordered[7:])
-    if remainder:
-        top.append(("Other", remainder))
+    top = ordered[:8]
+    if len(ordered) > 8:
+        top = ordered[:7] + [("Other", sum(value for _, value in ordered[7:]))]
 
     s = [
         '<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="190" viewBox="0 0 1000 190" role="img">',
@@ -154,7 +153,7 @@ def svg_chart(totals, count, skipped):
         x, y = 36 + col * 238, 106 + row * 44
         color = COLORS.get(name, FALLBACK_COLORS[i % len(FALLBACK_COLORS)])
         percent = 100 * amount / grand_total
-        percent_label = "<0.1%" if 0 < percent < .05 else "{:.1f}%".format(percent)
+        percent_label = "&lt;0.1%" if 0 < percent < .05 else "{:.1f}%".format(percent)
         s.extend([
             '<rect x="{}" y="{}" width="12" height="12" rx="2" fill="{}"/>'.format(x, y - 11, color),
             '<text x="{}" y="{}" font-family="Consolas,monospace" font-size="15" font-weight="600" fill="#E4EDF5">{}</text>'.format(x + 23, y, escape(name)),
