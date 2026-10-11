@@ -156,11 +156,11 @@ def svg_chart(totals, count, skipped):
         percent_label = "&lt;0.1%" if 0 < percent < .05 else "{:.1f}%".format(percent)
         s.extend([
             '<rect x="{}" y="{}" width="12" height="12" rx="2" fill="{}"/>'.format(x, y - 11, color),
-            '<text x="{}" y="{}" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="15" font-weight="600" fill="#E4EDF5">{}</text>'.format(x + 23, y, escape(name)),
-            '<text x="{}" y="{}" text-anchor="end" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="15" fill="#E4EDF5">{}</text>'.format(x + 215, y, percent_label),
+            '<text x="{}" y="{}" font-family="ui-monospace,SFMono-Regular,&apos;SF Mono&apos;,Menlo,Consolas,&apos;Liberation Mono&apos;,monospace" font-size="15" font-weight="600" fill="#E4EDF5">{}</text>'.format(x + 23, y, escape(name)),
+            '<text x="{}" y="{}" text-anchor="end" font-family="ui-monospace,SFMono-Regular,&apos;SF Mono&apos;,Menlo,Consolas,&apos;Liberation Mono&apos;,monospace" font-size="15" fill="#E4EDF5">{}</text>'.format(x + 215, y, percent_label),
         ])
     if skipped:
-        s.append('<text x="36" y="177" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="11" fill="#9BAFC2">PARTIAL DATA</text>')
+        s.append('<text x="36" y="177" font-family="ui-monospace,SFMono-Regular,&apos;SF Mono&apos;,Menlo,Consolas,&apos;Liberation Mono&apos;,monospace" font-size="11" fill="#9BAFC2">PARTIAL DATA</text>')
     s.append('</svg>')
     return "\n".join(s) + "\n"
 
@@ -170,7 +170,7 @@ def year_svg():
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="38" viewBox="0 0 200 38" role="img">'
         '<title>Current year</title>'
-        '<text x="100" y="28" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" '
+        '<text x="100" y="28" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,&apos;SF Mono&apos;,Menlo,Consolas,&apos;Liberation Mono&apos;,monospace" '
         'font-size="20" letter-spacing="3" fill="#9CB2C9">' + str(year) + '</text>'
         '</svg>\n'
     )
