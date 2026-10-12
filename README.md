@@ -11,7 +11,7 @@
 ## Projects
 
 <p align="center">
-  <a href="https://github.com/Ritegear"><img src="assets/project-ritegear.svg" alt="Ritegear | Discord bots and app development" width="45%" /></a>&emsp;&emsp;<img src="assets/project-cassiopeia.svg" alt="Cassiopeia AR | Lens Studio face tracking" width="45%" />
+  <a href="https://github.com/Ritegear"><img src="assets/project-ritegear.svg" alt="Ritegear | Discord bots and app development" width="48%" /></a>&emsp;&emsp;<img src="assets/project-cassiopeia.svg" alt="Cassiopeia AR | Lens Studio face tracking" width="48%" />
 </p>
 
 ## Language footprint
