@@ -148,16 +148,26 @@ def svg_chart(totals, count, skipped):
         color = next((color for threshold, color in cumulative if point <= threshold), cumulative[-1][1])
         s.append('<rect x="{:.1f}" y="{}" width="12" height="6" rx="1" fill="{}"/>'.format(x, y, color))
 
+    # Match the legend to the full width of the Tetris-style cell strip.
+    # Each column has identical room for its marker, label and percentage.
+    legend_left = 36
+    legend_right = 958  # right edge of the last colored cell
+    legend_columns = 4
+    legend_gap = 22
+    legend_width = (legend_right - legend_left - (legend_columns - 1) * legend_gap) // legend_columns
+    legend_step = legend_width + legend_gap
+
     for i, (name, amount) in enumerate(top):
-        col, row = i % 4, i // 4
-        x, y = 36 + col * 238, 106 + row * 44
+        col, row = i % legend_columns, i // legend_columns
+        x, y = legend_left + col * legend_step, 106 + row * 44
+        percent_x = x + legend_width
         color = COLORS.get(name, FALLBACK_COLORS[i % len(FALLBACK_COLORS)])
         percent = 100 * amount / grand_total
         percent_label = "&lt;0.1%" if 0 < percent < .05 else "{:.1f}%".format(percent)
         s.extend([
             '<rect x="{}" y="{}" width="12" height="12" rx="2" fill="{}"/>'.format(x, y - 11, color),
             '<text x="{}" y="{}" font-family="ui-monospace,SFMono-Regular,&apos;SF Mono&apos;,Menlo,Consolas,&apos;Liberation Mono&apos;,monospace" font-size="15" font-weight="600" fill="#E4EDF5">{}</text>'.format(x + 23, y, escape(name)),
-            '<text x="{}" y="{}" text-anchor="end" font-family="ui-monospace,SFMono-Regular,&apos;SF Mono&apos;,Menlo,Consolas,&apos;Liberation Mono&apos;,monospace" font-size="15" fill="#E4EDF5">{}</text>'.format(x + 215, y, percent_label),
+            '<text x="{}" y="{}" text-anchor="end" font-family="ui-monospace,SFMono-Regular,&apos;SF Mono&apos;,Menlo,Consolas,&apos;Liberation Mono&apos;,monospace" font-size="15" fill="#E4EDF5">{}</text>'.format(percent_x, y, percent_label),
         ])
     if skipped:
         s.append('<text x="36" y="177" font-family="ui-monospace,SFMono-Regular,&apos;SF Mono&apos;,Menlo,Consolas,&apos;Liberation Mono&apos;,monospace" font-size="11" fill="#9BAFC2">PARTIAL DATA</text>')
