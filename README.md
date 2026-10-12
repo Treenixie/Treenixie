@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/Treenixie">
-    <img src="assets/hero-banner.png" alt="Anna Treenixie | Game designer and creative developer" width="100%" />
+    <img src="assets/hero.svg" alt="Anna Treenixie | Game designer and creative developer" width="100%" />
   </a>
 </p>
 
@@ -13,11 +13,14 @@
 <p align="left">
   <a href="https://github.com/Ritegear"><img src="https://raw.githubusercontent.com/Ritegear/.github/main/profile/Logo.png" alt="Ritegear" width="62" height="62" align="middle" /></a>
   &nbsp;<strong><a href="https://github.com/Ritegear">Ritegear</a></strong>
-  &nbsp;<sub>Small rituals for large systems. · Bots &amp; apps</sub>
-  &emsp;&emsp;
+  &emsp;&emsp;&emsp;&emsp;
   <img src="assets/cassiopeia-mark.svg" alt="Cassiopeia constellation" width="62" height="62" align="middle" />
   &nbsp;<strong>Cassiopeia AR</strong>
-  &nbsp;<sub>Lens Studio · Face-tracking constellation</sub>
+</p>
+<p align="left">
+  &emsp;&emsp;<sub>Discord bot and app development</sub>
+  &emsp;&emsp;&emsp;
+  <sub>Lens Studio · Face-tracking constellation</sub>
 </p>
 
 ## Language footprint
