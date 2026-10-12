@@ -129,11 +129,10 @@ def svg_chart(totals, count, skipped):
         top = ordered[:7] + [("Other", sum(value for _, value in ordered[7:]))]
 
     s = [
-        '<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="190" viewBox="0 0 1000 190" role="img">',
+        '<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="134" viewBox="0 0 1000 134" role="img">',
         '<title>Language footprint</title>',
         '<desc>Automatically refreshed language distribution based on source-file sizes.</desc>',
-        '<rect width="1000" height="190" rx="13" fill="#111923"/>',
-        '<rect x="1" y="1" width="998" height="188" rx="12" fill="none" stroke="#354456"/>',
+        '<style>@media (prefers-color-scheme: light) { text { fill: #24292f; } }</style>',
     ]
     # Tetris-inspired color cells; percentages are computed anew on every run.
     cumulative = []
@@ -141,25 +140,30 @@ def svg_chart(totals, count, skipped):
     for i, (name, amount) in enumerate(top):
         running += amount
         cumulative.append((running / grand_total, COLORS.get(name, FALLBACK_COLORS[i % len(FALLBACK_COLORS)])))
-    for index in range(159):
-        col, row = index % 53, index // 53
-        x, y = 36 + col * 17.5, 24 + row * 10
+    strip_columns = 53
+    strip_rows = 3
+    strip_cell_width = 12
+    strip_width = 1000
+    strip_step = (strip_width - strip_cell_width) / (strip_columns - 1)
+    for index in range(strip_columns * strip_rows):
+        col, row = index % strip_columns, index // strip_columns
+        x, y = col * strip_step, row * 10
         point = (index + .5) / 159
         color = next((color for threshold, color in cumulative if point <= threshold), cumulative[-1][1])
         s.append('<rect x="{:.1f}" y="{}" width="12" height="6" rx="1" fill="{}"/>'.format(x, y, color))
 
-    # Match the legend to the full width of the Tetris-style cell strip.
-    # Each column has identical room for its marker, label and percentage.
-    legend_left = 36
-    legend_right = 958  # right edge of the last colored cell
+    # Full-width, frameless grid: strip and four legend columns share the same edges.
+    # All markers, labels and percentages retain equal, predictable spacing.
+    legend_left = 0
+    legend_right = 1000
     legend_columns = 4
-    legend_gap = 22
+    legend_gap = 20
     legend_width = (legend_right - legend_left - (legend_columns - 1) * legend_gap) // legend_columns
     legend_step = legend_width + legend_gap
 
     for i, (name, amount) in enumerate(top):
         col, row = i % legend_columns, i // legend_columns
-        x, y = legend_left + col * legend_step, 106 + row * 44
+        x, y = legend_left + col * legend_step, 82 + row * 38
         percent_x = x + legend_width
         color = COLORS.get(name, FALLBACK_COLORS[i % len(FALLBACK_COLORS)])
         percent = 100 * amount / grand_total
@@ -170,7 +174,7 @@ def svg_chart(totals, count, skipped):
             '<text x="{}" y="{}" text-anchor="end" font-family="ui-monospace,SFMono-Regular,&apos;SF Mono&apos;,Menlo,Consolas,&apos;Liberation Mono&apos;,monospace" font-size="15" fill="#E4EDF5">{}</text>'.format(percent_x, y, percent_label),
         ])
     if skipped:
-        s.append('<text x="36" y="177" font-family="ui-monospace,SFMono-Regular,&apos;SF Mono&apos;,Menlo,Consolas,&apos;Liberation Mono&apos;,monospace" font-size="11" fill="#9BAFC2">PARTIAL DATA</text>')
+        s.append('<text x="0" y="133" font-family="ui-monospace,SFMono-Regular,&apos;SF Mono&apos;,Menlo,Consolas,&apos;Liberation Mono&apos;,monospace" font-size="11" fill="#9BAFC2">PARTIAL DATA</text>')
     s.append('</svg>')
     return "\n".join(s) + "\n"
 
