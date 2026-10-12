@@ -10,17 +10,8 @@
 
 ## Projects
 
-<p align="left">
-  <a href="https://github.com/Ritegear"><img src="https://raw.githubusercontent.com/Ritegear/.github/main/profile/Logo.png" alt="Ritegear" width="62" height="62" align="middle" /></a>
-  &nbsp;<strong><a href="https://github.com/Ritegear">Ritegear</a></strong>
-  &emsp;&emsp;&emsp;&emsp;
-  <img src="assets/cassiopeia-mark.svg" alt="Cassiopeia constellation" width="62" height="62" align="middle" />
-  &nbsp;<strong>Cassiopeia AR</strong>
-</p>
-<p align="left">
-  &emsp;&emsp;<sub>Discord bot and app development</sub>
-  &emsp;&emsp;&emsp;
-  <sub>Lens Studio · Face-tracking constellation</sub>
+<p align="center">
+  <a href="https://github.com/Ritegear"><img src="assets/project-ritegear.svg" alt="Ritegear | Discord bots and app development" width="48%" /></a>&nbsp;<img src="assets/project-cassiopeia.svg" alt="Cassiopeia AR | Lens Studio face tracking" width="48%" />
 </p>
 
 ## Language footprint

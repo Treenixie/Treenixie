@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="230" viewBox="0 0 560 230" role="img" aria-label="Cassiopeia AR constellation project">
+<defs>
+<clipPath id="card"><rect x="1" y="1" width="558" height="228" rx="18"/></clipPath>
+<linearGradient id="vline" x1="0" x2="1"><stop stop-color="#C6A8FF"/><stop offset="1" stop-color="#7BCAF0"/></linearGradient>
+</defs>
+<rect width="560" height="230" rx="18" fill="#111923"/>
+<rect x="1" y="1" width="558" height="228" rx="18" fill="none" stroke="#2C3B4C" stroke-width="2"/>
+<rect x="24" y="25" width="3" height="179" rx="1.5" fill="url(#vline)"/>
+<g clip-path="url(#card)"><rect x="43" y="59" width="108" height="108" rx="21" fill="#171D2E" stroke="#3E355A" stroke-width="1.4"/>
+<g transform="translate(51 67) scale(1.28)">
+<rect width="72" height="72" rx="13" fill="#101923"/>
+<path d="M11 21L23 43 34 24 46 45 61 20" stroke="#B79BFF" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<g fill="#FCE89B" stroke="#A990F8" stroke-width="1.4"><circle cx="11" cy="21" r="4.6"/><circle cx="23" cy="43" r="4.6"/><circle cx="34" cy="24" r="4.6"/><circle cx="46" cy="45" r="4.6"/><circle cx="61" cy="20" r="4.6"/></g>
+<g fill="#8EC9FF" opacity=".65"><circle cx="7" cy="55" r="1.5"/><circle cx="35" cy="60" r="1.3"/><circle cx="57" cy="54" r="1.7"/><circle cx="51" cy="10" r="1.2"/></g>
+</g>
+<g fill="#A38BCF" opacity=".31"><circle cx="495" cy="39" r="2"/><circle cx="532" cy="57" r="1.5"/><circle cx="511" cy="190" r="1.5"/><circle cx="539" cy="209" r="2.2"/></g>
+<path d="m495 39 37 18 -21 133 28 19" stroke="#BBA0FF" opacity=".16" stroke-width="1.7" fill="none"/>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif">
+<text x="170" y="62" font-size="13" font-weight="700" letter-spacing="1.15" fill="#C6A8FF">02  /  AR PROJECT</text>
+<text x="170" y="112" font-size="33" font-weight="750" fill="#F0F4FA">Cassiopeia AR</text>
+<text x="171" y="149" font-size="17" fill="#D4DEEB">Lens Studio · Face tracking</text>
+<text x="171" y="177" font-size="14" fill="#9DAEC3">Connect five stars to reveal the constellation.</text>
+</g>
+<rect x="170" y="195" width="43" height="3" rx="1.5" fill="#C6A8FF" />
+<rect x="219" y="195" width="18" height="3" rx="1.5" fill="#7BCAF0" opacity=".8" />
+</svg>
