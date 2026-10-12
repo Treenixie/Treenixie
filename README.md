@@ -10,23 +10,22 @@
 
 ## Projects
 
-<a href="https://github.com/Ritegear">
-  <img src="https://raw.githubusercontent.com/Ritegear/.github/main/profile/Logo.png" alt="Ritegear" width="62" align="left" />
-</a>
-
-**[Ritegear](https://github.com/Ritegear)**  
-<sub>Small rituals for large systems.</sub>  
-Discord bot and app development.
-
-<br clear="left" />
-
-<img src="assets/cassiopeia-mark.svg" alt="Cassiopeia W constellation" width="62" align="left" />
-
-**Cassiopeia AR**  
-<sub>Lens Studio · Face-tracking experience</sub>  
-Connect five stars to discover the constellation.
-
-<br clear="left" />
+<table border="0" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="50%" valign="top" style="border:0;">
+      <a href="https://github.com/Ritegear"><img src="https://raw.githubusercontent.com/Ritegear/.github/main/profile/Logo.png" alt="Ritegear" width="62" align="left" /></a>
+      <strong><a href="https://github.com/Ritegear">Ritegear</a></strong><br/>
+      <sub>Small rituals for large systems.</sub><br/>
+      Discord bot and app development.
+    </td>
+    <td width="50%" valign="top" style="border:0;">
+      <img src="assets/cassiopeia-mark.svg" alt="Cassiopeia constellation" width="62" align="left" />
+      <strong>Cassiopeia AR</strong><br/>
+      <sub>Lens Studio · Face-tracking experience</sub><br/>
+      Connect five stars to discover the constellation.
+    </td>
+  </tr>
+</table>
 
 ## Language footprint
 
