@@ -8,7 +8,7 @@
   <img src="assets/focus-grid.svg" alt="Game design, development, and creative technology" width="100%" />
 </p>
 
-## Studio
+## Projects
 
 <a href="https://github.com/Ritegear">
   <img src="https://raw.githubusercontent.com/Ritegear/.github/main/profile/Logo.png" alt="Ritegear" width="62" align="left" />
@@ -17,6 +17,16 @@
 **[Ritegear](https://github.com/Ritegear)**  
 <sub>Small rituals for large systems.</sub>  
 Discord bot and app development.
+
+<br clear="left" />
+
+<img src="assets/cassiopeia-mark.svg" alt="Cassiopeia W constellation" width="62" align="left" />
+
+**Cassiopeia AR**  
+<sub>Lens Studio · Face-tracking experience</sub>  
+Connect five stars to discover the constellation.
+
+<br clear="left" />
 
 ## Language footprint
 
