@@ -9,8 +9,4 @@
 <text x="171" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="16" fill="#C5D2E1">Соедини пять звёзд</text>
 <text x="171" y="154" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="16" fill="#C5D2E1">и открой созвездие</text>
 <rect x="171" y="181" width="42" height="3" rx="1.5" fill="#BBA8FF"/><rect x="218" y="181" width="17" height="3" rx="1.5" fill="#82D4CF"/>
-<g opacity="0.13"><path d="M385 60 q35 -24 58 12" stroke="#8D79FF" stroke-width="2" fill="none"/><path d="M355 165 q56 -28 89 8" stroke="#79D6D9" stroke-width="2" fill="none"/>
-        <circle cx="392" cy="58" r="2.2" fill="#BBA8FF"/><circle cx="443" cy="72" r="2.2" fill="#BBA8FF"/><circle cx="367" cy="164" r="2.2" fill="#79D6D9"/><circle cx="442" cy="174" r="2.2" fill="#79D6D9"/>
-        <circle cx="427" cy="40" r="1.8" fill="#BBA8FF"/><circle cx="454" cy="54" r="1.6" fill="#BBA8FF"/>
-        </g>
 </svg>
