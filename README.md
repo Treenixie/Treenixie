@@ -11,7 +11,7 @@
 ## Projects
 
 <p align="center">
-  <a href="https://github.com/Ritegear"><img src="assets/project-ritegear-featured-v2.svg" alt="Ritegear — Discord bot and app development" width="100%" /></a>
+  <a href="https://github.com/Ritegear"><img src="assets/project-ritegear-featured-v3.svg" alt="Ritegear — Разработка приложений и ботов" width="100%" /></a>
 </p>
 
 ## Учебные проекты
