@@ -11,19 +11,13 @@
 ## Projects
 
 <p align="center">
-  <a href="https://github.com/Ritegear">
-    <img src="assets/project-ritegear-featured.svg" alt="Ritegear — Discord bot and app development" width="100%" />
-  </a>
+  <a href="https://github.com/Ritegear"><img src="assets/project-ritegear-featured.svg" alt="Ritegear — Discord bot and app development" width="100%" /></a>
 </p>
 
 ## Учебные проекты
 
 <p align="center">
-  <img src="assets/project-cassiopeia-study.svg" alt="Найди Кассиопею — AR-маска в Lens Studio" width="47%" />
-  &emsp;&emsp;
-  <a href="https://github.com/Treenixie/IDailyx">
-    <img src="assets/project-idailyx-study.svg" alt="IDailyx — приложение для хранения игровых идей" width="47%" />
-  </a>
+  <a href="https://github.com/Treenixie/IDailyx"><img src="assets/project-idailyx-study.svg" alt="IDailyx — архив игровых идей" width="49%" /></a>&nbsp;<img src="assets/project-cassiopeia-study.svg" alt="Найди Кассиопею — AR-проект" width="49%" />
 </p>
 
 ## Language footprint
