@@ -16,7 +16,7 @@
 
 ## Учебные проекты
 
-<p align="center"><a href="https://github.com/Treenixie/IDailyx"><img src="assets/project-idailyx-study.svg" alt="IDailyx — архив игровых идей" width="49%" /></a><img src="assets/study-projects-gap.svg" alt="" width="2%" /><img src="assets/project-cassiopeia-study.svg" alt="Найди Кассиопею — AR-проект" width="49%" /></p>
+<p align="center"><a href="https://github.com/Treenixie/IDailyx"><img src="assets/project-idailyx-study.svg" alt="IDailyx — архив игровых идей" width="49%" /></a><img src="assets/study-projects-gap.svg" alt="" width="2%" /><a href="https://www.snapchat.com/lens/4063b6cb5a6d452a8afb40de8bf4e750?utm=qr"><img src="assets/project-cassiopeia-study.svg" alt="Найди Кассиопею — AR-проект" width="49%" /></a></p>
 
 ## Language footprint
 
