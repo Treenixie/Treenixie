@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="86" viewBox="0 0 320 86" role="img" aria-label="Будущий учебный проект">
+<rect width="320" height="86" rx="12" fill="#111923"/>
+<rect x=".75" y=".75" width="318.5" height="84.5" rx="11.25" fill="none" stroke="#30363D" stroke-width="1"/>
+<rect x="20" y="16" width="54" height="54" rx="12" fill="#192333" stroke="#30363D" stroke-width="1"/>
+<path d="M47 31 V55 M35 43 H59" stroke="#91A0B6" stroke-width="2.6" stroke-linecap="round"/>
+<circle cx="47" cy="43" r="17" fill="none" stroke="#60718A" stroke-width="1.2" stroke-dasharray="2 4" opacity=".8"/>
+<text x="96" y="28" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-weight="400" font-size="13" fill="#91A0B6">03 / COMING SOON</text>
+<text x="96" y="58" font-family="Arial, Helvetica, 'Noto Sans', sans-serif" font-weight="600" font-size="18" fill="#F1F5FC">Новый проект</text>
+</svg>
