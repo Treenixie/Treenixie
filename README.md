@@ -16,7 +16,7 @@
 
 ## Учебные проекты
 
-<p align="center"><a href="https://github.com/Treenixie/IDailyx"><img src="assets/project-idailyx.svg" alt="IDailyx — desktop application" width="32%" /></a><img src="assets/study-projects-gap.svg" alt="" width="2%" /><a href="https://www.snapchat.com/lens/4063b6cb5a6d452a8afb40de8bf4e750?utm=qr"><img src="assets/project-cassiopeia.svg" alt="Найди Кассиопею — AR mask" width="32%" /></a><img src="assets/study-projects-gap.svg" alt="" width="2%" /><img src="assets/project-placeholder.svg" alt="Третий учебный проект — скоро" width="32%" /></p>
+<p align="center"><a href="https://github.com/Treenixie/IDailyx"><img src="assets/project-idailyx.svg" alt="IDailyx — desktop application" width="32%" /></a><img src="assets/study-projects-gap.svg" alt="" width="2%" /><a href="https://www.snapchat.com/lens/4063b6cb5a6d452a8afb40de8bf4e750?utm=qr"><img src="assets/project-cassiopeia.svg" alt="Найди Кассиопею — AR mask" width="32%" /></a><img src="assets/study-projects-gap.svg" alt="" width="2%" /><a href="https://tilecheck.pages.dev/"><img src="assets/project-tilecheck.svg" alt="Tilecheck — инструмент для проверки повторяющихся текстур" width="32%" /></a></p>
 
 ## Language footprint
 
