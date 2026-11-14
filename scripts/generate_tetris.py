@@ -873,7 +873,7 @@ def stack_towers(pieces, board):
 
 
 def build_animation_plan(pieces):
-    """One piece after another, falling one row per tick like real Tetris."""
+    """One piece after another, falling at a steady Tetris speed of one row per TICK."""
     plan = []
     t = ANIM_START_DELAY
     for piece in pieces:
@@ -894,11 +894,17 @@ def render_piece_live_layers(parts, theme_name, pieces):
     for piece, style, anim in zip(pieces, styles, plan):
         tx, ty = piece["origin_x"], piece["origin_y"]
 
-        keys = [(0.0, -anim["dist"])]
-        for i in range(anim["dist"] + 1):
-            keys.append((anim["start"] + i * TICK, i - anim["dist"]))
-        for i in range(1, clear_ticks + 1):
-            keys.append((clear_start + i * CLEAR_TICK, i))
+        # Only the turning points: the browser interpolates every frame in between,
+        # so the fall runs at the display refresh rate instead of one jump per row.
+        land = anim["start"] + anim["dist"] * TICK
+        keys = [
+            (0.0, -anim["dist"]),
+            (anim["start"], -anim["dist"]),
+            (land, 0),
+            (clear_start, 0),
+            (clear_start + clear_ticks * CLEAR_TICK, clear_ticks),
+            (cycle_dur, clear_ticks),
+        ]
 
         key_times, values = [], []
         for t, rows_off in keys:
@@ -913,7 +919,7 @@ def render_piece_live_layers(parts, theme_name, pieces):
         parts.append(f'<g transform="translate({GRID_X + tx * STEP_X} {GRID_Y + ty * STEP_Y})">')
         parts.append(
             '<animateTransform attributeName="transform" type="translate" additive="sum" '
-            f'dur="{cycle_dur:.3f}s" repeatCount="indefinite" calcMode="discrete" '
+            f'dur="{cycle_dur:.3f}s" repeatCount="indefinite" calcMode="linear" '
             f'values="{";".join(values)}" keyTimes="{";".join(map(str, key_times))}" />'
         )
         for (dx, dy), level in zip(piece["shape"], piece["levels"]):
