@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="320" height="86" viewBox="0 0 320 86" role="img" aria-label="Tilecheck — texture tiling and seam inspection tool">
-<rect width="320" height="86" rx="12" fill="#161B22"/>
-<rect x=".75" y=".75" width="318.5" height="84.5" rx="11.25" fill="none" stroke="#30363D" stroke-width="1"/>
-<rect x="20" y="16" width="54" height="54" rx="12" fill="#202630" stroke="#30363D" stroke-width="1"/>
-<svg x="28" y="24" width="38" height="38" viewBox="0 0 470 470" aria-hidden="true">
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="86" viewBox="0 0 256 86" role="img" aria-label="Tilecheck — texture tiling and seam inspection tool">
+<rect width="256" height="86" rx="12" fill="#161B22"/>
+<rect x=".75" y=".75" width="254.5" height="84.5" rx="11.25" fill="none" stroke="#30363D" stroke-width="1"/>
+<rect x="14" y="16" width="54" height="54" rx="12" fill="#202630" stroke="#30363D" stroke-width="1"/>
+<svg x="22" y="24" width="38" height="38" viewBox="0 0 470 470" aria-hidden="true">
   <rect x="0" y="0" width="94" height="94" fill="#EC62A2"/>
   <rect x="94" y="0" width="94" height="94" fill="#DCC54D"/>
   <rect x="0" y="94" width="94" height="94" fill="#46A1C6"/>
@@ -20,6 +20,6 @@
   <rect x="282" y="376" width="94" height="94" fill="#46A1C6"/>
   <rect x="376" y="376" width="94" height="94" fill="#8167DF"/>
 </svg>
-<text x="96" y="28" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-weight="400" font-size="13" fill="#AF91FB">Web Tool</text>
-<text x="96" y="58" font-family="Arial, Helvetica, 'Noto Sans', sans-serif" font-weight="600" font-size="18" fill="#F1F5FC">Tilecheck</text>
+<text x="82" y="28" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-weight="400" font-size="13" fill="#AF91FB">Web Tool</text>
+<text x="82" y="58" font-family="Arial, Helvetica, 'Noto Sans', sans-serif" font-weight="600" font-size="18" fill="#F1F5FC">Tilecheck</text>
 </svg>
