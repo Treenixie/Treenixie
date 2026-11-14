@@ -3,7 +3,6 @@ import os
 import datetime as dt
 import hashlib
 import json
-import random
 
 import requests
 
@@ -113,13 +112,14 @@ BASE_SHAPES = {
 PIECE_ORDER = ["T", "L", "J", "S", "Z", "O", "I", "TRI_L", "TRI_I", "DOMINO", "DOT"]
 EXACT_COMPONENT_LIMIT = 18
 
-ANIM_STEP_DUR = 0.22
-ANIM_PIECE_GAP = 0.08
-ANIM_START_DELAY = 0.18
+# Real Tetris rhythm: pieces fall one row per tick and lock onto the stack.
+TICK = 0.065
+LOCK_DELAY = 0.1
+ANIM_START_DELAY = 0.3
 
-HOLD_DUR = 2.0
-CLEAR_DUR = 0.9
-CYCLE_GAP = 0.2
+HOLD_DUR = 3.0
+CLEAR_TICK = 0.06
+CYCLE_GAP = 0.4
 
 
 def svg_rect(x, y, w, h, fill, rx=1, extra=""):
@@ -724,33 +724,6 @@ def solve_component_greedy(component):
     return pieces
 
 
-def partition_into_pieces(board):
-    active = {
-        (col, row)
-        for row in range(ROWS)
-        for col in range(COLS)
-        if board[row][col] > 0
-    }
-
-    components = connected_components(active)
-    pieces = []
-
-    for comp in components:
-        if len(comp) <= EXACT_COMPONENT_LIMIT:
-            pieces.extend(solve_component_exact(comp))
-        else:
-            pieces.extend(solve_component_greedy(comp))
-
-    pieces.sort(
-        key=lambda p: (
-            max(r for _, r in p["cells"]),
-            min(c for c, _ in p["cells"]),
-            p["name"],
-        )
-    )
-    return pieces
-
-
 def pieces_touch_by_edge(piece_a, piece_b):
     a_cells = set(piece_a["cells"])
     b_cells = set(piece_b["cells"])
@@ -804,120 +777,148 @@ def build_piece_styles(theme_name, pieces):
     return styles
 
 
-def build_animation_plan(pieces, calendar_hash):
-    seed = int(calendar_hash[:8], 16)
-    rng = random.Random(seed)
+def partition_active_cells(board):
+    active = {(c, r) for r in range(ROWS) for c in range(COLS) if board[r][c] > 0}
+    pieces = []
+    for comp in connected_components(active):
+        solver = solve_component_exact if len(comp) <= EXACT_COMPONENT_LIMIT else solve_component_greedy
+        pieces.extend(solver(comp))
+    return pieces
 
-    plan = []
-    current_t = ANIM_START_DELAY
 
-    for piece in pieces:
-        w = shape_width(piece["shape"])
-        h = shape_height(piece["shape"])
+def split_into_dots(piece):
+    return [
+        {"name": "DOT", "shape": ((0, 0),), "origin_x": c, "origin_y": r, "cells": [(c, r)]}
+        for c, r in piece["cells"]
+    ]
 
-        tx = piece["origin_x"]
-        ty = piece["origin_y"]
 
-        max_spawn_x = max(0, COLS - w)
-        side_shift = rng.choice([-3, -2, 0, 0, 2, 3])
-        spawn_x = max(0, min(max_spawn_x, tx + side_shift))
-        spawn_y = -h - rng.randint(1, 2)
+def drop_order(pieces):
+    """Lowest calendar rows fall first, earlier dates first.
 
-        mid_x = tx
-        mid_y = min(-1, ty - 2)
+    A piece waits until every piece below it in its own columns has landed,
+    so towers are built strictly bottom-up and never outgrow the board.
+    If pieces interlock, the lowest blocked one is split into single blocks.
+    """
+    remaining = list(pieces)
+    owner_of = {cell: id(p) for p in remaining for cell in p["cells"]}
+    done = set()
+    order = []
 
-        steps = max(abs(spawn_x - tx), abs(spawn_y - ty), 1)
-        duration = max(0.38, steps * ANIM_STEP_DUR * 0.42)
+    while remaining:
+        ready = []
+        for piece in remaining:
+            own = id(piece)
+            blocked = False
+            for c, r in piece["cells"]:
+                for below in range(r + 1, ROWS):
+                    other = owner_of.get((c, below))
+                    if other is not None and other != own and other not in done:
+                        blocked = True
+                        break
+                if blocked:
+                    break
+            if not blocked:
+                ready.append(piece)
 
-        plan.append(
+        if not ready:
+            stuck = max(
+                (p for p in remaining if len(p["cells"]) > 1),
+                key=lambda p: max(r for _, r in p["cells"]),
+            )
+            remaining.remove(stuck)
+            for dot in split_into_dots(stuck):
+                remaining.append(dot)
+                owner_of[dot["cells"][0]] = id(dot)
+            continue
+
+        piece = min(ready, key=lambda p: (-max(r for _, r in p["cells"]), min(c for c, _ in p["cells"])))
+        remaining.remove(piece)
+        done.add(id(piece))
+        order.append(piece)
+
+    return order
+
+
+def stack_towers(pieces, board):
+    """Hard-drop every piece straight down in its own week columns onto the floor or the tower below."""
+    landed = set()
+    stacked = []
+
+    for piece in drop_order(pieces):
+        own = set(piece["cells"])
+        shift = ROWS
+        for c, r in own:
+            below = r + 1
+            while below < ROWS and (c, below) not in landed:
+                below += 1
+            shift = min(shift, below - r - 1)
+
+        cells = [(c, r + shift) for c, r in piece["cells"]]
+        landed.update(cells)
+        stacked.append(
             {
-                "start": current_t,
-                "end": current_t + duration,
-                "dur": duration,
-                "spawn_x": spawn_x,
-                "spawn_y": spawn_y,
-                "mid_x": mid_x,
-                "mid_y": mid_y,
-                "target_x": tx,
-                "target_y": ty,
+                "name": piece["name"],
+                "shape": piece["shape"],
+                "origin_x": piece["origin_x"],
+                "origin_y": piece["origin_y"] + shift,
+                "cells": cells,
+                "levels": [
+                    board[piece["origin_y"] + dy][piece["origin_x"] + dx] for dx, dy in piece["shape"]
+                ],
             }
         )
 
-        current_t += duration + ANIM_PIECE_GAP
-
-    build_end = max((item["end"] for item in plan), default=0.0)
-    clear_start = build_end + HOLD_DUR
-    clear_end = clear_start + CLEAR_DUR
-    cycle_dur = clear_end + CYCLE_GAP
-
-    return plan, clear_start, clear_end, cycle_dur
+    return stacked
 
 
-def render_piece_live_layers(parts, theme_name, board, pieces, calendar_hash):
+def build_animation_plan(pieces):
+    """One piece after another, falling one row per tick like real Tetris."""
+    plan = []
+    t = ANIM_START_DELAY
+    for piece in pieces:
+        dist = piece["origin_y"] + shape_height(piece["shape"])
+        plan.append({"start": t, "dist": dist})
+        t += dist * TICK + LOCK_DELAY
+
+    clear_start = t + HOLD_DUR
+    clear_ticks = ROWS + 1
+    cycle_dur = clear_start + clear_ticks * CLEAR_TICK + CYCLE_GAP
+    return plan, clear_start, clear_ticks, cycle_dur
+
+
+def render_piece_live_layers(parts, theme_name, pieces):
     styles = build_piece_styles(theme_name, pieces)
-    plan, clear_start, clear_end, cycle_dur = build_animation_plan(pieces, calendar_hash)
-
-    exit_dx = 0
-    exit_dy = GRID_H + CELL_H + 12
+    plan, clear_start, clear_ticks, cycle_dur = build_animation_plan(pieces)
 
     for piece, style, anim in zip(pieces, styles, plan):
-        target_px_x = GRID_X + anim["target_x"] * STEP_X
-        target_px_y = GRID_Y + anim["target_y"] * STEP_Y
+        tx, ty = piece["origin_x"], piece["origin_y"]
 
-        spawn_dx = (anim["spawn_x"] - anim["target_x"]) * STEP_X
-        spawn_dy = (anim["spawn_y"] - anim["target_y"]) * STEP_Y
+        keys = [(0.0, -anim["dist"])]
+        for i in range(anim["dist"] + 1):
+            keys.append((anim["start"] + i * TICK, i - anim["dist"]))
+        for i in range(1, clear_ticks + 1):
+            keys.append((clear_start + i * CLEAR_TICK, i))
 
-        mid_dx = (anim["mid_x"] - anim["target_x"]) * STEP_X
-        mid_dy = (anim["mid_y"] - anim["target_y"]) * STEP_Y
+        key_times, values = [], []
+        for t, rows_off in keys:
+            kt = round(t / cycle_dur, 5)
+            value = f"0 {round(rows_off * STEP_Y, 2)}"
+            if key_times and kt <= key_times[-1]:
+                values[-1] = value
+                continue
+            key_times.append(kt)
+            values.append(value)
 
-        start_t = anim["start"] / cycle_dur
-        mid_t = (anim["start"] + anim["dur"] * 0.35) / cycle_dur
-        land_t = anim["end"] / cycle_dur
-        clear_start_t = clear_start / cycle_dur
-        clear_end_t = clear_end / cycle_dur
-
-        values = (
-            f"{spawn_dx} {spawn_dy};"
-            f"{spawn_dx} {spawn_dy};"
-            f"{mid_dx} {mid_dy};"
-            f"0 0;"
-            f"0 0;"
-            f"{exit_dx} {exit_dy};"
-            f"{exit_dx} {exit_dy}"
-        )
-
-        key_times = (
-            f"0;"
-            f"{start_t:.6f};"
-            f"{mid_t:.6f};"
-            f"{land_t:.6f};"
-            f"{clear_start_t:.6f};"
-            f"{clear_end_t:.6f};"
-            f"1"
-        )
-
-        parts.append(f'<g transform="translate({target_px_x} {target_px_y})">')
+        parts.append(f'<g transform="translate({GRID_X + tx * STEP_X} {GRID_Y + ty * STEP_Y})">')
         parts.append(
-            f'<animateTransform '
-            f'attributeName="transform" '
-            f'type="translate" '
-            f'additive="sum" '
-            f'dur="{cycle_dur:.3f}s" '
-            f'repeatCount="indefinite" '
-            f'calcMode="linear" '
-            f'values="{values}" '
-            f'keyTimes="{key_times}" />'
+            '<animateTransform attributeName="transform" type="translate" additive="sum" '
+            f'dur="{cycle_dur:.3f}s" repeatCount="indefinite" calcMode="discrete" '
+            f'values="{";".join(values)}" keyTimes="{";".join(map(str, key_times))}" />'
         )
-
-        for dx, dy in piece["shape"]:
-            col = piece["origin_x"] + dx
-            row = piece["origin_y"] + dy
-            level = board[row][col]
+        for (dx, dy), level in zip(piece["shape"], piece["levels"]):
             fill = shade_from_level(style["base"], level, theme_name)
-            x = dx * STEP_X
-            y = dy * STEP_Y
-            parts.append(svg_rect(x, y, CELL_W, CELL_H, fill, rx=1))
-
+            parts.append(svg_rect(dx * STEP_X, dy * STEP_Y, CELL_W, CELL_H, fill, rx=1))
         parts.append("</g>")
 
 
@@ -931,14 +932,14 @@ def render_base(parts, theme_name):
 
 
 def render_empty_grid(parts, theme_name):
-    theme = THEMES[theme_name]
+    slot = THEMES[theme_name]["empty"]
     for row in range(ROWS):
         for col in range(COLS):
             x, y, w, h = cell_rect(col, row)
-            parts.append(svg_rect(x, y, w, h, theme["empty"], rx=1))
+            parts.append(svg_rect(x, y, w, h, slot, rx=1))
 
 
-def render_live_svg(theme_name, board, active_cells, username, pieces, calendar_hash):
+def render_live_svg(theme_name, active_cells, username, pieces):
     parts = []
     clip_id = f"grid-clip-live-{theme_name}"
 
@@ -947,13 +948,13 @@ def render_live_svg(theme_name, board, active_cells, username, pieces, calendar_
     render_empty_grid(parts, theme_name)
 
     parts.append(f'<g clip-path="url(#{clip_id})">')
-    render_piece_live_layers(parts, theme_name, board, pieces, calendar_hash)
+    render_piece_live_layers(parts, theme_name, pieces)
     parts.append("</g>")
 
     meta_payload = {
         "username": username,
         "active_cells": active_cells,
-        "mode": "live-animation",
+        "mode": "gravity-stack",
     }
     parts.append(f"<metadata>{json.dumps(meta_payload, ensure_ascii=False)}</metadata>")
     parts.append("</svg>")
@@ -970,11 +971,11 @@ def main():
     outdir.mkdir(parents=True, exist_ok=True)
 
     calendar_data, _diagnostics = fetch_calendar(username, token)
-    board, _total, active_cells, calendar_hash = normalize_calendar(calendar_data)
-    pieces = partition_into_pieces(board)
+    board, _total, active_cells, _calendar_hash = normalize_calendar(calendar_data)
+    pieces = stack_towers(partition_active_cells(board), board)
 
-    light_live_svg = render_live_svg("light", board, active_cells, username, pieces, calendar_hash)
-    dark_live_svg = render_live_svg("dark", board, active_cells, username, pieces, calendar_hash)
+    light_live_svg = render_live_svg("light", active_cells, username, pieces)
+    dark_live_svg = render_live_svg("dark", active_cells, username, pieces)
 
     (outdir / "github-tetris-light.svg").write_text(light_live_svg, encoding="utf-8")
     (outdir / "github-tetris-dark.svg").write_text(dark_live_svg, encoding="utf-8")

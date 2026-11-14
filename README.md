@@ -1,11 +1,7 @@
 <p align="center">
   <a href="https://github.com/Treenixie">
-    <img src="assets/hero.svg" alt="Anna Treenixie | Game designer and creative developer" width="100%" />
+    <img src="assets/hero.svg" alt="Anna Treenixie | Game designer and creative developer: game design, development, creative tech" width="100%" />
   </a>
-</p>
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Treenixie/Treenixie/main/assets/focus-grid.svg?layout=compact" alt="Game design, development, and creative technology" width="100%" />
 </p>
 
 ## Projects
@@ -26,7 +22,7 @@
 
 ## GitHub activity / Tetris
 
-<!-- Tetris: original animation, theme switching and branch references are intentionally preserved. -->
+<!-- Tetris: pieces fall and stack with gravity; theme switching and visual-branch references are intentionally preserved. -->
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Treenixie/Treenixie/visual/github-tetris-dark.svg">
